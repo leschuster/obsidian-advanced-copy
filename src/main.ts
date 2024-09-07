@@ -1,6 +1,7 @@
 import { App, Modal, Plugin, Setting } from "obsidian";
 import { AdvancedCopyPluginSettings } from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
+import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -13,7 +14,7 @@ export default class AdvancedCopyPlugin extends Plugin {
 		this.registerCommands();
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		//this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new AdvancedCopyPluginSettingsTab(this.app, this));
 	}
 
 	public onunload(): void {}
