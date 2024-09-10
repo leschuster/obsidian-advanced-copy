@@ -1,5 +1,9 @@
 import { TFile } from "obsidian";
+import remarkMath from "remark-math";
+import remarkParse from "remark-parse";
 import { Profile } from "src/settings/settings";
+import { unified } from "unified";
+import customStringify from "./customStringify";
 
 export class Processor {
 	private constructor(
@@ -8,16 +12,24 @@ export class Processor {
 		private activeFile: TFile | null,
 	) {}
 
-	public static process(
+	public static async process(
 		input: string,
 		profile: Profile,
 		activeFile: TFile | null,
-	): string {
+	): Promise<string> {
 		const instance = new Processor(input, profile, activeFile);
-		return instance.process();
+		return await instance.process();
 	}
 
-	private process(): string {
-		return "";
+	private async process(): Promise<string> {
+		const rendered = await unified()
+			.use(remarkParse)
+			.use(remarkMath)
+			.use(customStringify, { profile: this.profile })
+			.process(this.input);
+
+		console.log("OUTPUT:", String(rendered));
+
+		return String(rendered);
 	}
 }
