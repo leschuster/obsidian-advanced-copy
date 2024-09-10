@@ -220,17 +220,6 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
-			"Bold",
-			"Define the format for bold text.\nVariables: $value",
-			this.profile.templates.bold,
-			async (value) => {
-				this.profile.templates.bold = value;
-				await this.save();
-			},
-		);
-
-		addTextAreaInput(
-			this.contentEl,
 			"Blockquote Line",
 			"Define how a single line of a blockquote should be converted.\nVariables: $value",
 			this.profile.templates.blockquoteLine,
@@ -253,8 +242,19 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"Bold",
+			"Define the format for bold text.\nVariables: $value",
+			this.profile.templates.bold,
+			async (value) => {
+				this.profile.templates.bold = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Code Block",
-			"Define how a code block should be converted.\nVariables: $value",
+			"Define how a code block should be converted.\nVariables: $value, $lang, $meta",
 			this.profile.templates.codeBlock,
 			async (value) => {
 				this.profile.templates.codeBlock = value;
@@ -276,7 +276,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 1",
-			"Define how a level 1 heading should be converted.\nVariables: $value",
+			"Define how a level 1 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading1,
 			async (value) => {
 				this.profile.templates.heading1 = value;
@@ -287,7 +287,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 2",
-			"Define how a level 2 heading should be converted.\nVariables: $value",
+			"Define how a level 2 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading2,
 			async (value) => {
 				this.profile.templates.heading2 = value;
@@ -298,7 +298,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 3",
-			"Define how a level 3 heading should be converted.\nVariables: $value",
+			"Define how a level 3 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading3,
 			async (value) => {
 				this.profile.templates.heading3 = value;
@@ -309,7 +309,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 4",
-			"Define how a level 4 heading should be converted.\nVariables: $value",
+			"Define how a level 4 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading4,
 			async (value) => {
 				this.profile.templates.heading4 = value;
@@ -320,7 +320,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 5",
-			"Define how a level 5 heading should be converted.\nVariables: $value",
+			"Define how a level 5 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading5,
 			async (value) => {
 				this.profile.templates.heading5 = value;
@@ -331,7 +331,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Heading 6",
-			"Define how a level 6 heading should be converted.\nVariables: $value",
+			"Define how a level 6 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading6,
 			async (value) => {
 				this.profile.templates.heading6 = value;
@@ -342,7 +342,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Horizontal Rule",
-			"Define how a horizontal rule should be converted.\nVariables: $value",
+			"Define how a horizontal rule should be converted.",
 			this.profile.templates.horizontalRule,
 			async (value) => {
 				this.profile.templates.horizontalRule = value;
@@ -353,7 +353,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Image",
-			"Define how an image should be converted.\nVariables: $src, $alt",
+			"Define how an image should be converted.\nVariables: $url, $title, $alt",
 			this.profile.templates.image,
 			async (value) => {
 				this.profile.templates.image = value;
@@ -375,7 +375,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Line Break",
-			"Define how a line break should be converted.\nVariables: $value",
+			"Define how a line break should be converted.",
 			this.profile.templates.lineBreak,
 			async (value) => {
 				this.profile.templates.lineBreak = value;
@@ -386,7 +386,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Link",
-			"Define how a link should be converted.\nVariables: $href, $text",
+			"Define how a link should be converted.\nVariables: $url, $alt, $title",
 			this.profile.templates.link,
 			async (value) => {
 				this.profile.templates.link = value;
@@ -397,7 +397,7 @@ class EditProfileModal extends Modal {
 		addTextAreaInput(
 			this.contentEl,
 			"Math Block",
-			"Define how a math block should be converted.\nVariables: $value",
+			"Define how a math block should be converted.\nVariables: $value, $meta",
 			this.profile.templates.mathBlock,
 			async (value) => {
 				this.profile.templates.mathBlock = value;
