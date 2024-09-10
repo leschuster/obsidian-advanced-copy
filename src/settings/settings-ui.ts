@@ -396,6 +396,17 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"List Item",
+			"Define how a list item should be converted.\nVariables: $value",
+			this.profile.templates.listItem,
+			async (value) => {
+				this.profile.templates.listItem = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Math Block",
 			"Define how a math block should be converted.\nVariables: $value, $meta",
 			this.profile.templates.mathBlock,
@@ -418,6 +429,17 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"Ordered List",
+			"Define how an ordered list should be converted.\nVariables: $value, $start",
+			this.profile.templates.orderedList,
+			async (value) => {
+				this.profile.templates.orderedList = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Paragraph",
 			"Define how a paragraph should be converted.\nVariables: $value",
 			this.profile.templates.paragraph,
@@ -434,6 +456,17 @@ class EditProfileModal extends Modal {
 			this.profile.templates.text,
 			async (value) => {
 				this.profile.templates.text = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
+			"Unordered List",
+			"Define how an unordered list should be converted.\nVariables: $value",
+			this.profile.templates.unorderedList,
+			async (value) => {
+				this.profile.templates.unorderedList = value;
 				await this.save();
 			},
 		);

@@ -13,9 +13,9 @@ export type Profile = {
 		configVersion: number;
 	};
 	templates: {
-		bold: string;
 		blockquoteLine: string;
 		blockquoteWrapper: string;
+		bold: string;
 		codeBlock: string;
 		codeInline: string;
 		heading1: string;
@@ -29,10 +29,13 @@ export type Profile = {
 		italic: string;
 		lineBreak: string;
 		link: string;
+		listItem: string;
 		mathBlock: string;
 		mathInline: string;
+		orderedList: string;
 		paragraph: string;
 		text: string;
+		unorderedList: string;
 	};
 	extra: {
 		before: string;

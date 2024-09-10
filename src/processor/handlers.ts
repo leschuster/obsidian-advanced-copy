@@ -15,6 +15,8 @@ import { paragraph } from "./handlers/paragraph";
 import { root } from "./handlers/root";
 import { bold } from "./handlers/bold";
 import { text } from "./handlers/text";
+import { list } from "./handlers/list";
+import { listItem } from "./handlers/listitem";
 
 export type HandlerFunc = (node: Node, profile: Profile) => string;
 
@@ -29,8 +31,8 @@ export const handlers: Record<string, HandlerFunc> = {
 	emphasis: italic,
 	break: lineBreak,
 	link: link,
-	//list,
-	//listItem,
+	list: list,
+	listItem: listItem,
 	math: mathBlock,
 	inlineMath: mathInline,
 	paragraph: paragraph,
