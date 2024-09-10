@@ -1,12 +1,4 @@
-import {
-	App,
-	Editor,
-	MarkdownFileInfo,
-	MarkdownView,
-	Modal,
-	Plugin,
-	Setting,
-} from "obsidian";
+import { Editor, MarkdownFileInfo, MarkdownView, Plugin } from "obsidian";
 import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
@@ -49,12 +41,11 @@ export default class AdvancedCopyPlugin extends Plugin {
 		}
 
 		for (const profile of Object.values(this.settings.profiles)) {
-			console.log(profile);
-			if (profile.cmd_selection) {
+			if (profile.meta.cmdSelection) {
 				this.createCmdToCopySelection(profile);
 			}
 
-			if (profile.code_block) {
+			if (profile.meta.cmdPage) {
 				this.createCmdToCopyPage(profile);
 			}
 		}
@@ -62,8 +53,8 @@ export default class AdvancedCopyPlugin extends Plugin {
 
 	private createCmdToCopySelection(profile: Profile): void {
 		this.addCommand({
-			id: `${PLUGIN_NAME}-Profile-${profile.id}-Copy-Selection`,
-			name: `${profile.name}: Selection`,
+			id: `${PLUGIN_NAME}-Profile-${profile.meta.id}-Copy-Selection`,
+			name: `${profile.meta.name}: Selection`,
 			editorCallback: (
 				editor: Editor,
 				ctx: MarkdownView | MarkdownFileInfo,
@@ -75,8 +66,8 @@ export default class AdvancedCopyPlugin extends Plugin {
 
 	private createCmdToCopyPage(profile: Profile): void {
 		this.addCommand({
-			id: `${PLUGIN_NAME}-Profile-${profile.id}-Copy-Page`,
-			name: `${profile.name}: Page`,
+			id: `${PLUGIN_NAME}-Profile-${profile.meta.id}-Copy-Page`,
+			name: `${profile.meta.name}: Page`,
 			editorCallback: (
 				editor: Editor,
 				ctx: MarkdownView | MarkdownFileInfo,
@@ -86,10 +77,10 @@ export default class AdvancedCopyPlugin extends Plugin {
 		});
 	}
 
-	private copy(input: string, profile: Profile): void {
+	private async copy(input: string, profile: Profile): Promise<void> {
 		const activeFile = this.app.workspace.getActiveFile();
 
-		const output = Processor.process(input, profile, activeFile);
+		const output = await Processor.process(input, profile, activeFile);
 
 		ClipboardHelper.copy(output);
 	}
