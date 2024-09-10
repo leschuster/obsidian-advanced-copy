@@ -18,6 +18,7 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/jest": "^29.5.12",
+		"@types/mdast": "^4.0.4",
 		"@types/node": "^16.11.6",
 		"@typescript-eslint/eslint-plugin": "5.29.0",
 		"@typescript-eslint/parser": "5.29.0",
@@ -35,5 +36,11 @@
 	},
 	"lint-staged": {
 		"**/*": "prettier --write --ignore-unknown"
+	},
+	"dependencies": {
+		"remark-math": "^6.0.0",
+		"remark-parse": "^11.0.0",
+		"unified": "^11.0.5",
+		"zwitch": "^2.0.4"
 	}
 }

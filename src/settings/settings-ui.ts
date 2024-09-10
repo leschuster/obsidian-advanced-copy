@@ -52,7 +52,8 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 						// @ts-ignore
 						const tab = this.app.setting.activeTab;
 						console.log(tab);
-						tab.searchComponent.inputEl.value = "Convert and Copy:";
+						tab.searchComponent.inputEl.value =
+							"obsidian-advanced-copy";
 						tab.updateHotkeyVisibility();
 					});
 			});
