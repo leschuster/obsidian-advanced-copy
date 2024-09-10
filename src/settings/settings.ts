@@ -4,22 +4,38 @@ export type AdvancedCopyPluginSettings = {
 };
 
 export type Profile = {
-	version: number;
-	id: string;
-	name: string;
-	description: string;
-	cmd_selection: boolean;
-	cmd_page: boolean;
-	before: string;
-	after: string;
-	text: string;
-	bold: string;
-	italic: string;
-	inline_math: string;
-	wikilink: string;
-	empty_line: string;
-	paragraph: string;
-	heading: string;
-	math_block: string;
-	code_block: string;
+	meta: {
+		id: string;
+		name: string;
+		description: string;
+		cmdSelection: boolean;
+		cmdPage: boolean;
+		configVersion: number;
+	};
+	templates: {
+		bold: string;
+		blockquoteLine: string;
+		blockquoteWrapper: string;
+		codeBlock: string;
+		codeInline: string;
+		heading1: string;
+		heading2: string;
+		heading3: string;
+		heading4: string;
+		heading5: string;
+		heading6: string;
+		horizontalRule: string;
+		image: string;
+		italic: string;
+		lineBreak: string;
+		link: string;
+		mathBlock: string;
+		mathInline: string;
+		paragraph: string;
+		text: string;
+	};
+	extra: {
+		before: string;
+		after: string;
+	};
 };
