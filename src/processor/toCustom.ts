@@ -1,7 +1,7 @@
 import { Nodes } from "mdast";
 import { Profile } from "src/settings/settings";
 import { zwitch } from "zwitch";
-import { handlers } from "./handlers/handlers";
+import { handlers } from "./handlers";
 
 export interface Options {
 	profile: Profile;
