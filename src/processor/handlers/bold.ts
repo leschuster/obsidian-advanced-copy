@@ -4,6 +4,8 @@ import toCustom from "../toCustom";
 
 /**
  * Convert a bold node to string
+ * Available variables:
+ * - $value
  * @param node
  * @param profile
  * @returns
