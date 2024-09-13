@@ -451,6 +451,17 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"Strikethrough",
+			"Define how strikethrough text should be converted.\nVariables: $value",
+			this.profile.templates.strikethrough,
+			async (value) => {
+				this.profile.templates.strikethrough = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Text",
 			"Define how text should be converted.\nVariables: $value",
 			this.profile.templates.text,

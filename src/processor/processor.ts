@@ -4,6 +4,7 @@ import remarkParse from "remark-parse";
 import { Profile } from "src/settings/settings";
 import { unified } from "unified";
 import customStringify from "./customStringify";
+import remarkGfm from "remark-gfm";
 
 export class Processor {
 	private constructor(
@@ -36,6 +37,7 @@ export class Processor {
 		const content = await unified()
 			.use(remarkParse)
 			.use(remarkMath)
+			.use(remarkGfm)
 			.use(customStringify, { profile: this.profile })
 			.process(input);
 

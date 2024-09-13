@@ -34,6 +34,7 @@ export type Profile = {
 		mathInline: string;
 		orderedList: string;
 		paragraph: string;
+		strikethrough: string;
 		text: string;
 		unorderedList: string;
 	};
