@@ -12,14 +12,10 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function image(node: Image, profile: Profile): string {
-	let content = profile.templates.image.replaceAll("$url", node.url);
-
-	if (node.title) {
-		content = content.replaceAll("$title", node.title);
-	}
-	if (node.alt) {
-		content = content.replaceAll("$alt", node.alt);
-	}
+	let content = profile.templates.image
+		.replaceAll("$url", node.url)
+		.replaceAll("$title", node.title ?? "")
+		.replaceAll("$alt", node.alt ?? "");
 
 	return content;
 }

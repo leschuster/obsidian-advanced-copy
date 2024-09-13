@@ -19,7 +19,7 @@ export function blockquote(node: Blockquote, profile: Profile): string {
 		.map((line) =>
 			profile.templates.blockquoteLine.replaceAll("$value", line),
 		)
-		.join("\n");
+		.join("");
 
 	return profile.templates.blockquoteWrapper.replaceAll("$value", content);
 }
