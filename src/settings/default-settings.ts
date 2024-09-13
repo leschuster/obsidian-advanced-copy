@@ -34,6 +34,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
 				mathInline: "\\($value\\)",
 				orderedList: "<ol>$value</ol>",
 				paragraph: "<p>$value</p>",
+				strikethrough: "<del>$value</del>",
 				text: "$value",
 				unorderedList: "<ul>$value</ul>",
 			},

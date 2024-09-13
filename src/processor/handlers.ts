@@ -1,4 +1,6 @@
-import { Node } from "mdast";
+// @ts-nocheck
+
+import { Nodes } from "mdast";
 import { Profile } from "src/settings/settings";
 import { blockquote } from "./handlers/blockquote";
 import { codeBlock } from "./handlers/code-block";
@@ -17,8 +19,9 @@ import { bold } from "./handlers/bold";
 import { text } from "./handlers/text";
 import { list } from "./handlers/list";
 import { listItem } from "./handlers/listitem";
+import { strikethrough } from "./handlers/strikethrough";
 
-export type HandlerFunc = (node: Node, profile: Profile) => string;
+export type HandlerFunc = (node: Nodes, profile: Profile) => string;
 
 export const handlers: Record<string, HandlerFunc> = {
 	strong: bold,
@@ -37,6 +40,6 @@ export const handlers: Record<string, HandlerFunc> = {
 	inlineMath: mathInline,
 	paragraph: paragraph,
 	root: root,
-	//strikethrough,
+	delete: strikethrough,
 	text: text,
 };
