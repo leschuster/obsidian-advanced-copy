@@ -6,6 +6,12 @@ import toCustom from "../toCustom";
 
 jest.mock("../toCustom");
 
+jest.mock("../../utils/Logger", () => {
+	return jest.fn().mockImplementation(() => {
+		return { error: console.error };
+	});
+});
+
 describe("testing heading", () => {
 	let profile: Profile;
 
