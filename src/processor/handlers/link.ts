@@ -19,11 +19,8 @@ export function link(node: Link, profile: Profile): string {
 
 	let content = profile.templates.link
 		.replaceAll("$url", node.url)
-		.replaceAll("$alt", alt);
-
-	if (node.title) {
-		content = content.replaceAll("$title", node.title);
-	}
+		.replaceAll("$alt", alt)
+		.replaceAll("$title", node.title ?? "");
 
 	return content;
 }
