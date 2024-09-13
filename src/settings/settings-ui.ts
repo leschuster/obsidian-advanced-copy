@@ -215,7 +215,7 @@ class EditProfileModal extends Modal {
 		});
 
 		this.contentEl.createEl("div", {
-			text: "Global variables: <tbd>",
+			text: "Global variables: $fileBasename, $fileExtension, $fileName, $filePath, $date, $time",
 		});
 
 		addTextAreaInput(
