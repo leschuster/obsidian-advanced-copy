@@ -5,6 +5,7 @@ import { Profile } from "src/settings/settings";
 import { unified } from "unified";
 import customStringify from "./customStringify";
 import remarkGfm from "remark-gfm";
+import remarkCallout from "./remark-plugins/remark-callout";
 
 export class Processor {
 	private constructor(
@@ -38,6 +39,7 @@ export class Processor {
 			.use(remarkParse)
 			.use(remarkMath)
 			.use(remarkGfm)
+			.use(remarkCallout)
 			.use(customStringify, { profile: this.profile })
 			.process(input);
 

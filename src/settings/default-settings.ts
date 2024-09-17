@@ -16,6 +16,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
 				blockquoteLine: ">$value",
 				blockquoteWrapper: "<blockquote>$value</blockquote>",
 				bold: "<strong>$value</strong>",
+				callout:
+					'<div class="$type"><h2>$title</h2><div>$value</div></div>',
 				codeBlock: "<pre><code>$value</code></pre>",
 				codeInline: "<code>$value</code>",
 				heading1: "<h1>$value</h1>",
