@@ -16,6 +16,7 @@ export type Profile = {
 		blockquoteLine: string;
 		blockquoteWrapper: string;
 		bold: string;
+		callout: string;
 		codeBlock: string;
 		codeInline: string;
 		heading1: string;

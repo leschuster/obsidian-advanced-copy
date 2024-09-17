@@ -12,7 +12,7 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function codeBlock(node: Code, profile: Profile): string {
-	let content = profile.templates.codeBlock
+	const content = profile.templates.codeBlock
 		.replaceAll("$value", node.value)
 		.replaceAll("$lang", node.lang ?? "")
 		.replaceAll("$meta", node.meta ?? "");

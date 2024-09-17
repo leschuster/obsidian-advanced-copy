@@ -253,6 +253,17 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"Callout",
+			"Define the format for callouts.\nVariables: $value, $type, $title, $closeable, $default_open",
+			this.profile.templates.callout,
+			async (value) => {
+				this.profile.templates.callout = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Code Block",
 			"Define how a code block should be converted.\nVariables: $value, $lang, $meta",
 			this.profile.templates.codeBlock,

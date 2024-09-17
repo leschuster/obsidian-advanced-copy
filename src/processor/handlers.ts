@@ -20,12 +20,14 @@ import { text } from "./handlers/text";
 import { list } from "./handlers/list";
 import { listItem } from "./handlers/listitem";
 import { strikethrough } from "./handlers/strikethrough";
+import { callout } from "./handlers/callout";
 
 export type HandlerFunc = (node: Nodes, profile: Profile) => string;
 
 export const handlers: Record<string, HandlerFunc> = {
 	strong: bold,
 	blockquote: blockquote,
+	callout: callout,
 	code: codeBlock,
 	inlineCode: codeInline,
 	heading: heading,
