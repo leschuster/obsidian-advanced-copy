@@ -3,6 +3,7 @@ import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
 import { Profile } from "./settings";
 import AdvancedCopyPlugin from "src/main";
+import { ConfirmationModal } from "./confirmation-modal";
 
 /**
  * Provides the settings tab for the user interface
@@ -88,7 +89,9 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
 		addHeading(this.containerEl, "Profiles");
 
-		for (const profile of Object.values(this.plugin.settings.profiles)) {
+		for (const [id, profile] of Object.entries(
+			this.plugin.settings.profiles,
+		)) {
 			new Setting(this.containerEl)
 				.setName(profile.meta.name)
 				.setDesc(profile.meta.description)
@@ -127,7 +130,18 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 						.setTooltip("Delete profile")
 						.setWarning()
 						.onClick(() => {
-							Logger.warn("Not yet implemented");
+							new ConfirmationModal(
+								this.app,
+								"Delete profile",
+								`Are you sure you want to delete the profile '${profile.meta.name}'?`,
+								() => {
+									Logger.log(
+										`Deleted profile '${profile.meta.name}'`,
+									);
+									delete this.plugin.settings?.profiles[id];
+									this.save();
+								},
+							).open();
 						});
 				});
 		}
