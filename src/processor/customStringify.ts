@@ -7,6 +7,7 @@ export interface Options {
 }
 
 export default function customStringify(options: Options): void {
+	// @ts-expect-error
 	const self = this;
 
 	self.compiler = compiler;
