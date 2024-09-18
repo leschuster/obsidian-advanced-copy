@@ -21,6 +21,7 @@ import { list } from "./handlers/list";
 import { listItem } from "./handlers/listitem";
 import { strikethrough } from "./handlers/strikethrough";
 import { callout } from "./handlers/callout";
+import { wikilink } from "./handlers/wikilink";
 
 export type HandlerFunc = (node: Nodes, profile: Profile) => string;
 
@@ -44,4 +45,5 @@ export const handlers: Record<string, HandlerFunc> = {
 	root: root,
 	delete: strikethrough,
 	text: text,
+	wikilink: wikilink,
 };

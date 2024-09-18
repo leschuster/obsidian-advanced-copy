@@ -1,7 +1,6 @@
-import { List, ListItem, Text } from "mdast";
+import { List, ListItem } from "mdast";
 import { Profile } from "src/settings/settings";
 import { list } from "./list";
-import toCustom from "../toCustom";
 
 jest.mock("../toCustom");
 
