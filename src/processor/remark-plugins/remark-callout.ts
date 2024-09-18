@@ -9,9 +9,9 @@ import {
 	Root,
 } from "mdast";
 import { Transformer } from "unified";
-import { visit, Visitor, VisitorResult } from "unist-util-visit";
+import { SKIP, visit, Visitor, VisitorResult } from "unist-util-visit";
 
-const REGEX = /^\[!(?<type>.+)\](?<behavior>[\+\-])?( +)/; //!BUG
+const REGEX = /^\[!(?<type>.+)\](?<behavior>[\+\-])?(?=(( )+)|\n|$)/;
 
 /**
  * Markdown Callout node parsed from Obsidian syntax.
@@ -109,6 +109,8 @@ const visitor: Visitor<Blockquote, Parent> = (
 	console.log(callout);
 
 	replaceCurrNodeWith(callout, index, parent);
+
+	return SKIP;
 };
 
 /**
@@ -193,7 +195,7 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 		);
 	}
 	const matchedText = match[0];
-	firstText.value = firstText.value.slice(matchedText.length);
+	firstText.value = firstText.value.slice(matchedText.length).trimStart();
 	if (firstText.value.length === 0) {
 		title.splice(0, 1);
 	}
@@ -453,7 +455,6 @@ const replaceCurrNodeWith = (
 	index: number | undefined,
 	parent: Parent | undefined,
 ): void => {
-	// TODO: Right way?
 	if (parent && index !== undefined) {
 		parent.children.splice(index, 1, newNode);
 	}
