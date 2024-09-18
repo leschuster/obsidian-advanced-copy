@@ -106,8 +106,6 @@ const visitor: Visitor<Blockquote, Parent> = (
 		children,
 	};
 
-	console.log(callout);
-
 	replaceCurrNodeWith(callout, index, parent);
 
 	return SKIP;
@@ -143,7 +141,6 @@ const extractMetaInfoOfPossibleCallout = (node: Blockquote): Meta | null => {
 		// Well, it's not a Callout then
 		return null;
 	}
-	console.log(match);
 
 	const calloutType = match?.groups?.type ?? "";
 	const calloutBehavior = match?.groups?.behavior ?? "";
@@ -237,7 +234,7 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 	): PhrasingContent | null {
 		// Handle leaf
 		if ("value" in node) {
-			if (!node.value.contains("\n")) {
+			if (!node.value.includes("\n")) {
 				return node;
 			}
 
@@ -285,9 +282,7 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 			};
 		}
 
-		throw new Error(
-			"cannot split node: node does not contain 'value' or 'children'",
-		);
+		return null;
 	}
 };
 
@@ -416,9 +411,7 @@ const extractCalloutChildren = (
 			};
 		}
 
-		throw new Error(
-			"cannot split node: node does not contain 'value' or 'children'",
-		);
+		return null;
 	}
 };
 
@@ -430,7 +423,7 @@ const extractCalloutChildren = (
 const containsLineBreakRec = (node: PhrasingContent): boolean => {
 	if ("value" in node) {
 		// Windows line breaks are replaced in the preprocess step of the Processor
-		return node.value.contains("\n");
+		return node.value.includes("\n");
 	}
 	if ("children" in node) {
 		for (const child of node.children) {
