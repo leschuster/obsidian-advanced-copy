@@ -1,4 +1,3 @@
-import { TFile } from "obsidian";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import { Profile } from "src/settings/settings";
@@ -7,18 +6,31 @@ import customStringify from "./customStringify";
 import remarkGfm from "remark-gfm";
 import remarkCallout from "./remark-plugins/remark-callout";
 
+/**
+ * Global variables that the user can use anywhere in any profile
+ */
+export type GlobalVariables = {
+	vaultName: string;
+	fileBasename: string;
+	fileExtension: string;
+	fileName: string;
+	filePath: string;
+	date: string;
+	time: string;
+};
+
 export class Processor {
 	private constructor(
 		private profile: Profile,
-		private activeFile: TFile | null,
+		private globalVars: GlobalVariables,
 	) {}
 
 	public static async process(
 		input: string,
 		profile: Profile,
-		activeFile: TFile | null,
+		globalVars: GlobalVariables,
 	): Promise<string> {
-		const instance = new Processor(profile, activeFile);
+		const instance = new Processor(profile, globalVars);
 
 		const preprocessed = instance.preprocess(input);
 		const processed = await instance.process(preprocessed);
@@ -56,19 +68,8 @@ export class Processor {
 	}
 
 	private replaceGlobalVariables(text: string): string {
-		const date = new Date();
-
-		const globalVariables: { [key: string]: string } = {
-			fileBasename: this.activeFile?.basename ?? "",
-			fileExtension: this.activeFile?.extension ?? "",
-			fileName: this.activeFile?.name ?? "",
-			filePath: this.activeFile?.path ?? "",
-			date: date.toLocaleDateString(),
-			time: date.toLocaleTimeString(),
-		};
-
-		for (const key in globalVariables) {
-			text = text.replaceAll(`\$${key}`, globalVariables[key]);
+		for (const [key, value] of Object.entries(this.globalVars)) {
+			text = text.replaceAll(`\$${key}`, value);
 		}
 
 		return text;
