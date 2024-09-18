@@ -20,6 +20,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
 					'<div class="callout callout-$type callout-closeable-$closeable callout-default-open-$default_open"><h2>$title</h2><div>$value</div></div>',
 				codeBlock: "<pre><code>$value</code></pre>",
 				codeInline: "<code>$value</code>",
+				embeddedWikilink:
+					'<a href="obsidian://open?vault=$vaultName&file=$link">$value</a>',
 				heading1: "<h1>$value</h1>",
 				heading2: "<h2>$value</h2>",
 				heading3: "<h3>$value</h3>",
@@ -39,6 +41,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
 				strikethrough: "<del>$value</del>",
 				text: "$value",
 				unorderedList: "<ul>$value</ul>",
+				wikilink:
+					'<a href="obsidian://open?vault=$vaultName&file=$link">$value</a>',
 			},
 			extra: {
 				before: "",

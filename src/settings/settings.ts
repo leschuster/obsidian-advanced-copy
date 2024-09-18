@@ -19,6 +19,7 @@ export type Profile = {
 		callout: string;
 		codeBlock: string;
 		codeInline: string;
+		embeddedWikilink: string;
 		heading1: string;
 		heading2: string;
 		heading3: string;
@@ -38,6 +39,7 @@ export type Profile = {
 		strikethrough: string;
 		text: string;
 		unorderedList: string;
+		wikilink: string;
 	};
 	extra: {
 		before: string;

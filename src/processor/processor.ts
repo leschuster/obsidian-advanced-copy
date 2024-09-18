@@ -5,6 +5,7 @@ import { unified } from "unified";
 import customStringify from "./customStringify";
 import remarkGfm from "remark-gfm";
 import remarkCallout from "./remark-plugins/remark-callout";
+import remarkWikilink from "./remark-plugins/wikilink";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -52,6 +53,7 @@ export class Processor {
 			.use(remarkMath)
 			.use(remarkGfm)
 			.use(remarkCallout)
+			.use(remarkWikilink)
 			.use(customStringify, { profile: this.profile })
 			.process(input);
 

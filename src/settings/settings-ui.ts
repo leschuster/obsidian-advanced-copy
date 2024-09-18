@@ -286,6 +286,17 @@ class EditProfileModal extends Modal {
 
 		addTextAreaInput(
 			this.contentEl,
+			"Embedded Wikilink",
+			"Define how an embedded wikilink should be converted.\nVariables: $value, $link",
+			this.profile.templates.embeddedWikilink,
+			async (value) => {
+				this.profile.templates.embeddedWikilink = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
 			"Heading 1",
 			"Define how a level 1 heading should be converted.\nVariables: $value, $level",
 			this.profile.templates.heading1,
@@ -489,6 +500,17 @@ class EditProfileModal extends Modal {
 			this.profile.templates.unorderedList,
 			async (value) => {
 				this.profile.templates.unorderedList = value;
+				await this.save();
+			},
+		);
+
+		addTextAreaInput(
+			this.contentEl,
+			"Wikilink",
+			"Define how a wikilink should be converted.\nVariables: $value, $link",
+			this.profile.templates.wikilink,
+			async (value) => {
+				this.profile.templates.wikilink = value;
 				await this.save();
 			},
 		);
