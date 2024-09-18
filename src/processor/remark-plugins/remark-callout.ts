@@ -11,8 +11,11 @@ import {
 import { Transformer } from "unified";
 import { visit, Visitor, VisitorResult } from "unist-util-visit";
 
-const REGEX = /^\[!(?<type>.+)\](?<behavior>[\+\-])?( +)/;
+const REGEX = /^\[!(?<type>.+)\](?<behavior>[\+\-])?( +)/; //!BUG
 
+/**
+ * Markdown Callout node parsed from Obsidian syntax.
+ */
 export interface Callout extends Parent {
 	/**
 	 * Node type of callout.
@@ -44,6 +47,11 @@ export interface Callout extends Parent {
 	data?: CalloutData | undefined;
 }
 
+/**
+ * Subset of Callout properties concerned with Callout's metadata
+ */
+type Meta = Pick<Callout, "calloutType" | "closeable" | "default_open">;
+
 export interface CalloutData extends Data {}
 
 declare module "mdast" {
@@ -56,7 +64,11 @@ declare module "mdast" {
 	}
 }
 
-export default function remarkCallout() {
+/**
+ * Add support for Callouts
+ * @returns tree transformer
+ */
+export default function remarkCallout(): Transformer<Root> {
 	const transformer: Transformer<Root> = (tree) => {
 		// Callouts are just special Blockquotes
 		// so we only need to check all Blockquotes if they are actually Callouts
@@ -66,8 +78,13 @@ export default function remarkCallout() {
 	return transformer;
 }
 
-type Meta = Pick<Callout, "calloutType" | "closeable" | "default_open">;
-
+/**
+ * Replace a Blockquote node with a Callout, if applicable
+ * @param node a Blockquote node
+ * @param index index of Blockquote in parent's children property
+ * @param parent Blockquote's parent node
+ * @returns
+ */
 const visitor: Visitor<Blockquote, Parent> = (
 	node,
 	index,
@@ -151,82 +168,14 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 	//
 	// Idea: Depth-First-Search to find the first Literal containing a line break.
 
-	const splitNodeAtLineBreakRec = (
-		node: PhrasingContent,
-	): PhrasingContent | null => {
-		if ("value" in node) {
-			if (!node.value.contains("\n")) {
-				return node;
-			}
-
-			const valueUntilLineBreak = node.value.slice(
-				0,
-				node.value.indexOf("\n"),
-			);
-
-			if (valueUntilLineBreak === "") {
-				// Do not add an empty element
-				return null;
-			}
-
-			return {
-				...node,
-				value: valueUntilLineBreak,
-				data: {},
-			};
-		}
-
-		if ("children" in node) {
-			const newChildren: Array<PhrasingContent> = [];
-			for (const child of node.children) {
-				if (!containsLineBreakRec(child)) {
-					newChildren.push(child);
-					continue;
-				}
-
-				const splitted = splitNodeAtLineBreakRec(child);
-				if (splitted) {
-					newChildren.push(splitted);
-				}
-				break;
-			}
-
-			if (newChildren.length === 0) {
-				return null;
-			}
-
-			return {
-				...node,
-				children: newChildren,
-				data: {},
-			};
-		}
-
-		throw new Error(
-			"cannot split node: node does not contain 'value' or 'children'",
-		);
-	};
-
-	const title: Array<PhrasingContent> = [];
-
 	if (node.children[0].type !== "paragraph") {
 		throw new Error(
 			"cannot extract callout title: first child of blockquote is not a paragraph",
 		);
 	}
 
-	const paragraph = node.children[0];
-	for (const child of paragraph.children) {
-		if (!containsLineBreakRec(child)) {
-			title.push(child);
-		} else {
-			const splitted = splitNodeAtLineBreakRec(child);
-			if (splitted) {
-				title.push(splitted);
-			}
-			break;
-		}
-	}
+	// We only need to look at the first block, which definitely is a Paragraph
+	const title = getParagraphChildrenUntilLineBreak(node.children[0]);
 
 	if (title.length === 0 || title[0].type !== "text") {
 		throw new Error(
@@ -250,16 +199,171 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 	}
 
 	return title;
+
+	/**
+	 * Return nodes until the first line break.
+	 * The node with the line break is split.
+	 * @param node paragraph node
+	 */
+	function getParagraphChildrenUntilLineBreak(
+		node: Paragraph,
+	): Array<PhrasingContent> {
+		const children: Array<PhrasingContent> = [];
+
+		for (const child of node.children) {
+			if (!containsLineBreakRec(child)) {
+				children.push(child);
+			} else {
+				const splitted = getSubtreeBeforeLineBreak(child);
+				if (splitted) {
+					children.push(splitted);
+				}
+				break;
+			}
+		}
+
+		return children;
+	}
+
+	/**
+	 * Splits the tree at the first line break and returns the part before that
+	 * @param node
+	 * @returns node or null, if node would be empty
+	 */
+	function getSubtreeBeforeLineBreak(
+		node: PhrasingContent,
+	): PhrasingContent | null {
+		// Handle leaf
+		if ("value" in node) {
+			if (!node.value.contains("\n")) {
+				return node;
+			}
+
+			const valueUntilLineBreak = node.value.slice(
+				0,
+				node.value.indexOf("\n"),
+			);
+
+			if (valueUntilLineBreak === "") {
+				// Do not add an empty element
+				return null;
+			}
+
+			return {
+				...node,
+				value: valueUntilLineBreak,
+				data: {},
+			};
+		}
+
+		// Handle inner node
+		if ("children" in node) {
+			const children: Array<PhrasingContent> = [];
+			for (const child of node.children) {
+				if (!containsLineBreakRec(child)) {
+					children.push(child);
+					continue;
+				}
+
+				const splitted = getSubtreeBeforeLineBreak(child);
+				if (splitted) {
+					children.push(splitted);
+				}
+				break;
+			}
+
+			if (children.length === 0) {
+				return null;
+			}
+
+			return {
+				...node,
+				children,
+				data: {},
+			};
+		}
+
+		throw new Error(
+			"cannot split node: node does not contain 'value' or 'children'",
+		);
+	}
 };
 
+/**
+ * Extract children for Callout node
+ * @param node Blockquote node
+ * @returns Array of children nodes
+ */
 const extractCalloutChildren = (
 	node: Blockquote,
 ): Array<BlockContent | DefinitionContent> => {
 	// The children of a Callout are the block nodes starting after the first line break
+	//
+	// Idea: The first child of node must be a Paragraph. Perform DFS search for first line break
+	// and only keep the subtree after the line break. All other node.children can be kept.
 
-	const splitNodeAtLineBreakRec = (
+	if (node.children[0].type !== "paragraph") {
+		throw new Error(
+			"cannot extract callout children: first child of blockquote is not a paragraph",
+		);
+	}
+
+	const splittedParagraph = getParagraphAfterLineBreak(node.children[0]);
+
+	if (splittedParagraph) {
+		return [splittedParagraph, ...node.children.slice(1)];
+	} else {
+		return node.children.slice(1);
+	}
+
+	/**
+	 * Split Paragraph node at the first line break and return the second half
+	 * as a new Paragrah.
+	 * @param node Paragraph node
+	 * @returns Paragraph node or null, if it would be empty
+	 */
+	function getParagraphAfterLineBreak(node: Paragraph): Paragraph | null {
+		let i: number;
+		for (i = 0; i < node.children.length; i++) {
+			if (containsLineBreakRec(node.children[i])) {
+				break;
+			}
+		}
+
+		if (i >= node.children.length) {
+			// No line break found
+			return null;
+		}
+
+		const splitted = getSubtreeAfterLineBreak(node.children[i]);
+
+		let children: Array<PhrasingContent>;
+		if (splitted) {
+			children = [splitted, ...node.children.slice(i + 1)];
+		} else {
+			children = node.children.slice(i + 1);
+		}
+
+		if (children.length === 0) {
+			return null;
+		}
+
+		return {
+			...node,
+			children,
+			data: {},
+		};
+	}
+
+	/**
+	 * Splits the tree at the first line break and returns the second part
+	 * @param node
+	 * @returns node or null, if node would be empty
+	 */
+	function getSubtreeAfterLineBreak(
 		node: PhrasingContent,
-	): PhrasingContent | null => {
+	): PhrasingContent | null {
+		// Handle leaf
 		if ("value" in node) {
 			const valueAfterLineBreak = node.value.slice(
 				node.value.indexOf("\n") + 1,
@@ -276,22 +380,28 @@ const extractCalloutChildren = (
 			};
 		}
 
+		// Handle inner node
 		if ("children" in node) {
-			let children: Array<PhrasingContent> = [];
 			let i: number;
 			for (i = 0; i < node.children.length; i++) {
-				const child = node.children[i];
-				if (!containsLineBreakRec(child)) {
-					continue;
+				if (containsLineBreakRec(node.children[i])) {
+					break;
 				}
-
-				const splitted = splitNodeAtLineBreakRec(child);
-				if (splitted) {
-					children.push(splitted);
-				}
-				break;
 			}
-			children = children.concat(node.children.slice(i + 1));
+
+			if (i >= node.children.length) {
+				// No line breaks found
+				return null;
+			}
+
+			const splitted = getSubtreeAfterLineBreak(node.children[i]);
+
+			let children: Array<PhrasingContent>;
+			if (splitted) {
+				children = [splitted, ...node.children.slice(i + 1)];
+			} else {
+				children = node.children.slice(i + 1);
+			}
 
 			if (children.length === 0) {
 				return null;
@@ -307,52 +417,14 @@ const extractCalloutChildren = (
 		throw new Error(
 			"cannot split node: node does not contain 'value' or 'children'",
 		);
-	};
-
-	const splitParagraph = (node: Paragraph): Paragraph | null => {
-		let children: Array<PhrasingContent> = [];
-		let i: number;
-		for (i = 0; i < node.children.length; i++) {
-			const child = node.children[i];
-			if (!containsLineBreakRec(child)) {
-				console.log("PARAGRAPH:", child);
-				continue;
-			}
-
-			const splitted = splitNodeAtLineBreakRec(child);
-			if (splitted) {
-				children.push(splitted);
-			}
-			break;
-		}
-		children = children.concat(node.children.slice(i + 1));
-
-		if (children.length === 0) {
-			return null;
-		}
-
-		return {
-			...node,
-			children,
-			data: {},
-		};
-	};
-
-	if (node.children[0].type !== "paragraph") {
-		throw new Error(
-			"cannot extract callout children: first child of blockquote is not a paragraph",
-		);
-	}
-
-	const splitted = splitParagraph(node.children[0]);
-
-	if (splitted) {
-		return [splitted, ...node.children.slice(1)];
-	} else {
-		return node.children.slice(1);
 	}
 };
 
+/**
+ * Helper function to determine if a node contains a line break or not
+ * @param node
+ * @returns
+ */
 const containsLineBreakRec = (node: PhrasingContent): boolean => {
 	if ("value" in node) {
 		// Windows line breaks are replaced in the preprocess step of the Processor
