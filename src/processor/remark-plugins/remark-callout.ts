@@ -151,26 +151,9 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 	//
 	// Idea: Depth-First-Search to find the first Literal containing a line break.
 
-	const containsLineBreakRec = (node: PhrasingContent): boolean => {
-		if ("value" in node) {
-			// Windows line breaks are replaced in the preprocess step of the Processor
-			return node.value.contains("\n");
-		}
-		if ("children" in node) {
-			for (const child of node.children) {
-				if (containsLineBreakRec(child)) {
-					return true;
-				}
-			}
-			return false;
-		}
-
-		return false;
-	};
-
 	const splitNodeAtLineBreakRec = (
 		node: PhrasingContent,
-	): PhrasingContent => {
+	): PhrasingContent | null => {
 		if ("value" in node) {
 			if (!node.value.contains("\n")) {
 				return node;
@@ -180,6 +163,11 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 				0,
 				node.value.indexOf("\n"),
 			);
+
+			if (valueUntilLineBreak === "") {
+				// Do not add an empty element
+				return null;
+			}
 
 			return {
 				...node,
@@ -193,10 +181,18 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 			for (const child of node.children) {
 				if (!containsLineBreakRec(child)) {
 					newChildren.push(child);
-				} else {
-					newChildren.push(splitNodeAtLineBreakRec(child));
-					break;
+					continue;
 				}
+
+				const splitted = splitNodeAtLineBreakRec(child);
+				if (splitted) {
+					newChildren.push(splitted);
+				}
+				break;
+			}
+
+			if (newChildren.length === 0) {
+				return null;
 			}
 
 			return {
@@ -224,7 +220,10 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 		if (!containsLineBreakRec(child)) {
 			title.push(child);
 		} else {
-			title.push(splitNodeAtLineBreakRec(child));
+			const splitted = splitNodeAtLineBreakRec(child);
+			if (splitted) {
+				title.push(splitted);
+			}
 			break;
 		}
 	}
@@ -256,7 +255,119 @@ const extractCalloutTitle = (node: Blockquote): Array<PhrasingContent> => {
 const extractCalloutChildren = (
 	node: Blockquote,
 ): Array<BlockContent | DefinitionContent> => {
-	return [];
+	// The children of a Callout are the block nodes starting after the first line break
+
+	const splitNodeAtLineBreakRec = (
+		node: PhrasingContent,
+	): PhrasingContent | null => {
+		if ("value" in node) {
+			const valueAfterLineBreak = node.value.slice(
+				node.value.indexOf("\n") + 1,
+			);
+
+			if (valueAfterLineBreak === "") {
+				return null;
+			}
+
+			return {
+				...node,
+				value: valueAfterLineBreak,
+				data: {},
+			};
+		}
+
+		if ("children" in node) {
+			let children: Array<PhrasingContent> = [];
+			let i: number;
+			for (i = 0; i < node.children.length; i++) {
+				const child = node.children[i];
+				if (!containsLineBreakRec(child)) {
+					continue;
+				}
+
+				const splitted = splitNodeAtLineBreakRec(child);
+				if (splitted) {
+					children.push(splitted);
+				}
+				break;
+			}
+			children = children.concat(node.children.slice(i + 1));
+
+			if (children.length === 0) {
+				return null;
+			}
+
+			return {
+				...node,
+				children,
+				data: {},
+			};
+		}
+
+		throw new Error(
+			"cannot split node: node does not contain 'value' or 'children'",
+		);
+	};
+
+	const splitParagraph = (node: Paragraph): Paragraph | null => {
+		let children: Array<PhrasingContent> = [];
+		let i: number;
+		for (i = 0; i < node.children.length; i++) {
+			const child = node.children[i];
+			if (!containsLineBreakRec(child)) {
+				console.log("PARAGRAPH:", child);
+				continue;
+			}
+
+			const splitted = splitNodeAtLineBreakRec(child);
+			if (splitted) {
+				children.push(splitted);
+			}
+			break;
+		}
+		children = children.concat(node.children.slice(i + 1));
+
+		if (children.length === 0) {
+			return null;
+		}
+
+		return {
+			...node,
+			children,
+			data: {},
+		};
+	};
+
+	if (node.children[0].type !== "paragraph") {
+		throw new Error(
+			"cannot extract callout children: first child of blockquote is not a paragraph",
+		);
+	}
+
+	const splitted = splitParagraph(node.children[0]);
+
+	if (splitted) {
+		return [splitted, ...node.children.slice(1)];
+	} else {
+		return node.children.slice(1);
+	}
+};
+
+const containsLineBreakRec = (node: PhrasingContent): boolean => {
+	if ("value" in node) {
+		// Windows line breaks are replaced in the preprocess step of the Processor
+		return node.value.contains("\n");
+	}
+	if ("children" in node) {
+		for (const child of node.children) {
+			if (containsLineBreakRec(child)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	return false;
 };
 
 /**
