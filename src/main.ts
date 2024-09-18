@@ -1,10 +1,16 @@
-import { Editor, MarkdownFileInfo, MarkdownView, Plugin } from "obsidian";
+import {
+	Editor,
+	MarkdownFileInfo,
+	MarkdownView,
+	Plugin,
+	Vault,
+} from "obsidian";
 import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
 import { ClipboardHelper } from "./utils/ClipboardHelper";
-import { Processor } from "./processor/processor";
+import { GlobalVariables, Processor } from "./processor/processor";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -108,11 +114,26 @@ export default class AdvancedCopyPlugin extends Plugin {
 	 * @param profile profile to use
 	 */
 	private async copy(input: string, profile: Profile): Promise<void> {
-		// We need a reference to the current file to get some global variables
-		const activeFile = this.app.workspace.getActiveFile();
+		const globalVars = this.getGlobalVariables();
 
-		const output = await Processor.process(input, profile, activeFile);
+		const output = await Processor.process(input, profile, globalVars);
 
 		ClipboardHelper.copy(output);
+	}
+
+	private getGlobalVariables(): GlobalVariables {
+		const date = new Date();
+		const activeFile = this.app.workspace.getActiveFile();
+		const vaultName = this.app.vault.getName();
+
+		return {
+			vaultName,
+			fileBasename: activeFile?.basename ?? "",
+			fileExtension: activeFile?.extension ?? "",
+			fileName: activeFile?.name ?? "",
+			filePath: activeFile?.path ?? "",
+			date: date.toLocaleDateString(),
+			time: date.toLocaleTimeString(),
+		};
 	}
 }
