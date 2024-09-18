@@ -108,7 +108,15 @@ const visitor: Visitor<Blockquote, Parent> = (
 
 	replaceCurrNodeWith(callout, index, parent);
 
-	return SKIP;
+	// If we were to return nothing, the utility would also visit node.children
+	// and possibly replace Blockquotes with Callouts in the _original_ node.
+	// When you have two nested Callouts both would be visited and replaced,
+	// but the inner Callout would be replaced in the original node, not the outer one.
+	//
+	// We return SKIP to say that node.children should _not_ be visisted. By returning the `index`
+	// the newly created Callout gets visited again (nothing happens because it's not a Blockquote anymore)
+	// and the children Blockquotes get correctly replaced.
+	return [SKIP, index];
 };
 
 /**
