@@ -2,6 +2,7 @@ import { Nodes } from "mdast";
 import { Profile } from "src/settings/settings";
 import { zwitch } from "zwitch";
 import { handlers } from "./handlers";
+import { Logger } from "src/utils/Logger";
 
 export interface Options {
     profile: Profile;
@@ -23,7 +24,28 @@ function invalid(value: unknown): never {
 }
 
 // Node type is unknown
-function unknown(value: unknown): never {
+function unknown(value: unknown, profile: Profile): string {
     const node = value as Nodes;
-    throw new Error(`Cannot handle unknown node '${node.type}'`);
+
+    if ("value" in node) {
+        return node.value;
+    }
+
+    if ("children" in node) {
+        return node.children
+            .map((child) => toCustom(child, { profile }))
+            .join("");
+    }
+
+    if ("label" in node && node.label) {
+        return node.label;
+    }
+
+    if ("identifier" in node && node.identifier) {
+        return node.identifier;
+    }
+
+    Logger.warn(`Cannot handle unknown node '${node.type}'`);
+
+    return "";
 }
