@@ -9,11 +9,11 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function list(node: List, profile: Profile): string {
-	if (node.ordered) {
-		return orderedList(node, profile);
-	} else {
-		return unorderedList(node, profile);
-	}
+    if (node.ordered) {
+        return orderedList(node, profile);
+    } else {
+        return unorderedList(node, profile);
+    }
 }
 
 /**
@@ -26,15 +26,15 @@ export function list(node: List, profile: Profile): string {
  * @returns
  */
 function orderedList(node: List, profile: Profile): string {
-	const children = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const children = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	const start = node.start ?? 1;
+    const start = node.start ?? 1;
 
-	return profile.templates.orderedList
-		.replaceAll("$value", children)
-		.replaceAll("$start", start + "");
+    return profile.templates.orderedList
+        .replaceAll("$value", children)
+        .replaceAll("$start", start + "");
 }
 
 /**
@@ -46,9 +46,9 @@ function orderedList(node: List, profile: Profile): string {
  * @returns
  */
 function unorderedList(node: List, profile: Profile): string {
-	const children = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const children = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	return profile.templates.unorderedList.replaceAll("$value", children);
+    return profile.templates.unorderedList.replaceAll("$value", children);
 }

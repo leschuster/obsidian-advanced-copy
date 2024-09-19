@@ -9,5 +9,5 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function root(node: Root, profile: Profile): string {
-	return node.children.map((child) => toCustom(child, { profile })).join("");
+    return node.children.map((child) => toCustom(child, { profile })).join("");
 }

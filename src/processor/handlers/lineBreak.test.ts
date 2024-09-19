@@ -4,18 +4,18 @@ import { Profile } from "src/settings/settings";
 import { lineBreak } from "./lineBreak";
 
 describe("testing lineBreak", () => {
-	let profile: Profile;
+    let profile: Profile;
 
-	beforeEach(() => {
-		profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-		profile.templates.lineBreak = "<br />";
-	});
+    beforeEach(() => {
+        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        profile.templates.lineBreak = "<br />";
+    });
 
-	test("should return break element", () => {
-		const input: Break = {
-			type: "break",
-		};
-		const expected = "<br />";
-		expect(lineBreak(input, profile)).toBe(expected);
-	});
+    test("should return break element", () => {
+        const input: Break = {
+            type: "break",
+        };
+        const expected = "<br />";
+        expect(lineBreak(input, profile)).toBe(expected);
+    });
 });

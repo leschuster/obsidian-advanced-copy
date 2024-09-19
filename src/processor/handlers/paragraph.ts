@@ -11,9 +11,9 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function paragraph(node: Paragraph, profile: Profile): string {
-	const content = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const content = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	return profile.templates.paragraph.replaceAll("$value", content);
+    return profile.templates.paragraph.replaceAll("$value", content);
 }

@@ -8,5 +8,5 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function lineBreak(node: Break, profile: Profile): string {
-	return profile.templates.lineBreak;
+    return profile.templates.lineBreak;
 }

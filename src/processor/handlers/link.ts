@@ -13,14 +13,14 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function link(node: Link, profile: Profile): string {
-	const alt = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const alt = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	let content = profile.templates.link
-		.replaceAll("$url", node.url)
-		.replaceAll("$alt", alt)
-		.replaceAll("$title", node.title ?? "");
+    let content = profile.templates.link
+        .replaceAll("$url", node.url)
+        .replaceAll("$alt", alt)
+        .replaceAll("$title", node.title ?? "");
 
-	return content;
+    return content;
 }

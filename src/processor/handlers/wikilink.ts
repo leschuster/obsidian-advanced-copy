@@ -8,11 +8,11 @@ import { Wikilink } from "../remark-plugins/wikilink";
  * @returns
  */
 export function wikilink(node: Wikilink, profile: Profile): string {
-	if (node.embedded) {
-		return embeddedWikilink(node, profile);
-	} else {
-		return normalWikilink(node, profile);
-	}
+    if (node.embedded) {
+        return embeddedWikilink(node, profile);
+    } else {
+        return normalWikilink(node, profile);
+    }
 }
 
 /**
@@ -22,9 +22,9 @@ export function wikilink(node: Wikilink, profile: Profile): string {
  * @returns
  */
 function normalWikilink(node: Wikilink, profile: Profile): string {
-	return profile.templates.wikilink
-		.replaceAll("$value", node.value)
-		.replaceAll("$link", node.link);
+    return profile.templates.wikilink
+        .replaceAll("$value", node.value)
+        .replaceAll("$link", node.link);
 }
 
 /**
@@ -34,7 +34,7 @@ function normalWikilink(node: Wikilink, profile: Profile): string {
  * @returns
  */
 function embeddedWikilink(node: Wikilink, profile: Profile): string {
-	return profile.templates.embeddedWikilink
-		.replaceAll("$value", node.value)
-		.replaceAll("$link", node.link);
+    return profile.templates.embeddedWikilink
+        .replaceAll("$value", node.value)
+        .replaceAll("$link", node.link);
 }

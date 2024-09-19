@@ -13,18 +13,18 @@ import { Logger } from "src/utils/Logger";
  * @returns
  */
 export function heading(node: Heading, profile: Profile): string {
-	const content = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const content = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	const template = profile.templates[`heading${node.depth}`];
+    const template = profile.templates[`heading${node.depth}`];
 
-	if (!template) {
-		Logger.error(`could not find template 'heading${node.depth}'`);
-		return "";
-	}
+    if (!template) {
+        Logger.error(`could not find template 'heading${node.depth}'`);
+        return "";
+    }
 
-	return template
-		.replaceAll("$value", content)
-		.replaceAll("$level", node.depth + "");
+    return template
+        .replaceAll("$value", content)
+        .replaceAll("$level", node.depth + "");
 }

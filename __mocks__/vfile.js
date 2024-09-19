@@ -1,3 +1,3 @@
 module.exports = {
-	VFile: class {},
+    VFile: class {},
 };

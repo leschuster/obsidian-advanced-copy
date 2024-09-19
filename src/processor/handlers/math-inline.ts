@@ -10,5 +10,5 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function mathInline(node: InlineMath, profile: Profile): string {
-	return profile.templates.mathInline.replaceAll("$value", node.value);
+    return profile.templates.mathInline.replaceAll("$value", node.value);
 }
