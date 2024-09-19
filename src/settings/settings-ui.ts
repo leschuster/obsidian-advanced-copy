@@ -102,14 +102,48 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                 .setDesc(profile.meta.description)
                 .addExtraButton((extraButton) => {
                     // Button to toggle if the user wants to add an 'selection' command
-                    extraButton.setIcon("text-cursor").onClick(() => {
+
+                    const refresh = () => {
+                        extraButton.extraSettingsEl.style.backgroundColor =
+                            profile.meta.cmdSelection
+                                ? "var(--color-green)"
+                                : "var(--color-red)";
+                        extraButton.extraSettingsEl.style.color = "white";
+                        extraButton.setTooltip(
+                            profile.meta.cmdSelection
+                                ? 'Disable "Copy Selection" command'
+                                : 'Enable "Copy Selection" command',
+                        );
+                    };
+                    refresh();
+
+                    extraButton.setIcon("text-cursor").onClick(async () => {
                         profile.meta.cmdSelection = !profile.meta.cmdSelection;
+                        refresh();
+                        await this.save();
                     });
                 })
                 .addExtraButton((extraButton) => {
                     // Button to toggle if the user wants to add a 'page' command
-                    extraButton.setIcon("file").onClick(() => {
+
+                    const refresh = () => {
+                        extraButton.extraSettingsEl.style.backgroundColor =
+                            profile.meta.cmdPage
+                                ? "var(--color-green)"
+                                : "var(--color-red)";
+                        extraButton.extraSettingsEl.style.color = "white";
+                        extraButton.setTooltip(
+                            profile.meta.cmdPage
+                                ? 'Disable "Copy Page" command'
+                                : 'Enable "Copy Page" command',
+                        );
+                    };
+                    refresh();
+
+                    extraButton.setIcon("file").onClick(async () => {
                         profile.meta.cmdPage = !profile.meta.cmdPage;
+                        refresh();
+                        await this.save();
                     });
                 })
                 .addButton((button) => {
