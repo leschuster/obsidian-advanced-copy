@@ -3,6 +3,7 @@ import {
     MarkdownFileInfo,
     MarkdownView,
     Plugin,
+    SuggestModal,
     Vault,
 } from "obsidian";
 import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
@@ -11,6 +12,7 @@ import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
 import { ClipboardHelper } from "./utils/ClipboardHelper";
 import { GlobalVariables, Processor } from "./processor/processor";
+import { ProfileSelectionModal } from "./modals/profile-selection-modal";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -62,6 +64,8 @@ export default class AdvancedCopyPlugin extends Plugin {
             return;
         }
 
+        this.registerMainCmds();
+
         // Add commands for each profile individually
         for (const profile of Object.values(this.settings.profiles)) {
             if (profile.meta.cmdSelection) {
@@ -72,6 +76,34 @@ export default class AdvancedCopyPlugin extends Plugin {
                 this.registerCmdToCopyPage(profile);
             }
         }
+    }
+
+    private registerMainCmds(): void {
+        this.addCommand({
+            id: `${PLUGIN_NAME}-Selection`,
+            name: "Copy Selection",
+            editorCallback: (
+                editor: Editor,
+                _: MarkdownView | MarkdownFileInfo,
+            ) => {
+                new ProfileSelectionModal(this.app, this, async (profile) => {
+                    this.copy(editor.getSelection(), profile);
+                }).open();
+            },
+        });
+
+        this.addCommand({
+            id: `${PLUGIN_NAME}-Page`,
+            name: "Copy Page",
+            editorCallback: (
+                editor: Editor,
+                _: MarkdownView | MarkdownFileInfo,
+            ) => {
+                new ProfileSelectionModal(this.app, this, async (profile) => {
+                    this.copy(editor.getValue(), profile);
+                }).open();
+            },
+        });
     }
 
     /**
