@@ -10,6 +10,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 description: "Convert Markdown to HTML",
                 cmdSelection: true,
                 cmdPage: true,
+                replaceGemojiShortcodes: true,
                 configVersion: 1,
             },
             templates: {

@@ -10,6 +10,7 @@ export type Profile = {
         description: string;
         cmdSelection: boolean;
         cmdPage: boolean;
+        replaceGemojiShortcodes: boolean;
         configVersion: number;
     };
     templates: {

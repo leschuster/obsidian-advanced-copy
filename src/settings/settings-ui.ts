@@ -311,6 +311,17 @@ class EditProfileModal extends Modal {
             },
         );
 
+        addToggleInput(
+            this.contentEl,
+            "Replace Gemoji Shortcodes",
+            "Replace gemoji shotcodes :cat: with actual emojis 🐱",
+            this.profile.meta.replaceGemojiShortcodes,
+            async (value) => {
+                this.profile.meta.replaceGemojiShortcodes = value;
+                await this.save();
+            },
+        );
+
         addHeading(this.contentEl, "Templates");
 
         this.contentEl.createEl("div", {

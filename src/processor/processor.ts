@@ -6,6 +6,7 @@ import customStringify from "./customStringify";
 import remarkGfm from "remark-gfm";
 import remarkCallout from "./remark-plugins/remark-callout";
 import remarkWikilink from "./remark-plugins/wikilink";
+import remarkGemoji from "remark-gemoji";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -48,12 +49,18 @@ export class Processor {
     }
 
     private async process(input: string): Promise<string> {
-        const content = await unified()
+        let processor = unified()
             .use(remarkParse)
             .use(remarkMath)
             .use(remarkGfm)
             .use(remarkCallout)
-            .use(remarkWikilink)
+            .use(remarkWikilink);
+
+        if (this.profile.meta.replaceGemojiShortcodes) {
+            processor = processor.use(remarkGemoji);
+        }
+
+        const content = await processor
             .use(customStringify, { profile: this.profile })
             .process(input);
 
