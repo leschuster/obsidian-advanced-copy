@@ -8,5 +8,5 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function horizontalRule(node: ThematicBreak, profile: Profile): string {
-	return profile.templates.horizontalRule;
+    return profile.templates.horizontalRule;
 }

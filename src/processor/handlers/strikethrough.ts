@@ -11,9 +11,9 @@ import { Delete } from "mdast";
  * @returns
  */
 export function strikethrough(node: Delete, profile: Profile): string {
-	const content = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const content = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	return profile.templates.strikethrough.replaceAll("$value", content);
+    return profile.templates.strikethrough.replaceAll("$value", content);
 }

@@ -4,26 +4,26 @@ import { zwitch } from "zwitch";
 import { handlers } from "./handlers";
 
 export interface Options {
-	profile: Profile;
+    profile: Profile;
 }
 
 export default function toCustom(node: Nodes, { profile }: Options): string {
-	const handle = zwitch("type", {
-		invalid,
-		unknown,
-		handlers,
-	});
+    const handle = zwitch("type", {
+        invalid,
+        unknown,
+        handlers,
+    });
 
-	return handle(node, profile);
+    return handle(node, profile);
 }
 
 // Invalid value
 function invalid(value: unknown): never {
-	throw new Error(`Cannot handle value '${value}', expected node`);
+    throw new Error(`Cannot handle value '${value}', expected node`);
 }
 
 // Node type is unknown
 function unknown(value: unknown): never {
-	const node = value as Nodes;
-	throw new Error(`Cannot handle unknown node '${node.type}'`);
+    const node = value as Nodes;
+    throw new Error(`Cannot handle unknown node '${node.type}'`);
 }

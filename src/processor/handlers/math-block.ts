@@ -11,9 +11,9 @@ import { Math as MathNode } from "mdast-util-math";
  * @returns
  */
 export function mathBlock(node: MathNode, profile: Profile): string {
-	let content = profile.templates.mathBlock
-		.replaceAll("$value", node.value)
-		.replaceAll("$meta", node.meta ?? "");
+    let content = profile.templates.mathBlock
+        .replaceAll("$value", node.value)
+        .replaceAll("$meta", node.meta ?? "");
 
-	return content;
+    return content;
 }

@@ -15,17 +15,17 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function callout(node: Callout, profile: Profile): string {
-	const title = node.title
-		.map((child) => toCustom(child, { profile }))
-		.join("");
-	const value = node.children
-		.map((child) => toCustom(child, { profile }))
-		.join("");
+    const title = node.title
+        .map((child) => toCustom(child, { profile }))
+        .join("");
+    const value = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
 
-	return profile.templates.callout
-		.replaceAll("$type", node.calloutType)
-		.replaceAll("$value", value)
-		.replaceAll("$title", title)
-		.replaceAll("$closeable", node.closeable + "")
-		.replaceAll("$default_open", node.default_open + "");
+    return profile.templates.callout
+        .replaceAll("$type", node.calloutType)
+        .replaceAll("$value", value)
+        .replaceAll("$title", title)
+        .replaceAll("$closeable", node.closeable + "")
+        .replaceAll("$default_open", node.default_open + "");
 }

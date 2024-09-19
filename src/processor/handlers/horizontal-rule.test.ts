@@ -4,18 +4,18 @@ import { Profile } from "src/settings/settings";
 import { horizontalRule } from "./horizontal-rule";
 
 describe("testing horizontalRule", () => {
-	let profile: Profile;
+    let profile: Profile;
 
-	beforeEach(() => {
-		profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-		profile.templates.horizontalRule = "<hr />";
-	});
+    beforeEach(() => {
+        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        profile.templates.horizontalRule = "<hr />";
+    });
 
-	test("should return horizontal rule element", () => {
-		const input: ThematicBreak = {
-			type: "thematicBreak",
-		};
-		const expected = "<hr />";
-		expect(horizontalRule(input, profile)).toBe(expected);
-	});
+    test("should return horizontal rule element", () => {
+        const input: ThematicBreak = {
+            type: "thematicBreak",
+        };
+        const expected = "<hr />";
+        expect(horizontalRule(input, profile)).toBe(expected);
+    });
 });

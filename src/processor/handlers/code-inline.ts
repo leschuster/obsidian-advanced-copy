@@ -10,5 +10,5 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function codeInline(node: InlineCode, profile: Profile): string {
-	return profile.templates.codeInline.replaceAll("$value", node.value);
+    return profile.templates.codeInline.replaceAll("$value", node.value);
 }

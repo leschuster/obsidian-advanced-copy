@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-advanced-copy",
-	"name": "Advanced Copy",
-	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "leschuster",
-	"authorUrl": "https://github.com/leschuster",
-	"isDesktopOnly": false
+    "id": "obsidian-advanced-copy",
+    "name": "Advanced Copy",
+    "version": "1.0.0",
+    "minAppVersion": "0.15.0",
+    "description": "Demonstrates some of the capabilities of the Obsidian API.",
+    "author": "leschuster",
+    "authorUrl": "https://github.com/leschuster",
+    "isDesktopOnly": false
 }

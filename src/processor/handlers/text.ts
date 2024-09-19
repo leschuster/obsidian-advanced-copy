@@ -10,5 +10,5 @@ import { Profile } from "src/settings/settings";
  * @returns
  */
 export function text(node: Text, profile: Profile): string {
-	return profile.templates.text.replaceAll("$value", node.value);
+    return profile.templates.text.replaceAll("$value", node.value);
 }

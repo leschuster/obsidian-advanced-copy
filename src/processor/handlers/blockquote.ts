@@ -14,12 +14,12 @@ import toCustom from "../toCustom";
  * @returns
  */
 export function blockquote(node: Blockquote, profile: Profile): string {
-	const content = node.children
-		.map((child) => toCustom(child, { profile }))
-		.map((line) =>
-			profile.templates.blockquoteLine.replaceAll("$value", line),
-		)
-		.join("");
+    const content = node.children
+        .map((child) => toCustom(child, { profile }))
+        .map((line) =>
+            profile.templates.blockquoteLine.replaceAll("$value", line),
+        )
+        .join("");
 
-	return profile.templates.blockquoteWrapper.replaceAll("$value", content);
+    return profile.templates.blockquoteWrapper.replaceAll("$value", content);
 }
