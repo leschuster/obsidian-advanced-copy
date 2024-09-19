@@ -3,8 +3,8 @@ import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
 import { Profile } from "./settings";
 import AdvancedCopyPlugin from "src/main";
-import { ConfirmationModal } from "./confirmation-modal";
-import { InputModal } from "./input-modal";
+import { ConfirmationModal } from "../modals/confirmation-modal";
+import { InputModal } from "../modals/input-modal";
 
 /**
  * Provides the settings tab for the user interface
