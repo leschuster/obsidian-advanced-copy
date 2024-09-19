@@ -1,9 +1,10 @@
-import { App, Modal, PluginSettingTab, Setting } from "obsidian";
+import { App, Modal, Notice, PluginSettingTab, Setting } from "obsidian";
 import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
 import { Profile } from "./settings";
 import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "./confirmation-modal";
+import { InputModal } from "./input-modal";
 
 /**
  * Provides the settings tab for the user interface
@@ -34,6 +35,10 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
 	private async save(): Promise<void> {
 		await this.plugin.saveSettings();
+	}
+
+	private reload(): void {
+		this.display();
 	}
 
 	private addGeneralSettings(): void {
@@ -120,7 +125,56 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 						.setIcon("copy-plus")
 						.setTooltip("Duplicate profile")
 						.onClick(() => {
-							Logger.warn("Not yet implemented");
+							new InputModal(
+								this.app,
+								"Duplicate profile",
+								"Name",
+								"Duplicate",
+								async (name) => {
+									const newId = name
+										.toLowerCase()
+										.replace(/\s/g, "_");
+
+									if (this.plugin.settings!.profiles[newId]) {
+										new Notice(
+											`Profile ID '${newId}' already exists`,
+										);
+										Logger.log(
+											`Profile '${newId}' already exists`,
+										);
+										return;
+									}
+
+									if (
+										Object.values(
+											this.plugin.settings!.profiles,
+										).find((p) => p.meta.name === name)
+									) {
+										new Notice(
+											`Profile name '${name}' already exists`,
+										);
+										Logger.log(
+											`Profile '${name}' already exists`,
+										);
+										return;
+									}
+
+									const newProfile = JSON.parse(
+										JSON.stringify(profile),
+									) as Profile;
+									newProfile.meta.name = name;
+									this.plugin.settings!.profiles[name] =
+										newProfile;
+
+									Logger.log(
+										`Duplicated profile '${profile.meta.name}' to '${name}'`,
+									);
+
+									await this.save();
+
+									this.reload();
+								},
+							).open();
 						});
 				})
 				.addButton((button) => {
@@ -134,12 +188,13 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 								this.app,
 								"Delete profile",
 								`Are you sure you want to delete the profile '${profile.meta.name}'?`,
-								() => {
+								async () => {
 									Logger.log(
 										`Deleted profile '${profile.meta.name}'`,
 									);
 									delete this.plugin.settings?.profiles[id];
-									this.save();
+									await this.save();
+									this.reload();
 								},
 							).open();
 						});
