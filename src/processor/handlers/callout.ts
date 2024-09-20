@@ -4,12 +4,6 @@ import toCustom from "../toCustom";
 
 /**
  * Convert a callout node to string
- * Available variables:
- * - $type
- * - $content
- * - $title
- * - $closeable
- * - $default_open
  * @param node
  * @param profile
  * @returns

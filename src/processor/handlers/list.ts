@@ -18,9 +18,6 @@ export function list(node: List, profile: Profile): string {
 
 /**
  * Convert an ordered list node to string
- * Available variables:
- * - $value
- * - $start
  * @param node
  * @param profile
  * @returns
@@ -33,14 +30,12 @@ function orderedList(node: List, profile: Profile): string {
     const start = node.start ?? 1;
 
     return profile.templates.orderedList
-        .replaceAll("$value", children)
+        .replaceAll("$content", children)
         .replaceAll("$start", start + "");
 }
 
 /**
  * Convert an unordered list node to string
- * Available variables:
- * - $value
  * @param node
  * @param profile
  * @returns
@@ -50,7 +45,7 @@ function unorderedList(node: List, profile: Profile): string {
         .map((child) => listItem(child, profile, false))
         .join("");
 
-    return profile.templates.unorderedList.replaceAll("$value", children);
+    return profile.templates.unorderedList.replaceAll("$content", children);
 }
 
 function listItem(node: ListItem, profile: Profile, ordered: boolean): string {

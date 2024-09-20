@@ -3,8 +3,6 @@ import { Profile } from "src/settings/settings";
 
 /**
  * Convert a text node to string
- * Available variables:
- * - $value
  * @param node
  * @param profile
  * @returns

@@ -4,8 +4,6 @@ import { Delete } from "mdast";
 
 /**
  * Convert a strikethrough node to string
- * Available variables:
- * - $value
  * @param node
  * @param profile
  * @returns

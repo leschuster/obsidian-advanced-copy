@@ -3,10 +3,6 @@ import { Profile } from "src/settings/settings";
 
 /**
  * Convert a code block node to string
- * Available variables:
- * - $value
- * - $lang
- * - $meta
  * @param node
  * @param profile
  * @returns
