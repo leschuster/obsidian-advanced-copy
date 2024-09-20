@@ -26,6 +26,10 @@ export interface Callout extends Parent {
      */
     calloutType: string;
     /**
+     * Behavior of callout (e.g. "+", "-" or "")
+     */
+    calloutBehavior: string;
+    /**
      * Whether the callout can be closed.
      */
     closeable: boolean;
@@ -50,7 +54,10 @@ export interface Callout extends Parent {
 /**
  * Subset of Callout properties concerned with Callout's metadata
  */
-type Meta = Pick<Callout, "calloutType" | "closeable" | "default_open">;
+type Meta = Pick<
+    Callout,
+    "calloutType" | "calloutBehavior" | "closeable" | "default_open"
+>;
 
 export interface CalloutData extends Data {}
 
@@ -157,6 +164,7 @@ const extractMetaInfoOfPossibleCallout = (node: Blockquote): Meta | null => {
 
     return {
         calloutType,
+        calloutBehavior,
         closeable,
         default_open,
     };

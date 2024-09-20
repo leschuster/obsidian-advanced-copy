@@ -1,4 +1,4 @@
-import { List, ListItem } from "mdast";
+import { List, ListItem, Paragraph } from "mdast";
 import { Profile } from "src/settings/settings";
 import { list } from "./list";
 
@@ -12,7 +12,8 @@ describe("testing list", () => {
             templates: {
                 orderedList: '<ol start="$start">$value</ol>',
                 unorderedList: "<ul>$value</ul>",
-                listItem: "<li>$value</li>",
+                listItemOrdered: "<li ordered>$value</li>",
+                listItemUnordered: "<li unordered>$value</li>",
             },
         } as Profile;
     });
@@ -24,17 +25,27 @@ describe("testing list", () => {
             children: [
                 {
                     type: "listItem",
-                    children: [],
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [],
+                        } satisfies Paragraph,
+                    ],
                 } satisfies ListItem,
                 {
                     type: "listItem",
-                    children: [],
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [],
+                        } satisfies Paragraph,
+                    ],
                 } satisfies ListItem,
             ],
         };
 
         const expected =
-            '<ol start="1"><mock-listItem>...</mock-listItem><mock-listItem>...</mock-listItem></ol>';
+            '<ol start="1"><li ordered><mock-paragraph>...</mock-paragraph></li><li ordered><mock-paragraph>...</mock-paragraph></li></ol>';
         expect(list(input, profile)).toBe(expected);
     });
 
@@ -45,17 +56,27 @@ describe("testing list", () => {
             children: [
                 {
                     type: "listItem",
-                    children: [],
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [],
+                        } satisfies Paragraph,
+                    ],
                 } satisfies ListItem,
                 {
                     type: "listItem",
-                    children: [],
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [],
+                        } satisfies Paragraph,
+                    ],
                 } satisfies ListItem,
             ],
         };
 
         const expected =
-            "<ul><mock-listItem>...</mock-listItem><mock-listItem>...</mock-listItem></ul>";
+            "<ul><li unordered><mock-paragraph>...</mock-paragraph></li><li unordered><mock-paragraph>...</mock-paragraph></li></ul>";
         expect(list(input, profile)).toBe(expected);
     });
 

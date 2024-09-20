@@ -6,7 +6,7 @@ import toCustom from "../toCustom";
  * Convert a callout node to string
  * Available variables:
  * - $type
- * - $value
+ * - $content
  * - $title
  * - $closeable
  * - $default_open
@@ -18,13 +18,20 @@ export function callout(node: Callout, profile: Profile): string {
     const title = node.title
         .map((child) => toCustom(child, { profile }))
         .join("");
-    const value = node.children
-        .map((child) => toCustom(child, { profile }))
+    const content = node.children
+        .map((child) => {
+            const value = toCustom(child, { profile });
+            return profile.templates.calloutContentLine.replaceAll(
+                "$value",
+                value,
+            );
+        })
         .join("");
 
     return profile.templates.callout
         .replaceAll("$type", node.calloutType)
-        .replaceAll("$value", value)
+        .replaceAll("$behavior", node.calloutBehavior)
+        .replaceAll("$content", content)
         .replaceAll("$title", title)
         .replaceAll("$closeable", node.closeable + "")
         .replaceAll("$default_open", node.default_open + "");
