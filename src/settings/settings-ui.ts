@@ -260,7 +260,6 @@ class EditProfileModal extends Modal {
                 }
 
                 const name = setting.name;
-                const desc = setting.desc;
 
                 const initialValue = (
                     this.profile[sectionKey as keyof Profile] as any
@@ -275,19 +274,28 @@ class EditProfileModal extends Modal {
 
                 switch (setting.type) {
                     case "string":
-                        addTextAreaInput(
-                            this.contentEl,
-                            name,
-                            desc,
-                            initialValue as string,
-                            update,
-                        );
+                        const set = new Setting(this.contentEl)
+                            .setName(name)
+                            .addTextArea((text) =>
+                                text
+                                    .setPlaceholder(name)
+                                    .setValue(initialValue as string)
+                                    .onChange(update),
+                            );
+                        let desc = setting.desc;
+                        if (setting.vars) {
+                            for (const variable of setting.vars) {
+                                desc += `<br><b>${variable.name}</b>: ${variable.desc}`;
+                            }
+                        }
+                        set.descEl.innerHTML = desc;
+
                         break;
                     case "boolean":
                         addToggleInput(
                             this.contentEl,
                             name,
-                            desc,
+                            setting.desc,
                             initialValue as boolean,
                             update,
                         );

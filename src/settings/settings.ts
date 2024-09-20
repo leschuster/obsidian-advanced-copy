@@ -63,7 +63,7 @@ export type ProfileDescProperty = {
     name: string;
     desc: string;
     type: "string" | "boolean" | "number";
-    vars?: { name: string; desc?: string }[];
+    vars?: { name: string; desc: string }[];
     visible?: boolean;
 };
 
@@ -118,19 +118,19 @@ export const profileDesc: {
         blockquoteLine: {
             name: "Blockquote Line",
             desc: "Template for a single blockquote line",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Blockquote line content" }],
             type: "string",
         },
         blockquoteWrapper: {
             name: "Blockquote Wrapper",
             desc: "Template for a blockquote. Contains all blockquote lines.",
-            vars: [{ name: "content" }],
+            vars: [{ name: "content", desc: "Blockquote lines" }],
             type: "string",
         },
         bold: {
             name: "Bold",
             desc: "Template for bold text",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Bold text content" }],
             type: "string",
         },
         callout: {
@@ -140,7 +140,7 @@ export const profileDesc: {
                 { name: "type", desc: "Callout type, e.g. 'info'" },
                 { name: "behavior", desc: "either '+', '-', or ''" },
                 { name: "content", desc: "Callout content lines" },
-                { name: "title" },
+                { name: "title", desc: "Callout title" },
                 {
                     name: "closeable",
                     desc: "boolean, whether it can be closed or not",
@@ -155,7 +155,7 @@ export const profileDesc: {
         calloutContentLine: {
             name: "Callout Content Line",
             desc: "Template for a single callout content line",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Callout content line" }],
             type: "string",
         },
         codeBlock: {
@@ -171,7 +171,7 @@ export const profileDesc: {
         codeInline: {
             name: "Code Inline",
             desc: "Template for inline code",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Code content" }],
             type: "string",
         },
         embeddedWikilink: {
@@ -186,37 +186,55 @@ export const profileDesc: {
         heading1: {
             name: "Heading 1",
             desc: "Template for heading 1",
-            vars: [{ name: "value" }, { name: "level", desc: "1" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "1" },
+            ],
             type: "string",
         },
         heading2: {
             name: "Heading 2",
             desc: "Template for heading 2",
-            vars: [{ name: "value" }, { name: "level", desc: "2" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "2" },
+            ],
             type: "string",
         },
         heading3: {
             name: "Heading 3",
             desc: "Template for heading 3",
-            vars: [{ name: "value" }, { name: "level", desc: "3" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "3" },
+            ],
             type: "string",
         },
         heading4: {
             name: "Heading 4",
             desc: "Template for heading 4",
-            vars: [{ name: "value" }, { name: "level", desc: "4" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "4" },
+            ],
             type: "string",
         },
         heading5: {
             name: "Heading 5",
             desc: "Template for heading 5",
-            vars: [{ name: "value" }, { name: "level", desc: "5" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "5" },
+            ],
             type: "string",
         },
         heading6: {
             name: "Heading 6",
             desc: "Template for heading 6",
-            vars: [{ name: "value" }, { name: "level", desc: "6" }],
+            vars: [
+                { name: "value", desc: "Heading content" },
+                { name: "level", desc: "6" },
+            ],
             type: "string",
         },
         horizontalRule: {
@@ -237,7 +255,7 @@ export const profileDesc: {
         italic: {
             name: "Italic",
             desc: "Template for italic text",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Italic text content" }],
             type: "string",
         },
         lineBreak: {
@@ -258,25 +276,28 @@ export const profileDesc: {
         listItemOrdered: {
             name: "Ordered List Item",
             desc: "Template for an ordered list item",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "List item content" }],
             type: "string",
         },
         listItemUnordered: {
             name: "Unordered List Item",
             desc: "Template for an unordered list item",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "List item content" }],
             type: "string",
         },
         mathBlock: {
             name: "Math Block",
             desc: "Template for a math block",
-            vars: [{ name: "value" }, { name: "meta" }],
+            vars: [
+                { name: "value", desc: "Math block content" },
+                { name: "meta", desc: "Metadata" },
+            ],
             type: "string",
         },
         mathInline: {
             name: "Math Inline",
             desc: "Template for inline math",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Math content" }],
             type: "string",
         },
         orderedList: {
@@ -291,19 +312,19 @@ export const profileDesc: {
         paragraph: {
             name: "Paragraph",
             desc: "Template for a paragraph",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Paragraph content" }],
             type: "string",
         },
         strikethrough: {
             name: "Strikethrough",
             desc: "Template for strikethrough text",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Strikethrough text content" }],
             type: "string",
         },
         text: {
             name: "Text",
             desc: "Template for plain text",
-            vars: [{ name: "value" }],
+            vars: [{ name: "value", desc: "Text content" }],
             type: "string",
         },
         unorderedList: {
