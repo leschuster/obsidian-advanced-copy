@@ -51,7 +51,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
         markdown_to_anki: {
             meta: {
                 id: "markdown_to_anki",
-                name: "Markdown to ANKI",
+                name: "Markdown to Anki",
                 description: "Convert Markdown to Anki HTML",
                 cmdSelection: false,
                 cmdPage: false,
