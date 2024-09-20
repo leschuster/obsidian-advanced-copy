@@ -1,5 +1,8 @@
 # Obsidian Sample Plugin
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/leschuster/obsidian-advanced-copy/main.yml)
+![GitHub Release](https://img.shields.io/github/v/release/leschuster/obsidian-advanced-copy)
+
 A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.
 
 Note: This plugin is still in alpha. Please open issues if you find bugs or have ideas for improvements.
