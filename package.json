@@ -1,7 +1,7 @@
 {
     "name": "obsidian-advanced-copy",
-    "version": "1.0.0",
-    "description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+    "version": "0.1.0",
+    "description": "A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.",
     "main": "main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
@@ -13,7 +13,11 @@
         "prettier:write": "prettier . --write",
         "prepare": "husky"
     },
-    "keywords": [],
+    "keywords": [
+        "obsidian",
+        "obsidian-plugin",
+        "markdown"
+    ],
     "author": "leschuster",
     "license": "MIT",
     "devDependencies": {
