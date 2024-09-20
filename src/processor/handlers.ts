@@ -18,7 +18,6 @@ import { root } from "./handlers/root";
 import { bold } from "./handlers/bold";
 import { text } from "./handlers/text";
 import { list } from "./handlers/list";
-import { listItem } from "./handlers/listitem";
 import { strikethrough } from "./handlers/strikethrough";
 import { callout } from "./handlers/callout";
 import { wikilink } from "./handlers/wikilink";
@@ -38,7 +37,6 @@ export const handlers: Record<string, HandlerFunc> = {
     break: lineBreak,
     link: link,
     list: list,
-    listItem: listItem,
     math: mathBlock,
     inlineMath: mathInline,
     paragraph: paragraph,
