@@ -6,6 +6,8 @@ import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 
+// TODO: Global variables
+
 /**
  * Provides the settings tab for the user interface
  */

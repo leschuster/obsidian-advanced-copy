@@ -3,14 +3,13 @@ import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { Profile } from "src/settings/settings";
 import { codeInline } from "./code-inline";
 
-jest.mock("../toCustom");
-
 describe("testing codeInline", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.codeInline = "<code>$value</code>";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty code element when there is no value", () => {

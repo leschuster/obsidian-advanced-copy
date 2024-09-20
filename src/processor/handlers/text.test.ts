@@ -8,7 +8,6 @@ describe("testing text", () => {
 
     beforeEach(() => {
         profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.text = "$value";
     });
 
     test("should return correct string for a given text node", () => {

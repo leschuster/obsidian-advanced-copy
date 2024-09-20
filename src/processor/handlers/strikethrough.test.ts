@@ -3,14 +3,13 @@ import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { Profile } from "src/settings/settings";
 import { strikethrough } from "./strikethrough";
 
-jest.mock("../toCustom");
-
 describe("testing strikethrough", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.strikethrough = "<del>$value</del>";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty element when there are no children", () => {
@@ -26,12 +25,11 @@ describe("testing strikethrough", () => {
         const input: Delete = {
             type: "delete",
             children: [
-                { type: "text", value: "" } satisfies Text,
-                { type: "text", value: "" } satisfies Text,
+                { type: "text", value: "Hello, World! " } satisfies Text,
+                { type: "text", value: "Lorem ipsum!" } satisfies Text,
             ],
         };
-        const expected =
-            "<del><mock-text>...</mock-text><mock-text>...</mock-text></del>";
+        const expected = "<del>Hello, World! Lorem ipsum!</del>";
         expect(strikethrough(input, profile)).toBe(expected);
     });
 });

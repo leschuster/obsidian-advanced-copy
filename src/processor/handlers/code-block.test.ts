@@ -7,8 +7,9 @@ describe("testing codeBlock", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.codeBlock = "<pre><code>$value</code></pre>";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return code block without language or metadata", () => {

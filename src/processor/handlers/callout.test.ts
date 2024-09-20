@@ -4,13 +4,13 @@ import { Callout } from "../remark-plugins/remark-callout";
 import { callout } from "./callout";
 import { Emphasis, Paragraph, Text } from "mdast";
 
-jest.mock("../toCustom");
-
 describe("testing callout", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty callout", () => {
@@ -38,17 +38,22 @@ describe("testing callout", () => {
             title: [
                 {
                     type: "text",
-                    value: "test",
+                    value: "test ",
                 } satisfies Text,
                 {
                     type: "emphasis",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "emphasis",
+                        } satisfies Text,
+                    ],
                 } satisfies Emphasis,
             ],
             children: [],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2><mock-text>...</mock-text><mock-emphasis>...</mock-emphasis></h2><div></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2>test <em>emphasis</em></h2><div></div></div>';
         expect(callout(input, profile)).toBe(expected);
     });
 
@@ -63,16 +68,26 @@ describe("testing callout", () => {
             children: [
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "Hello",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "World",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
             ],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><mock-paragraph>...</mock-paragraph><mock-paragraph>...</mock-paragraph></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><p>Hello</p><p>World</p></div></div>';
         expect(callout(input, profile)).toBe(expected);
     });
 
@@ -87,17 +102,27 @@ describe("testing callout", () => {
             children: [
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "Hello",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "World",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
             ],
         };
         profile.templates.calloutContentLine = "<line>$value</line>";
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><line><mock-paragraph>...</mock-paragraph></line><line><mock-paragraph>...</mock-paragraph></line></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><line><p>Hello</p></line><line><p>World</p></line></div></div>';
         expect(callout(input, profile)).toBe(expected);
     });
 

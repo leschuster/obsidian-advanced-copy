@@ -4,13 +4,13 @@ import { Profile } from "src/settings/settings";
 import { root } from "./root";
 import toCustom from "../toCustom";
 
-jest.mock("../toCustom");
-
 describe("testing root", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty string for an empty root node", () => {
@@ -41,14 +41,7 @@ describe("testing root", () => {
             ],
         };
 
-        (toCustom as jest.Mock).mockImplementation((node) => {
-            if (node.type === "paragraph") {
-                return node.children.map((child: Text) => child.value).join("");
-            }
-            return "";
-        });
-
-        const expected = "Hello World";
+        const expected = "<p>Hello </p><p>World</p>";
         expect(root(input, profile)).toBe(expected);
     });
 });

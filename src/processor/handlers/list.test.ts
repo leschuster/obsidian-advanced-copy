@@ -1,21 +1,19 @@
-import { List, ListItem, Paragraph } from "mdast";
+import { List, ListItem, Paragraph, Text } from "mdast";
 import { Profile } from "src/settings/settings";
 import { list } from "./list";
-
-jest.mock("../toCustom");
+import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 
 describe("testing list", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = {
-            templates: {
-                orderedList: '<ol start="$start">$value</ol>',
-                unorderedList: "<ul>$value</ul>",
-                listItemOrdered: "<li ordered>$value</li>",
-                listItemUnordered: "<li unordered>$value</li>",
-            },
-        } as Profile;
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
+        profile.templates.orderedList = '<ol start="$start">$content</ol>';
+        profile.templates.unorderedList = "<ul>$content</ul>";
+        profile.templates.listItemOrdered = "<li ordered>$value</li>";
+        profile.templates.listItemUnordered = "<li unordered>$value</li>";
     });
 
     test("should return correct string for an ordered list with multiple items", () => {
@@ -28,7 +26,12 @@ describe("testing list", () => {
                     children: [
                         {
                             type: "paragraph",
-                            children: [],
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "First item",
+                                } satisfies Text,
+                            ],
                         } satisfies Paragraph,
                     ],
                 } satisfies ListItem,
@@ -37,7 +40,12 @@ describe("testing list", () => {
                     children: [
                         {
                             type: "paragraph",
-                            children: [],
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "Second item",
+                                } satisfies Text,
+                            ],
                         } satisfies Paragraph,
                     ],
                 } satisfies ListItem,
@@ -45,7 +53,7 @@ describe("testing list", () => {
         };
 
         const expected =
-            '<ol start="1"><li ordered><mock-paragraph>...</mock-paragraph></li><li ordered><mock-paragraph>...</mock-paragraph></li></ol>';
+            '<ol start="1"><li ordered><p>First item</p></li><li ordered><p>Second item</p></li></ol>';
         expect(list(input, profile)).toBe(expected);
     });
 
@@ -59,7 +67,12 @@ describe("testing list", () => {
                     children: [
                         {
                             type: "paragraph",
-                            children: [],
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "First item",
+                                } satisfies Text,
+                            ],
                         } satisfies Paragraph,
                     ],
                 } satisfies ListItem,
@@ -68,7 +81,12 @@ describe("testing list", () => {
                     children: [
                         {
                             type: "paragraph",
-                            children: [],
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "Second item",
+                                } satisfies Text,
+                            ],
                         } satisfies Paragraph,
                     ],
                 } satisfies ListItem,
@@ -76,7 +94,7 @@ describe("testing list", () => {
         };
 
         const expected =
-            "<ul><li unordered><mock-paragraph>...</mock-paragraph></li><li unordered><mock-paragraph>...</mock-paragraph></li></ul>";
+            "<ul><li unordered><p>First item</p></li><li unordered><p>Second item</p></li></ul>";
         expect(list(input, profile)).toBe(expected);
     });
 

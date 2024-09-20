@@ -1,6 +1,6 @@
 import { Blockquote } from "mdast";
 import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom from "src/processor/toCustom";
 
 /**
  * Convert a blockquote node to string

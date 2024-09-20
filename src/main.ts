@@ -1,11 +1,4 @@
-import {
-    Editor,
-    MarkdownFileInfo,
-    MarkdownView,
-    Plugin,
-    SuggestModal,
-    Vault,
-} from "obsidian";
+import { Editor, MarkdownFileInfo, MarkdownView, Plugin } from "obsidian";
 import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";

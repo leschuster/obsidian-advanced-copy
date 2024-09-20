@@ -3,17 +3,17 @@ import { Profile } from "src/settings/settings";
 import { Wikilink } from "../remark-plugins/wikilink";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 
-jest.mock("../toCustom");
-
 describe("testing wikilink", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
         profile.templates.embeddedWikilink =
-            '<a class="embedded" href="obsidian://open?vault=$vaultName&file=$link">$value</a>';
+            '<a class="embedded" href="obsidian://open?vault=$vaultName&file=$link">$text</a>';
         profile.templates.wikilink =
-            '<a href="obsidian://open?vault=$vaultName&file=$link">$value</a>';
+            '<a href="obsidian://open?vault=$vaultName&file=$link">$text</a>';
     });
 
     test("should convert a normal wikilink to string", () => {

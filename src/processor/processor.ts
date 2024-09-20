@@ -38,8 +38,6 @@ export class Processor {
         const processed = await instance.process(preprocessed);
         const postprocessed = instance.postprocess(processed);
 
-        console.log("OUTPUT:", postprocessed);
-
         return postprocessed;
     }
 
