@@ -4,10 +4,6 @@ import toCustom from "../toCustom";
 
 /**
  * Convert a link node to string
- * Available variables:
- * - $url
- * - $title
- * - $alt
  * @param node
  * @param profile
  * @returns
@@ -18,7 +14,7 @@ export function link(node: Link, profile: Profile): string {
         .join("");
 
     let content = profile.templates.link
-        .replaceAll("$url", node.url)
+        .replaceAll("$src", node.url)
         .replaceAll("$alt", alt)
         .replaceAll("$title", node.title ?? "");
 

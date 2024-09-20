@@ -23,7 +23,7 @@ export function wikilink(node: Wikilink, profile: Profile): string {
  */
 function normalWikilink(node: Wikilink, profile: Profile): string {
     return profile.templates.wikilink
-        .replaceAll("$value", node.value)
+        .replaceAll("$text", node.value)
         .replaceAll("$link", node.link);
 }
 
@@ -35,6 +35,6 @@ function normalWikilink(node: Wikilink, profile: Profile): string {
  */
 function embeddedWikilink(node: Wikilink, profile: Profile): string {
     return profile.templates.embeddedWikilink
-        .replaceAll("$value", node.value)
+        .replaceAll("$text", node.value)
         .replaceAll("$link", node.link);
 }

@@ -5,9 +5,6 @@ import { Logger } from "src/utils/Logger";
 
 /**
  * Convert a heading node to string
- * Available variables:
- * - $value
- * - $level
  * @param node
  * @param profile
  * @returns

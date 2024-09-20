@@ -4,8 +4,6 @@ import toCustom from "../toCustom";
 
 /**
  * Convert a paragraph to string
- * Available variables:
- * - $value
  * @param node
  * @param profile
  * @returns

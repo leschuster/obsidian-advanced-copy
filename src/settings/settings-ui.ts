@@ -1,7 +1,7 @@
 import { App, Modal, Notice, PluginSettingTab, Setting } from "obsidian";
 import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
-import { Profile } from "./settings";
+import { Profile, profileDesc } from "./settings";
 import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
@@ -247,415 +247,54 @@ class EditProfileModal extends Modal {
     private buildUI(): void {
         this.setTitle(`Edit: ${this.profile.meta.name}`);
 
-        addHeading(this.contentEl, "Meta");
+        for (const [sectionKey, section] of Object.entries(profileDesc)) {
+            if (sectionKey !== "") {
+                const heading =
+                    sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1);
+                addHeading(this.contentEl, heading);
+            }
 
-        addTextInput(
-            this.contentEl,
-            "Name",
-            "Name of the profile",
-            this.profile.meta.name,
-            async (value) => {
-                this.profile.meta.name = value;
-                await this.save();
-            },
-        );
+            for (const [settingKey, setting] of Object.entries(section)) {
+                if (setting.visible === false) {
+                    continue;
+                }
 
-        addTextAreaInput(
-            this.contentEl,
-            "Description",
-            "Description of the profile",
-            this.profile.meta.description,
-            async (value) => {
-                this.profile.meta.description = value;
-                await this.save();
-            },
-        );
+                const name = setting.name;
+                const desc = setting.desc;
 
-        addToggleInput(
-            this.contentEl,
-            "Command - Selection",
-            "Add a command to copy the selected text",
-            this.profile.meta.cmdSelection,
-            async (value) => {
-                this.profile.meta.cmdSelection = value;
-                await this.save();
-            },
-        );
+                const initialValue = (
+                    this.profile[sectionKey as keyof Profile] as any
+                )[settingKey];
 
-        addToggleInput(
-            this.contentEl,
-            "Command - Page",
-            "Add a command to copy the entire page",
-            this.profile.meta.cmdPage,
-            async (value) => {
-                this.profile.meta.cmdPage = value;
-                await this.save();
-            },
-        );
+                const update = async (value: any) => {
+                    (this.profile[sectionKey as keyof Profile] as any)[
+                        settingKey
+                    ] = value;
+                    await this.save();
+                };
 
-        addToggleInput(
-            this.contentEl,
-            "Replace Gemoji Shortcodes",
-            "Replace gemoji shotcodes :cat: with actual emojis 🐱",
-            this.profile.meta.replaceGemojiShortcodes,
-            async (value) => {
-                this.profile.meta.replaceGemojiShortcodes = value;
-                await this.save();
-            },
-        );
-
-        addHeading(this.contentEl, "Templates");
-
-        this.contentEl.createEl("div", {
-            text: "In the following section, you can define how Obsidian's Markdown elements will be converted. For each element, you need to provide a template. You have access to both global and element-specific variables. For example, $value will be replaced by the raw text or the element's converted children.",
-        });
-
-        this.contentEl.createEl("div", {
-            text: "Global variables: $fileBasename, $fileExtension, $fileName, $filePath, $date, $time",
-        });
-
-        addTextAreaInput(
-            this.contentEl,
-            "Blockquote Line",
-            "Define how a single line of a blockquote should be converted.\nVariables: $value",
-            this.profile.templates.blockquoteLine,
-            async (value) => {
-                this.profile.templates.blockquoteLine = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Blockquote Wrapper",
-            "Define how a blockquote as a whole should be converted.\nVariables: $value",
-            this.profile.templates.blockquoteWrapper,
-            async (value) => {
-                this.profile.templates.blockquoteWrapper = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Bold",
-            "Define the format for bold text.\nVariables: $value",
-            this.profile.templates.bold,
-            async (value) => {
-                this.profile.templates.bold = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Callout",
-            "Define the format for callouts.\nVariables: $content, $type, $title, $closeable, $default_open",
-            this.profile.templates.callout,
-            async (value) => {
-                this.profile.templates.callout = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Callout Content Line",
-            "Define how each content line of a Callout should be rendered.\nVariables: $value",
-            this.profile.templates.calloutContentLine,
-            async (value) => {
-                this.profile.templates.calloutContentLine = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Code Block",
-            "Define how a code block should be converted.\nVariables: $value, $lang, $meta",
-            this.profile.templates.codeBlock,
-            async (value) => {
-                this.profile.templates.codeBlock = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Code Inline",
-            "Define how inline code should be converted.\nVariables: $value",
-            this.profile.templates.codeInline,
-            async (value) => {
-                this.profile.templates.codeInline = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Embedded Wikilink",
-            "Define how an embedded wikilink should be converted.\nVariables: $value, $link",
-            this.profile.templates.embeddedWikilink,
-            async (value) => {
-                this.profile.templates.embeddedWikilink = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 1",
-            "Define how a level 1 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading1,
-            async (value) => {
-                this.profile.templates.heading1 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 2",
-            "Define how a level 2 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading2,
-            async (value) => {
-                this.profile.templates.heading2 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 3",
-            "Define how a level 3 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading3,
-            async (value) => {
-                this.profile.templates.heading3 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 4",
-            "Define how a level 4 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading4,
-            async (value) => {
-                this.profile.templates.heading4 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 5",
-            "Define how a level 5 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading5,
-            async (value) => {
-                this.profile.templates.heading5 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Heading 6",
-            "Define how a level 6 heading should be converted.\nVariables: $value, $level",
-            this.profile.templates.heading6,
-            async (value) => {
-                this.profile.templates.heading6 = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Horizontal Rule",
-            "Define how a horizontal rule should be converted.",
-            this.profile.templates.horizontalRule,
-            async (value) => {
-                this.profile.templates.horizontalRule = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Image",
-            "Define how an image should be converted.\nVariables: $url, $title, $alt",
-            this.profile.templates.image,
-            async (value) => {
-                this.profile.templates.image = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Italic",
-            "Define how italic text should be converted.\nVariables: $value",
-            this.profile.templates.italic,
-            async (value) => {
-                this.profile.templates.italic = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Line Break",
-            "Define how a line break should be converted.",
-            this.profile.templates.lineBreak,
-            async (value) => {
-                this.profile.templates.lineBreak = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Link",
-            "Define how a link should be converted.\nVariables: $url, $alt, $title",
-            this.profile.templates.link,
-            async (value) => {
-                this.profile.templates.link = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "List Item Oredered",
-            "Define how an ordered list item should be converted.\nVariables: $value",
-            this.profile.templates.listItemOrdered,
-            async (value) => {
-                this.profile.templates.listItemOrdered = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "List Item Unordered",
-            "Define how an unordered list item should be converted.\nVariables: $value",
-            this.profile.templates.listItemUnordered,
-            async (value) => {
-                this.profile.templates.listItemUnordered = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Math Block",
-            "Define how a math block should be converted.\nVariables: $value, $meta",
-            this.profile.templates.mathBlock,
-            async (value) => {
-                this.profile.templates.mathBlock = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Math Inline",
-            "Define how inline math should be converted.\nVariables: $value",
-            this.profile.templates.mathInline,
-            async (value) => {
-                this.profile.templates.mathInline = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Ordered List",
-            "Define how an ordered list should be converted.\nVariables: $value, $start",
-            this.profile.templates.orderedList,
-            async (value) => {
-                this.profile.templates.orderedList = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Paragraph",
-            "Define how a paragraph should be converted.\nVariables: $value",
-            this.profile.templates.paragraph,
-            async (value) => {
-                this.profile.templates.paragraph = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Strikethrough",
-            "Define how strikethrough text should be converted.\nVariables: $value",
-            this.profile.templates.strikethrough,
-            async (value) => {
-                this.profile.templates.strikethrough = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Text",
-            "Define how text should be converted.\nVariables: $value",
-            this.profile.templates.text,
-            async (value) => {
-                this.profile.templates.text = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Unordered List",
-            "Define how an unordered list should be converted.\nVariables: $value",
-            this.profile.templates.unorderedList,
-            async (value) => {
-                this.profile.templates.unorderedList = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "Wikilink",
-            "Define how a wikilink should be converted.\nVariables: $value, $link",
-            this.profile.templates.wikilink,
-            async (value) => {
-                this.profile.templates.wikilink = value;
-                await this.save();
-            },
-        );
-
-        addHeading(this.contentEl, "Extra");
-
-        addTextAreaInput(
-            this.contentEl,
-            "Before",
-            "What you put in here will be placed at the beginning of the output. You can use all global variables from the above.",
-            this.profile.extra.before,
-            async (value) => {
-                this.profile.extra.before = value;
-                await this.save();
-            },
-        );
-
-        addTextAreaInput(
-            this.contentEl,
-            "After",
-            "What you put in here will be placed at the end of the output. You can use all global variables from the above.",
-            this.profile.extra.after,
-            async (value) => {
-                this.profile.extra.after = value;
-                await this.save();
-            },
-        );
+                switch (setting.type) {
+                    case "string":
+                        addTextAreaInput(
+                            this.contentEl,
+                            name,
+                            desc,
+                            initialValue as string,
+                            update,
+                        );
+                        break;
+                    case "boolean":
+                        addToggleInput(
+                            this.contentEl,
+                            name,
+                            desc,
+                            initialValue as boolean,
+                            update,
+                        );
+                        break;
+                }
+            }
+        }
     }
 }
 

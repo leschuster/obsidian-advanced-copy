@@ -4,8 +4,6 @@ import toCustom from "../toCustom";
 
 /**
  * Convert a blockquote node to string
- * Available variables:
- * - $value
  *
  * Each line is converted using the `blockquoteLine` template.
  * All converted lines are inserted into the `bockquoteWrapper` template.
@@ -21,5 +19,5 @@ export function blockquote(node: Blockquote, profile: Profile): string {
         )
         .join("");
 
-    return profile.templates.blockquoteWrapper.replaceAll("$value", content);
+    return profile.templates.blockquoteWrapper.replaceAll("$content", content);
 }
