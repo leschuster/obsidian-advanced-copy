@@ -39,12 +39,12 @@ export default class AdvancedCopyPlugin extends Plugin {
      * Load user settings
      */
     public async loadSettings(): Promise<void> {
-        // TODO: DEEP COPY
-        this.settings = Object.assign(
-            {},
-            DEFAULT_SETTINGS,
-            await this.loadData(),
-        );
+        this.settings = structuredClone(DEFAULT_SETTINGS);
+
+        const customSettings = await this.loadData();
+        if (customSettings) {
+            this.settings = customSettings;
+        }
     }
 
     /**
