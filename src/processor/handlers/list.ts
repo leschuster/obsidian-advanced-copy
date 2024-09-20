@@ -1,4 +1,4 @@
-import { List } from "mdast";
+import { List, ListItem } from "mdast";
 import { Profile } from "src/settings/settings";
 import toCustom from "../toCustom";
 
@@ -27,7 +27,7 @@ export function list(node: List, profile: Profile): string {
  */
 function orderedList(node: List, profile: Profile): string {
     const children = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => listItem(child, profile, true))
         .join("");
 
     const start = node.start ?? 1;
@@ -47,8 +47,20 @@ function orderedList(node: List, profile: Profile): string {
  */
 function unorderedList(node: List, profile: Profile): string {
     const children = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => listItem(child, profile, false))
         .join("");
 
     return profile.templates.unorderedList.replaceAll("$value", children);
+}
+
+function listItem(node: ListItem, profile: Profile, ordered: boolean): string {
+    const content = node.children
+        .map((child) => toCustom(child, { profile }))
+        .join("");
+
+    const template = ordered
+        ? profile.templates.listItemOrdered
+        : profile.templates.listItemUnordered;
+
+    return template.replaceAll("$value", content);
 }

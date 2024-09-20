@@ -39,6 +39,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [],
@@ -79,6 +80,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "warning",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [],
@@ -119,6 +121,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "+",
                     closeable: true,
                     default_open: true,
                     title: [],
@@ -159,6 +162,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "-",
                     closeable: true,
                     default_open: false,
                     title: [],
@@ -199,6 +203,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [
@@ -303,6 +308,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [
@@ -370,6 +376,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [
@@ -437,6 +444,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [],
@@ -501,6 +509,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [],
@@ -574,6 +583,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [],
@@ -647,6 +657,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [
@@ -735,6 +746,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [
@@ -837,6 +849,7 @@ describe("testing remark-callout", () => {
                 {
                     type: "callout",
                     calloutType: "info",
+                    calloutBehavior: "",
                     closeable: false,
                     default_open: true,
                     title: [

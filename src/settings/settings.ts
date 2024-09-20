@@ -1,5 +1,4 @@
 export type AdvancedCopyPluginSettings = {
-    debug_mode: boolean;
     profiles: { [key: string]: Profile };
 };
 
@@ -18,6 +17,7 @@ export type Profile = {
         blockquoteWrapper: string;
         bold: string;
         callout: string;
+        calloutContentLine: string;
         codeBlock: string;
         codeInline: string;
         embeddedWikilink: string;
@@ -32,7 +32,8 @@ export type Profile = {
         italic: string;
         lineBreak: string;
         link: string;
-        listItem: string;
+        listItemOrdered: string;
+        listItemUnordered: string;
         mathBlock: string;
         mathInline: string;
         orderedList: string;

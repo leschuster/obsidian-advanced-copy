@@ -49,7 +49,7 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
         addHeading(this.containerEl, "General");
 
         new Setting(this.containerEl)
-            .setName("Configure Macros")
+            .setName("Configure Hotkeys")
             .setDesc("Redirect to Hotkeys tab")
             .addButton((button) => {
                 button
@@ -65,24 +65,6 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                         tab.searchComponent.inputEl.value =
                             "obsidian-advanced-copy";
                         tab.updateHotkeyVisibility();
-                    });
-            });
-
-        new Setting(this.containerEl)
-            .setName("Debug Mode")
-            .setDesc("Add additional logging")
-            .addToggle((toggle) => {
-                if (!this.plugin.settings) {
-                    return;
-                }
-
-                toggle
-                    .setValue(this.plugin.settings.debug_mode)
-                    .onChange(async (value) => {
-                        if (this.plugin.settings) {
-                            this.plugin.settings.debug_mode = value;
-                            await this.save();
-                        }
                     });
             });
     }
@@ -368,10 +350,21 @@ class EditProfileModal extends Modal {
         addTextAreaInput(
             this.contentEl,
             "Callout",
-            "Define the format for callouts.\nVariables: $value, $type, $title, $closeable, $default_open",
+            "Define the format for callouts.\nVariables: $content, $type, $title, $closeable, $default_open",
             this.profile.templates.callout,
             async (value) => {
                 this.profile.templates.callout = value;
+                await this.save();
+            },
+        );
+
+        addTextAreaInput(
+            this.contentEl,
+            "Callout Content Line",
+            "Define how each content line of a Callout should be rendered.\nVariables: $value",
+            this.profile.templates.calloutContentLine,
+            async (value) => {
+                this.profile.templates.calloutContentLine = value;
                 await this.save();
             },
         );
@@ -532,11 +525,22 @@ class EditProfileModal extends Modal {
 
         addTextAreaInput(
             this.contentEl,
-            "List Item",
-            "Define how a list item should be converted.\nVariables: $value",
-            this.profile.templates.listItem,
+            "List Item Oredered",
+            "Define how an ordered list item should be converted.\nVariables: $value",
+            this.profile.templates.listItemOrdered,
             async (value) => {
-                this.profile.templates.listItem = value;
+                this.profile.templates.listItemOrdered = value;
+                await this.save();
+            },
+        );
+
+        addTextAreaInput(
+            this.contentEl,
+            "List Item Unordered",
+            "Define how an unordered list item should be converted.\nVariables: $value",
+            this.profile.templates.listItemUnordered,
+            async (value) => {
+                this.profile.templates.listItemUnordered = value;
                 await this.save();
             },
         );
