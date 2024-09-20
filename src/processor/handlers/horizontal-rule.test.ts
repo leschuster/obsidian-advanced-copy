@@ -7,8 +7,9 @@ describe("testing horizontalRule", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.horizontalRule = "<hr />";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return horizontal rule element", () => {

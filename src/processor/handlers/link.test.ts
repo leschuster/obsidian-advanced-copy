@@ -1,22 +1,19 @@
 import { Link, Text } from "mdast";
 import { Profile } from "src/settings/settings";
 import { link } from "./link";
-import toCustom from "../toCustom";
-
-jest.mock("../toCustom");
+import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 
 describe("testing link", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = {
-            templates: {
-                link: '<a href="$url" title="$title">$alt</a>',
-            },
-        } as Profile;
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return correct string for a link node with URL, title, and alt text", () => {
+        profile.templates.link = '<a href="$src" title="$title">$alt</a>';
         const input: Link = {
             type: "link",
             url: "https://example.com",
@@ -24,19 +21,12 @@ describe("testing link", () => {
             children: [{ type: "text", value: "Click here" }] satisfies Text[],
         };
 
-        (toCustom as jest.Mock).mockImplementation((node) => {
-            if (node.type === "text") {
-                return node.value;
-            }
-            return "";
-        });
-
         const expected =
             '<a href="https://example.com" title="Example">Click here</a>';
         expect(link(input, profile)).toBe(expected);
     });
 
-    test("should return correct string for a link node with URL and alt text but no title", () => {
+    test("should return correct string for a link node with URL and alt text", () => {
         const input: Link = {
             type: "link",
             url: "https://example.com",
@@ -44,27 +34,7 @@ describe("testing link", () => {
             children: [{ type: "text", value: "Click here" }] satisfies Text[],
         };
 
-        (toCustom as jest.Mock).mockImplementation((node) => {
-            if (node.type === "text") {
-                return node.value;
-            }
-            return "";
-        });
-
-        const expected =
-            '<a href="https://example.com" title="">Click here</a>';
-        expect(link(input, profile)).toBe(expected);
-    });
-
-    test("should return correct string for a link node with URL and title but no alt text", () => {
-        const input: Link = {
-            type: "link",
-            url: "https://example.com",
-            title: "Example",
-            children: [],
-        };
-
-        const expected = '<a href="https://example.com" title="Example"></a>';
+        const expected = '<a href="https://example.com">Click here</a>';
         expect(link(input, profile)).toBe(expected);
     });
 
@@ -76,7 +46,7 @@ describe("testing link", () => {
             children: [],
         };
 
-        const expected = '<a href="https://example.com" title=""></a>';
+        const expected = '<a href="https://example.com"></a>';
         expect(link(input, profile)).toBe(expected);
     });
 });

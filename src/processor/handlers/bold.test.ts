@@ -3,14 +3,13 @@ import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { Profile } from "src/settings/settings";
 import { bold } from "./bold";
 
-jest.mock("../toCustom");
-
 describe("testing bold", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.bold = "<strong>$value</strong>";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty element when there are no children", () => {
@@ -26,12 +25,16 @@ describe("testing bold", () => {
         const input: Strong = {
             type: "strong",
             children: [
-                { type: "emphasis", children: [] } satisfies Emphasis,
-                { type: "text", value: "" } satisfies Text,
+                {
+                    type: "emphasis",
+                    children: [
+                        { type: "text", value: "Hello, World!" } satisfies Text,
+                    ],
+                } satisfies Emphasis,
+                { type: "text", value: "Lorem ipsum!" } satisfies Text,
             ],
         };
-        const expected =
-            "<strong><mock-emphasis>...</mock-emphasis><mock-text>...</mock-text></strong>";
+        const expected = "<strong><em>Hello, World!</em>Lorem ipsum!</strong>";
         expect(bold(input, profile)).toBe(expected);
     });
 });

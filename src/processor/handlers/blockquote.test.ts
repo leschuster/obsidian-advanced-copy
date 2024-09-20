@@ -2,16 +2,15 @@ import { Blockquote, Paragraph } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { Profile } from "src/settings/settings";
 import { blockquote } from "./blockquote";
-
-jest.mock("../toCustom");
+import { Text } from "mdast";
 
 describe("testing blockquote", () => {
     let profile: Profile;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
-        profile.templates.blockquoteWrapper = "<blockquote>$value</blockquote>";
-        profile.templates.blockquoteLine = "<line>$value</line>";
+        profile = structuredClone(
+            DEFAULT_SETTINGS.profiles["markdown_to_html"],
+        );
     });
 
     test("should return empty blockquote element when there are no children", () => {
@@ -24,51 +23,82 @@ describe("testing blockquote", () => {
     });
 
     test("should return blockquote with multiple children", () => {
+        profile.templates.blockquoteLine = "<line>$value</line>";
         const input: Blockquote = {
             type: "blockquote",
             children: [
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "Hello",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "World",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "!",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
             ],
         };
         const expected =
-            "<blockquote><line><mock-paragraph>...</mock-paragraph></line><line><mock-paragraph>...</mock-paragraph></line><line><mock-paragraph>...</mock-paragraph></line></blockquote>";
+            "<blockquote><line><p>Hello</p></line><line><p>World</p></line><line><p>!</p></line></blockquote>";
         expect(blockquote(input, profile)).toBe(expected);
     });
 
     test("should return blockquote with multiple children in markdown style", () => {
-        profile.templates.blockquoteWrapper = "$value";
+        profile.templates.blockquoteWrapper = "$content";
         profile.templates.blockquoteLine = "> $value\n";
+        profile.templates.paragraph = "$value";
 
         const input: Blockquote = {
             type: "blockquote",
             children: [
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "Hello",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "World",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
                 {
                     type: "paragraph",
-                    children: [],
+                    children: [
+                        {
+                            type: "text",
+                            value: "!",
+                        } satisfies Text,
+                    ],
                 } satisfies Paragraph,
             ],
         };
-        const expected =
-            "> <mock-paragraph>...</mock-paragraph>\n> <mock-paragraph>...</mock-paragraph>\n> <mock-paragraph>...</mock-paragraph>\n";
+        const expected = "> Hello\n> World\n> !\n";
         expect(blockquote(input, profile)).toBe(expected);
     });
 });
