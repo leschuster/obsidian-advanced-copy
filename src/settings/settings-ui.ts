@@ -5,6 +5,7 @@ import { Profile, profileDesc } from "./settings";
 import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
+import { DEFAULT_SETTINGS } from "./default-settings";
 
 /**
  * Provides the settings tab for the user interface
@@ -61,12 +62,45 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                         this.app.setting.openTabById("hotkeys");
                         // @ts-ignore
                         const tab = this.app.setting.activeTab;
-                        console.log(tab);
                         tab.searchComponent.inputEl.value =
                             "obsidian-advanced-copy";
                         tab.updateHotkeyVisibility();
                     });
             });
+
+        new Setting(this.containerEl)
+            .setName("Settings")
+            .addButton((button) =>
+                button
+                    .setButtonText("Copy settings")
+                    .setTooltip("Copy settings")
+                    .onClick(async () => {
+                        await navigator.clipboard.writeText(
+                            JSON.stringify(this.plugin.settings, null, 2),
+                        );
+                        new Notice("Settings copied to clipboard");
+                    }),
+            )
+            .addButton((button) =>
+                button
+                    .setButtonText("Reset settings")
+                    .setTooltip("Reset settings")
+                    .setWarning()
+                    .onClick(() => {
+                        new ConfirmationModal(
+                            this.app,
+                            "Reset settings",
+                            "Are you sure you want to reset the settings?",
+                            async () => {
+                                this.plugin.settings = JSON.parse(
+                                    JSON.stringify(DEFAULT_SETTINGS),
+                                );
+                                await this.save();
+                                this.reload();
+                            },
+                        ).open();
+                    }),
+            );
     }
 
     private addProfileOverview(): void {
