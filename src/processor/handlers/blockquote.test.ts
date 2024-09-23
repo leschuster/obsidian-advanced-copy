@@ -66,6 +66,7 @@ describe("testing blockquote", () => {
         opts.profile.templates.blockquoteWrapper = "$content";
         opts.profile.templates.blockquoteLine = "> $value\n";
         opts.profile.templates.paragraph = "$value";
+        opts.profile.templates.paragraphNested = "$value";
 
         const input: Blockquote = {
             type: "blockquote",

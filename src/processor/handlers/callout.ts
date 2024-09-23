@@ -9,9 +9,12 @@ import toCustom, { CustomOptions } from "../toCustom";
  */
 export function callout(node: Callout, opts: CustomOptions): string {
     const title = node.title.map((child) => toCustom(child, opts)).join("");
+
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
     const content = node.children
         .map((child) => {
-            const value = toCustom(child, opts);
+            const value = toCustom(child, childOpts);
             return opts.profile.templates.calloutContentLine.replaceAll(
                 "$value",
                 value,

@@ -8,9 +8,15 @@ import toCustom, { CustomOptions } from "../toCustom";
  * @returns
  */
 export function paragraph(node: Paragraph, opts: CustomOptions): string {
+    const template = opts.topLevel
+        ? opts.profile.templates.paragraph
+        : opts.profile.templates.paragraphNested;
+
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
     const content = node.children
-        .map((child) => toCustom(child, opts))
+        .map((child) => toCustom(child, childOpts))
         .join("");
 
-    return opts.profile.templates.paragraph.replaceAll("$value", content);
+    return template.replaceAll("$value", content);
 }

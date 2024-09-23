@@ -60,12 +60,13 @@ function listItem(
 ): string {
     const childOpts = {
         ...opts,
+        topLevel: false,
         indentation: (opts.indentation ?? 0) + ONE_LEVEL_INDENT,
     };
 
     const content = node.children
         .map((child) => toCustom(child, childOpts))
-        .join("");
+        .join("\n");
 
     let template: string;
     if (ordered) {

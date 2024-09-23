@@ -8,8 +8,10 @@ import toCustom, { CustomOptions } from "../toCustom";
  * @returns
  */
 export function bold(node: Strong, opts: CustomOptions): string {
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
     const content = node.children
-        .map((child) => toCustom(child, opts))
+        .map((child) => toCustom(child, childOpts))
         .join("");
 
     return opts.profile.templates.bold.replaceAll("$value", content);

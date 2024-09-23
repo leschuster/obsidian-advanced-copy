@@ -9,8 +9,10 @@ import { Logger } from "src/utils/Logger";
  * @returns
  */
 export function heading(node: Heading, opts: CustomOptions): string {
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
     const content = node.children
-        .map((child) => toCustom(child, opts))
+        .map((child) => toCustom(child, childOpts))
         .join("");
 
     const template = opts.profile.templates[`heading${node.depth}`];

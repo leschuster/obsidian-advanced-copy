@@ -45,6 +45,7 @@ export type Profile = {
         mathInline: string;
         orderedList: string;
         paragraph: string;
+        paragraphNested: string;
         strikethrough: string;
         text: string;
         unorderedList: string;
@@ -276,13 +277,20 @@ export const profileDesc: {
         listItemOrdered: {
             name: "Ordered List Item",
             desc: "Template for an ordered list item",
-            vars: [{ name: "value", desc: "List item content" }],
+            vars: [
+                { name: "value", desc: "List item content" },
+                { name: "index", desc: "List item index" },
+                { name: "indent", desc: "List item indentation" },
+            ],
             type: "string",
         },
         listItemUnordered: {
             name: "Unordered List Item",
             desc: "Template for an unordered list item",
-            vars: [{ name: "value", desc: "List item content" }],
+            vars: [
+                { name: "value", desc: "List item content" },
+                { name: "indent", desc: "List item indentation" },
+            ],
             type: "string",
         },
         mathBlock: {
@@ -312,6 +320,12 @@ export const profileDesc: {
         paragraph: {
             name: "Paragraph",
             desc: "Template for a paragraph",
+            vars: [{ name: "value", desc: "Paragraph content" }],
+            type: "string",
+        },
+        paragraphNested: {
+            name: "Paragraph Nested",
+            desc: "Template for a paragraph that is nested inside another element",
             vars: [{ name: "value", desc: "Paragraph content" }],
             type: "string",
         },
