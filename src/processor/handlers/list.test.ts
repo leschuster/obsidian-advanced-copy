@@ -212,10 +212,7 @@ describe("testing list", () => {
     });
 
     test("should return correct Markdown for a nested ordered list", () => {
-        opts.profile.templates.orderedList = "$content";
-        opts.profile.templates.listItemOrdered = "$indent$index. $value\n";
-        opts.profile.templates.paragraph = "$value\n\n";
-        opts.profile.templates.paragraphNested = "$value";
+        opts.profile = DEFAULT_SETTINGS.profiles["markdown_to_markdown"];
 
         const input: List = {
             type: "list",
@@ -263,6 +260,41 @@ describe("testing list", () => {
                                                 } satisfies Text,
                                             ],
                                         } satisfies Paragraph,
+                                        {
+                                            type: "list",
+                                            ordered: true,
+                                            start: 100,
+                                            children: [
+                                                {
+                                                    type: "listItem",
+                                                    children: [
+                                                        {
+                                                            type: "paragraph",
+                                                            children: [
+                                                                {
+                                                                    type: "text",
+                                                                    value: "Nested item 1.1",
+                                                                } satisfies Text,
+                                                            ],
+                                                        } satisfies Paragraph,
+                                                    ],
+                                                } satisfies ListItem,
+                                                {
+                                                    type: "listItem",
+                                                    children: [
+                                                        {
+                                                            type: "paragraph",
+                                                            children: [
+                                                                {
+                                                                    type: "text",
+                                                                    value: "Nested item 1.2",
+                                                                } satisfies Text,
+                                                            ],
+                                                        } satisfies Paragraph,
+                                                    ],
+                                                } satisfies ListItem,
+                                            ],
+                                        } satisfies List,
                                     ],
                                 } satisfies ListItem,
                                 {
@@ -286,7 +318,193 @@ describe("testing list", () => {
             ],
         };
         const expected =
-            "1. First item\n2. Second item\n    1. Nested item 1\n    2. Nested item 2\n\n";
+            "1. First item\n2. Second item\n    1. Nested item 1\n        100. Nested item 1.1\n        101. Nested item 1.2\n    2. Nested item 2\n\n";
+
+        expect(list(input, opts)).toBe(expected);
+    });
+
+    test("should return correct HTML for a nested unordered list", () => {
+        const input: List = {
+            type: "list",
+            ordered: false,
+            children: [
+                {
+                    type: "listItem",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "First item",
+                                } satisfies Text,
+                            ],
+                        } satisfies Paragraph,
+                    ],
+                },
+                {
+                    type: "listItem",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "Second item",
+                                } satisfies Text,
+                            ],
+                        },
+                        {
+                            type: "list",
+                            ordered: false,
+                            children: [
+                                {
+                                    type: "listItem",
+                                    children: [
+                                        {
+                                            type: "paragraph",
+                                            children: [
+                                                {
+                                                    type: "text",
+                                                    value: "Nested item 1",
+                                                } satisfies Text,
+                                            ],
+                                        } satisfies Paragraph,
+                                    ],
+                                } satisfies ListItem,
+                                {
+                                    type: "listItem",
+                                    children: [
+                                        {
+                                            type: "paragraph",
+                                            children: [
+                                                {
+                                                    type: "text",
+                                                    value: "Nested item 2",
+                                                } satisfies Text,
+                                            ],
+                                        } satisfies Paragraph,
+                                    ],
+                                } satisfies ListItem,
+                            ],
+                        } satisfies List,
+                    ],
+                } satisfies ListItem,
+            ],
+        };
+
+        const expected =
+            "<ul><li unordered><p>First item</p></li><li unordered><p>Second item</p>\n<ul><li unordered><p>Nested item 1</p></li><li unordered><p>Nested item 2</p></li></ul></li></ul>";
+        expect(list(input, opts)).toBe(expected);
+    });
+
+    test("should return correct Markdown for a nested unordered list", () => {
+        opts.profile = DEFAULT_SETTINGS.profiles["markdown_to_markdown"];
+
+        const input: List = {
+            type: "list",
+            ordered: false,
+            children: [
+                {
+                    type: "listItem",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "First item",
+                                } satisfies Text,
+                            ],
+                        } satisfies Paragraph,
+                    ],
+                },
+                {
+                    type: "listItem",
+                    children: [
+                        {
+                            type: "paragraph",
+                            children: [
+                                {
+                                    type: "text",
+                                    value: "Second item",
+                                } satisfies Text,
+                            ],
+                        },
+                        {
+                            type: "list",
+                            ordered: false,
+                            children: [
+                                {
+                                    type: "listItem",
+                                    children: [
+                                        {
+                                            type: "paragraph",
+                                            children: [
+                                                {
+                                                    type: "text",
+                                                    value: "Nested item 1",
+                                                } satisfies Text,
+                                            ],
+                                        } satisfies Paragraph,
+                                        {
+                                            type: "list",
+                                            ordered: false,
+                                            children: [
+                                                {
+                                                    type: "listItem",
+                                                    children: [
+                                                        {
+                                                            type: "paragraph",
+                                                            children: [
+                                                                {
+                                                                    type: "text",
+                                                                    value: "Nested item 1.1",
+                                                                } satisfies Text,
+                                                            ],
+                                                        } satisfies Paragraph,
+                                                    ],
+                                                } satisfies ListItem,
+                                                {
+                                                    type: "listItem",
+                                                    children: [
+                                                        {
+                                                            type: "paragraph",
+                                                            children: [
+                                                                {
+                                                                    type: "text",
+                                                                    value: "Nested item 1.2",
+                                                                } satisfies Text,
+                                                            ],
+                                                        } satisfies Paragraph,
+                                                    ],
+                                                } satisfies ListItem,
+                                            ],
+                                        } satisfies List,
+                                    ],
+                                } satisfies ListItem,
+                                {
+                                    type: "listItem",
+                                    children: [
+                                        {
+                                            type: "paragraph",
+                                            children: [
+                                                {
+                                                    type: "text",
+                                                    value: "Nested item 2",
+                                                } satisfies Text,
+                                            ],
+                                        } satisfies Paragraph,
+                                    ],
+                                } satisfies ListItem,
+                            ],
+                        } satisfies List,
+                    ],
+                } satisfies ListItem,
+            ],
+        };
+        const expected =
+            "-   First item\n-   Second item\n    -   Nested item 1\n        -   Nested item 1.1\n        -   Nested item 1.2\n    -   Nested item 2\n\n";
 
         expect(list(input, opts)).toBe(expected);
     });

@@ -9,5 +9,8 @@ import toCustom, { CustomOptions } from "../toCustom";
  */
 export function root(node: Root, opts: CustomOptions): string {
     const childOpts = { ...opts, topLevel: true };
-    return node.children.map((child) => toCustom(child, childOpts)).join("");
+    return node.children
+        .map((child) => toCustom(child, childOpts))
+        .join("")
+        .trim();
 }

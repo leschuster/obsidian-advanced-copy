@@ -24,11 +24,12 @@ export function list(node: List, opts: CustomOptions): string {
  * @returns
  */
 function orderedList(node: List, opts: CustomOptions): string {
-    const children = node.children
-        .map((child, idx) => listItem(child, opts, true, idx + 1))
-        .join("");
-
     const start = node.start ?? 1;
+
+    const children = node.children
+        .map((child, idx) => listItem(child, opts, true, idx + start))
+        .join("")
+        .trimEnd();
 
     return opts.profile.templates.orderedList
         .replaceAll("$content", children)
@@ -44,7 +45,8 @@ function orderedList(node: List, opts: CustomOptions): string {
 function unorderedList(node: List, opts: CustomOptions): string {
     const children = node.children
         .map((child) => listItem(child, opts, false))
-        .join("");
+        .join("")
+        .trimEnd();
 
     return opts.profile.templates.unorderedList.replaceAll(
         "$content",
@@ -66,7 +68,8 @@ function listItem(
 
     const content = node.children
         .map((child) => toCustom(child, childOpts))
-        .join("\n");
+        .join("\n")
+        .trimEnd();
 
     let template: string;
     if (ordered) {
