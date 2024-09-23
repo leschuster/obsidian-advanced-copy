@@ -207,14 +207,15 @@ describe("testing list", () => {
         };
 
         const expected =
-            '<ol start="1"><li ordered><p>First item</p></li><li ordered><p>Second item</p><ol start="1"><li ordered><p>Nested item 1</p></li><li ordered><p>Nested item 2</p></li></ol></li></ol>';
+            '<ol start="1"><li ordered><p>First item</p></li><li ordered><p>Second item</p>\n<ol start="1"><li ordered><p>Nested item 1</p></li><li ordered><p>Nested item 2</p></li></ol></li></ol>';
         expect(list(input, opts)).toBe(expected);
     });
 
     test("should return correct Markdown for a nested ordered list", () => {
         opts.profile.templates.orderedList = "$content";
         opts.profile.templates.listItemOrdered = "$indent$index. $value\n";
-        opts.profile.templates.paragraph = "$value\n";
+        opts.profile.templates.paragraph = "$value\n\n";
+        opts.profile.templates.paragraphNested = "$value";
 
         const input: List = {
             type: "list",
@@ -285,7 +286,7 @@ describe("testing list", () => {
             ],
         };
         const expected =
-            "1. First item\n2. Second item\n    1. Nested item 1\n    2. Nested item 2\n";
+            "1. First item\n2. Second item\n    1. Nested item 1\n    2. Nested item 2\n\n";
 
         expect(list(input, opts)).toBe(expected);
     });

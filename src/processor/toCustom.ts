@@ -6,6 +6,7 @@ import { Logger } from "src/utils/Logger";
 
 export interface CustomOptions {
     profile: Profile;
+    topLevel?: boolean;
     indentation?: number;
 }
 
@@ -25,7 +26,7 @@ function invalid(value: unknown): never {
 }
 
 // Node type is unknown
-function unknown(value: unknown, profile: Profile): string {
+function unknown(value: unknown, opts: CustomOptions): string {
     const node = value as Nodes;
 
     if ("value" in node) {
@@ -33,8 +34,9 @@ function unknown(value: unknown, profile: Profile): string {
     }
 
     if ("children" in node) {
+        const childOpts = { ...opts, topLevel: false };
         return node.children
-            .map((child) => toCustom(child, { profile }))
+            .map((child) => toCustom(child, childOpts))
             .join("");
     }
 

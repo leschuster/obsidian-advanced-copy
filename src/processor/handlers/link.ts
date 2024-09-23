@@ -8,7 +8,11 @@ import toCustom, { CustomOptions } from "../toCustom";
  * @returns
  */
 export function link(node: Link, opts: CustomOptions): string {
-    const alt = node.children.map((child) => toCustom(child, opts)).join("");
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
+    const alt = node.children
+        .map((child) => toCustom(child, childOpts))
+        .join("");
 
     let content = opts.profile.templates.link
         .replaceAll("$src", node.url)

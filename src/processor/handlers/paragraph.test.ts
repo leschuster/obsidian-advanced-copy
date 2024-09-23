@@ -10,7 +10,7 @@ describe("testing paragraph", () => {
         const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
-        opts = { profile };
+        opts = { profile, topLevel: true };
     });
 
     test("should return empty paragraph element when there are no children", () => {
@@ -48,6 +48,36 @@ describe("testing paragraph", () => {
         };
 
         const expected = "<p>Hello <em>World</em></p>";
+        expect(paragraph(input, opts)).toBe(expected);
+    });
+
+    test("should handle top level paragraph", () => {
+        opts.topLevel = true;
+        opts.profile.templates.paragraph = "<p topLevel>$value</p>";
+        const input: Paragraph = {
+            type: "paragraph",
+            children: [
+                { type: "text", value: "Hello" } satisfies Text,
+                { type: "text", value: " World" } satisfies Text,
+            ],
+        };
+
+        const expected = "<p topLevel>Hello World</p>";
+        expect(paragraph(input, opts)).toBe(expected);
+    });
+
+    test("should handle nested paragraph", () => {
+        opts.topLevel = false;
+        opts.profile.templates.paragraphNested = "<p nested>$value</p>";
+        const input: Paragraph = {
+            type: "paragraph",
+            children: [
+                { type: "text", value: "Hello" } satisfies Text,
+                { type: "text", value: " World" } satisfies Text,
+            ],
+        };
+
+        const expected = "<p nested>Hello World</p>";
         expect(paragraph(input, opts)).toBe(expected);
     });
 });
