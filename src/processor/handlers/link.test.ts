@@ -1,19 +1,20 @@
 import { Link, Text } from "mdast";
-import { Profile } from "src/settings/settings";
 import { link } from "./link";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
+import { CustomOptions } from "../toCustom";
 
 describe("testing link", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return correct string for a link node with URL, title, and alt text", () => {
-        profile.templates.link = '<a href="$src" title="$title">$alt</a>';
+        opts.profile.templates.link = '<a href="$src" title="$title">$alt</a>';
         const input: Link = {
             type: "link",
             url: "https://example.com",
@@ -23,7 +24,7 @@ describe("testing link", () => {
 
         const expected =
             '<a href="https://example.com" title="Example">Click here</a>';
-        expect(link(input, profile)).toBe(expected);
+        expect(link(input, opts)).toBe(expected);
     });
 
     test("should return correct string for a link node with URL and alt text", () => {
@@ -35,7 +36,7 @@ describe("testing link", () => {
         };
 
         const expected = '<a href="https://example.com">Click here</a>';
-        expect(link(input, profile)).toBe(expected);
+        expect(link(input, opts)).toBe(expected);
     });
 
     test("should return correct string for a link node with only a URL", () => {
@@ -47,6 +48,6 @@ describe("testing link", () => {
         };
 
         const expected = '<a href="https://example.com"></a>';
-        expect(link(input, profile)).toBe(expected);
+        expect(link(input, opts)).toBe(expected);
     });
 });

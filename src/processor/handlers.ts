@@ -21,8 +21,9 @@ import { list } from "./handlers/list";
 import { strikethrough } from "./handlers/strikethrough";
 import { callout } from "./handlers/callout";
 import { wikilink } from "./handlers/wikilink";
+import { CustomOptions } from "./toCustom";
 
-export type HandlerFunc = (node: Nodes, profile: Profile) => string;
+export type HandlerFunc = (node: Nodes, options: CustomOptions) => string;
 
 export const handlers: Record<string, HandlerFunc> = {
     strong: bold,

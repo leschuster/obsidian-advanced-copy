@@ -1,15 +1,16 @@
 import { ThematicBreak } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { horizontalRule } from "./horizontal-rule";
+import { CustomOptions } from "../toCustom";
 
 describe("testing horizontalRule", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return horizontal rule element", () => {
@@ -17,6 +18,6 @@ describe("testing horizontalRule", () => {
             type: "thematicBreak",
         };
         const expected = "<hr />";
-        expect(horizontalRule(input, profile)).toBe(expected);
+        expect(horizontalRule(input, opts)).toBe(expected);
     });
 });

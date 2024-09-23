@@ -1,12 +1,12 @@
 import { Text } from "mdast";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a text node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function text(node: Text, profile: Profile): string {
-    return profile.templates.text.replaceAll("$value", node.value);
+export function text(node: Text, opts: CustomOptions): string {
+    return opts.profile.templates.text.replaceAll("$value", node.value);
 }

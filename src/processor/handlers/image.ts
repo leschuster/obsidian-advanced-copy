@@ -1,14 +1,14 @@
 import { Image } from "mdast";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert an image node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function image(node: Image, profile: Profile): string {
-    let content = profile.templates.image
+export function image(node: Image, opts: CustomOptions): string {
+    let content = opts.profile.templates.image
         .replaceAll("$src", node.url)
         .replaceAll("$title", node.title ?? "")
         .replaceAll("$alt", node.alt ?? "");

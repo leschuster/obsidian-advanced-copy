@@ -1,15 +1,16 @@
 import { Emphasis, Text } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { italic } from "./italic";
+import { CustomOptions } from "../toCustom";
 
 describe("testing italic", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return empty element when there are no children", () => {
@@ -18,7 +19,7 @@ describe("testing italic", () => {
             children: [],
         };
         const expected = "<em></em>";
-        expect(italic(input, profile)).toBe(expected);
+        expect(italic(input, opts)).toBe(expected);
     });
 
     test("should return italic element with multiple children", () => {
@@ -35,6 +36,6 @@ describe("testing italic", () => {
             ],
         };
         const expected = "<em><em>Hello, World!</em> Lorem ipsum!</em>";
-        expect(italic(input, profile)).toBe(expected);
+        expect(italic(input, opts)).toBe(expected);
     });
 });

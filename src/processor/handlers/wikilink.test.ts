@@ -1,19 +1,20 @@
 import { wikilink } from "./wikilink";
-import { Profile } from "src/settings/settings";
 import { Wikilink } from "../remark-plugins/wikilink";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
+import { CustomOptions } from "../toCustom";
 
 describe("testing wikilink", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
         profile.templates.embeddedWikilink =
             '<a class="embedded" href="obsidian://open?vault=$vaultName&file=$link">$text</a>';
         profile.templates.wikilink =
             '<a href="obsidian://open?vault=$vaultName&file=$link">$text</a>';
+        opts = { profile };
     });
 
     test("should convert a normal wikilink to string", () => {
@@ -26,7 +27,7 @@ describe("testing wikilink", () => {
         const expected =
             '<a href="obsidian://open?vault=$vaultName&file=test_file">Lorem ipsum</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 
     test("should convert an embedded wikilink to string", () => {
@@ -39,10 +40,10 @@ describe("testing wikilink", () => {
         const expected =
             '<a class="embedded" href="obsidian://open?vault=$vaultName&file=test_file">Lorem ipsum</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 
-    test("should handle wikilink with empty value", () => {
+    test("should use link as value when value is empty", () => {
         const input: Wikilink = {
             type: "wikilink",
             value: "",
@@ -50,12 +51,12 @@ describe("testing wikilink", () => {
             embedded: false,
         };
         const expected =
-            '<a href="obsidian://open?vault=$vaultName&file=test_file"></a>';
+            '<a href="obsidian://open?vault=$vaultName&file=test_file">test_file</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 
-    test("should handle embedded wikilink with empty value", () => {
+    test("should use link as value when value is empty (embedded)", () => {
         const input: Wikilink = {
             type: "wikilink",
             value: "",
@@ -63,9 +64,9 @@ describe("testing wikilink", () => {
             embedded: true,
         };
         const expected =
-            '<a class="embedded" href="obsidian://open?vault=$vaultName&file=test_file"></a>';
+            '<a class="embedded" href="obsidian://open?vault=$vaultName&file=test_file">test_file</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 
     test("should handle wikilink with special characters in link", () => {
@@ -78,7 +79,7 @@ describe("testing wikilink", () => {
         const expected =
             '<a href="obsidian://open?vault=$vaultName&file=test_file#section">Lorem ipsum</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 
     test("should handle embedded wikilink with special characters in link", () => {
@@ -91,6 +92,6 @@ describe("testing wikilink", () => {
         const expected =
             '<a class="embedded" href="obsidian://open?vault=$vaultName&file=test_file#section">Lorem ipsum</a>';
 
-        expect(wikilink(input, profile)).toBe(expected);
+        expect(wikilink(input, opts)).toBe(expected);
     });
 });

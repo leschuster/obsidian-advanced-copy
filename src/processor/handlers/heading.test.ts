@@ -1,8 +1,8 @@
 import { Heading, Text } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { heading } from "./heading";
 import { jest } from "@jest/globals";
+import { CustomOptions } from "../toCustom";
 
 jest.mock("../../utils/Logger", () => {
     return jest.fn().mockImplementation(() => {
@@ -11,12 +11,13 @@ jest.mock("../../utils/Logger", () => {
 });
 
 describe("testing heading", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return heading with depth 1", () => {
@@ -27,7 +28,7 @@ describe("testing heading", () => {
         };
 
         const expected = "<h1>Hello</h1>";
-        expect(heading(input, profile)).toBe(expected);
+        expect(heading(input, opts)).toBe(expected);
     });
 
     test("should return heading with depth 6", () => {
@@ -38,7 +39,7 @@ describe("testing heading", () => {
         };
 
         const expected = "<h6>Hello</h6>";
-        expect(heading(input, profile)).toBe(expected);
+        expect(heading(input, opts)).toBe(expected);
     });
 
     test("should process child nodes correctly", () => {
@@ -52,6 +53,6 @@ describe("testing heading", () => {
         };
 
         const expected = "<h2>Hello World</h2>";
-        expect(heading(input, profile)).toBe(expected);
+        expect(heading(input, opts)).toBe(expected);
     });
 });

@@ -1,12 +1,12 @@
 import { InlineCode } from "mdast";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a code inline node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function codeInline(node: InlineCode, profile: Profile): string {
-    return profile.templates.codeInline.replaceAll("$value", node.value);
+export function codeInline(node: InlineCode, opts: CustomOptions): string {
+    return opts.profile.templates.codeInline.replaceAll("$value", node.value);
 }

@@ -4,18 +4,19 @@ import { zwitch } from "zwitch";
 import { handlers } from "./handlers";
 import { Logger } from "src/utils/Logger";
 
-export interface Options {
+export interface CustomOptions {
     profile: Profile;
+    indentation?: number;
 }
 
-export default function toCustom(node: Nodes, { profile }: Options): string {
+export default function toCustom(node: Nodes, options: CustomOptions): string {
     const handle = zwitch("type", {
         invalid,
         unknown,
         handlers,
     });
 
-    return handle(node, profile);
+    return handle(node, options);
 }
 
 // Invalid value

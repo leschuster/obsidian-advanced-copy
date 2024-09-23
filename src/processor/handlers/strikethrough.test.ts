@@ -1,15 +1,16 @@
 import { Delete, Text } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { strikethrough } from "./strikethrough";
+import { CustomOptions } from "../toCustom";
 
 describe("testing strikethrough", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return empty element when there are no children", () => {
@@ -18,7 +19,7 @@ describe("testing strikethrough", () => {
             children: [],
         };
         const expected = "<del></del>";
-        expect(strikethrough(input, profile)).toBe(expected);
+        expect(strikethrough(input, opts)).toBe(expected);
     });
 
     test("should return strikethrough element with multiple children", () => {
@@ -30,6 +31,6 @@ describe("testing strikethrough", () => {
             ],
         };
         const expected = "<del>Hello, World! Lorem ipsum!</del>";
-        expect(strikethrough(input, profile)).toBe(expected);
+        expect(strikethrough(input, opts)).toBe(expected);
     });
 });

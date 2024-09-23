@@ -1,13 +1,14 @@
 import { Text } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { text } from "./text";
+import { CustomOptions } from "../toCustom";
 
 describe("testing text", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        const profile = DEFAULT_SETTINGS.profiles["markdown_to_html"];
+        opts = { profile };
     });
 
     test("should return correct string for a given text node", () => {
@@ -16,7 +17,7 @@ describe("testing text", () => {
             value: "Hello, world!",
         };
         const expected = "Hello, world!";
-        expect(text(input, profile)).toBe(expected);
+        expect(text(input, opts)).toBe(expected);
     });
 
     test("should handle an empty text node", () => {
@@ -25,6 +26,6 @@ describe("testing text", () => {
             value: "",
         };
         const expected = "";
-        expect(text(input, profile)).toBe(expected);
+        expect(text(input, opts)).toBe(expected);
     });
 });

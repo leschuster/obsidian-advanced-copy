@@ -1,35 +1,36 @@
 import { List, ListItem } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
+
+const ONE_LEVEL_INDENT = 4;
 
 /**
  * Convert a list node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function list(node: List, profile: Profile): string {
+export function list(node: List, opts: CustomOptions): string {
     if (node.ordered) {
-        return orderedList(node, profile);
+        return orderedList(node, opts);
     } else {
-        return unorderedList(node, profile);
+        return unorderedList(node, opts);
     }
 }
 
 /**
  * Convert an ordered list node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-function orderedList(node: List, profile: Profile): string {
+function orderedList(node: List, opts: CustomOptions): string {
     const children = node.children
-        .map((child) => listItem(child, profile, true))
+        .map((child, idx) => listItem(child, opts, true, idx + 1))
         .join("");
 
     const start = node.start ?? 1;
 
-    return profile.templates.orderedList
+    return opts.profile.templates.orderedList
         .replaceAll("$content", children)
         .replaceAll("$start", start + "");
 }
@@ -37,25 +38,47 @@ function orderedList(node: List, profile: Profile): string {
 /**
  * Convert an unordered list node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-function unorderedList(node: List, profile: Profile): string {
+function unorderedList(node: List, opts: CustomOptions): string {
     const children = node.children
-        .map((child) => listItem(child, profile, false))
+        .map((child) => listItem(child, opts, false))
         .join("");
 
-    return profile.templates.unorderedList.replaceAll("$content", children);
+    return opts.profile.templates.unorderedList.replaceAll(
+        "$content",
+        children,
+    );
 }
 
-function listItem(node: ListItem, profile: Profile, ordered: boolean): string {
+function listItem(
+    node: ListItem,
+    opts: CustomOptions,
+    ordered: boolean,
+    index?: number,
+): string {
+    const childOpts = {
+        ...opts,
+        indentation: (opts.indentation ?? 0) + ONE_LEVEL_INDENT,
+    };
+
     const content = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => toCustom(child, childOpts))
         .join("");
 
-    const template = ordered
-        ? profile.templates.listItemOrdered
-        : profile.templates.listItemUnordered;
+    let template: string;
+    if (ordered) {
+        const num = index === undefined ? 1 : index;
+        template = opts.profile.templates.listItemOrdered.replaceAll(
+            "$index",
+            num + "",
+        );
+    } else {
+        template = opts.profile.templates.listItemUnordered;
+    }
 
-    return template.replaceAll("$value", content);
+    const indent = " ".repeat(opts.indentation ?? 0);
+
+    return template.replaceAll("$value", content).replaceAll("$indent", indent);
 }

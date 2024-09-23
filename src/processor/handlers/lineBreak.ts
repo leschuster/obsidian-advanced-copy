@@ -1,12 +1,12 @@
 import { Break } from "mdast";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a break node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function lineBreak(node: Break, profile: Profile): string {
-    return profile.templates.lineBreak;
+export function lineBreak(node: Break, opts: CustomOptions): string {
+    return opts.profile.templates.lineBreak;
 }

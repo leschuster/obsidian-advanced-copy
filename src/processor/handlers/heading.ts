@@ -1,20 +1,19 @@
 import { Heading } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 import { Logger } from "src/utils/Logger";
 
 /**
  * Convert a heading node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function heading(node: Heading, profile: Profile): string {
+export function heading(node: Heading, opts: CustomOptions): string {
     const content = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => toCustom(child, opts))
         .join("");
 
-    const template = profile.templates[`heading${node.depth}`];
+    const template = opts.profile.templates[`heading${node.depth}`];
 
     if (!template) {
         Logger.error(`could not find template 'heading${node.depth}'`);

@@ -1,15 +1,16 @@
 import { Code } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { codeBlock } from "./code-block";
+import { CustomOptions } from "../toCustom";
 
 describe("testing codeBlock", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return code block without language or metadata", () => {
@@ -19,11 +20,11 @@ describe("testing codeBlock", () => {
         };
         const expected =
             "<pre><code>console.log('Hello, world!');</code></pre>";
-        expect(codeBlock(input, profile)).toBe(expected);
+        expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should return code block with language", () => {
-        profile.templates.codeBlock =
+        opts.profile.templates.codeBlock =
             '<pre><code class="$lang">$value</code></pre>';
         const input: Code = {
             type: "code",
@@ -32,11 +33,11 @@ describe("testing codeBlock", () => {
         };
         const expected =
             "<pre><code class=\"javascript\">console.log('Hello, world!');</code></pre>";
-        expect(codeBlock(input, profile)).toBe(expected);
+        expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should return code block with metadata", () => {
-        profile.templates.codeBlock =
+        opts.profile.templates.codeBlock =
             '<pre><code data-meta="$meta">$value</code></pre>';
         const input: Code = {
             type: "code",
@@ -45,11 +46,11 @@ describe("testing codeBlock", () => {
         };
         const expected =
             "<pre><code data-meta=\"line-numbers\">console.log('Hello, world!');</code></pre>";
-        expect(codeBlock(input, profile)).toBe(expected);
+        expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should return code block with both language and metadata", () => {
-        profile.templates.codeBlock =
+        opts.profile.templates.codeBlock =
             '<pre><code class="$lang" data-meta="$meta">$value</code></pre>';
         const input: Code = {
             type: "code",
@@ -59,11 +60,11 @@ describe("testing codeBlock", () => {
         };
         const expected =
             '<pre><code class="javascript" data-meta="line-numbers">console.log(\'Hello, world!\');</code></pre>';
-        expect(codeBlock(input, profile)).toBe(expected);
+        expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should replace missing lang and meta with empty string", () => {
-        profile.templates.codeBlock =
+        opts.profile.templates.codeBlock =
             '<pre><code class="$lang" data-meta="$meta">$value</code></pre>';
         const input: Code = {
             type: "code",
@@ -71,6 +72,6 @@ describe("testing codeBlock", () => {
         };
         const expected =
             '<pre><code class="" data-meta="">console.log(\'Hello, world!\');</code></pre>';
-        expect(codeBlock(input, profile)).toBe(expected);
+        expect(codeBlock(input, opts)).toBe(expected);
     });
 });

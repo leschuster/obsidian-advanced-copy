@@ -1,19 +1,16 @@
 import { Link } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 
 /**
  * Convert a link node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function link(node: Link, profile: Profile): string {
-    const alt = node.children
-        .map((child) => toCustom(child, { profile }))
-        .join("");
+export function link(node: Link, opts: CustomOptions): string {
+    const alt = node.children.map((child) => toCustom(child, opts)).join("");
 
-    let content = profile.templates.link
+    let content = opts.profile.templates.link
         .replaceAll("$src", node.url)
         .replaceAll("$alt", alt)
         .replaceAll("$title", node.title ?? "");

@@ -1,6 +1,5 @@
 import { Blockquote } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "src/processor/toCustom";
+import toCustom, { CustomOptions } from "src/processor/toCustom";
 
 /**
  * Convert a blockquote node to string
@@ -8,16 +7,19 @@ import toCustom from "src/processor/toCustom";
  * Each line is converted using the `blockquoteLine` template.
  * All converted lines are inserted into the `bockquoteWrapper` template.
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function blockquote(node: Blockquote, profile: Profile): string {
+export function blockquote(node: Blockquote, opts: CustomOptions): string {
     const content = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => toCustom(child, opts))
         .map((line) =>
-            profile.templates.blockquoteLine.replaceAll("$value", line),
+            opts.profile.templates.blockquoteLine.replaceAll("$value", line),
         )
         .join("");
 
-    return profile.templates.blockquoteWrapper.replaceAll("$content", content);
+    return opts.profile.templates.blockquoteWrapper.replaceAll(
+        "$content",
+        content,
+    );
 }

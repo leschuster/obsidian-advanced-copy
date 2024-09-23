@@ -1,16 +1,17 @@
 import { Blockquote, Paragraph } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { blockquote } from "./blockquote";
 import { Text } from "mdast";
+import { CustomOptions } from "../toCustom";
 
 describe("testing blockquote", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return empty blockquote element when there are no children", () => {
@@ -19,11 +20,11 @@ describe("testing blockquote", () => {
             children: [],
         };
         const expected = "<blockquote></blockquote>";
-        expect(blockquote(input, profile)).toBe(expected);
+        expect(blockquote(input, opts)).toBe(expected);
     });
 
     test("should return blockquote with multiple children", () => {
-        profile.templates.blockquoteLine = "<line>$value</line>";
+        opts.profile.templates.blockquoteLine = "<line>$value</line>";
         const input: Blockquote = {
             type: "blockquote",
             children: [
@@ -58,13 +59,13 @@ describe("testing blockquote", () => {
         };
         const expected =
             "<blockquote><line><p>Hello</p></line><line><p>World</p></line><line><p>!</p></line></blockquote>";
-        expect(blockquote(input, profile)).toBe(expected);
+        expect(blockquote(input, opts)).toBe(expected);
     });
 
     test("should return blockquote with multiple children in markdown style", () => {
-        profile.templates.blockquoteWrapper = "$content";
-        profile.templates.blockquoteLine = "> $value\n";
-        profile.templates.paragraph = "$value";
+        opts.profile.templates.blockquoteWrapper = "$content";
+        opts.profile.templates.blockquoteLine = "> $value\n";
+        opts.profile.templates.paragraph = "$value";
 
         const input: Blockquote = {
             type: "blockquote",
@@ -99,6 +100,6 @@ describe("testing blockquote", () => {
             ],
         };
         const expected = "> Hello\n> World\n> !\n";
-        expect(blockquote(input, profile)).toBe(expected);
+        expect(blockquote(input, opts)).toBe(expected);
     });
 });
