@@ -6,8 +6,6 @@ import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 
-// TODO: Global variables
-
 /**
  * Provides the settings tab for the user interface
  */
@@ -254,6 +252,21 @@ class EditProfileModal extends Modal {
                 const heading =
                     sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1);
                 addHeading(this.contentEl, heading);
+            }
+
+            if (sectionKey === "templates") {
+                new Setting(this.contentEl).descEl.innerHTML =
+                    `Templates are used to define the output of the copied text. 
+                    You can use variables to insert dynamic content. 
+                    Each Markdown element has their own set of variables available.<br>
+                    In addition, the following global variables can be used:<br>
+                    <b>$vaultName</b>: The name of the vault<br>
+                    <b>$fileBasename</b>: The name of the file without the extension<br>
+                    <b>$fileExtension</b>: The extension of the file<br>
+                    <b>$fileName</b>: The name of the file with the extension<br>
+                    <b>$filePath</b>: The path of the file relative to the vaults root<br>
+                    <b>$date</b>: The current date (e.g. "23/09/2024")<br>
+                    <b>$time</b>: The current time (e.g. "10:10:00")<br>`;
             }
 
             for (const [settingKey, setting] of Object.entries(section)) {
