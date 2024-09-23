@@ -1,16 +1,16 @@
 import { Paragraph, Text, Emphasis } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { paragraph } from "./paragraph";
-import toCustom from "../toCustom";
+import { CustomOptions } from "../toCustom";
 
 describe("testing paragraph", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return empty paragraph element when there are no children", () => {
@@ -19,7 +19,7 @@ describe("testing paragraph", () => {
             children: [],
         };
         const expected = "<p></p>";
-        expect(paragraph(input, profile)).toBe(expected);
+        expect(paragraph(input, opts)).toBe(expected);
     });
 
     test("should return paragraph with multiple child nodes", () => {
@@ -32,7 +32,7 @@ describe("testing paragraph", () => {
         };
 
         const expected = "<p>Hello World</p>";
-        expect(paragraph(input, profile)).toBe(expected);
+        expect(paragraph(input, opts)).toBe(expected);
     });
 
     test("should handle different types of child nodes", () => {
@@ -48,6 +48,6 @@ describe("testing paragraph", () => {
         };
 
         const expected = "<p>Hello <em>World</em></p>";
-        expect(paragraph(input, profile)).toBe(expected);
+        expect(paragraph(input, opts)).toBe(expected);
     });
 });

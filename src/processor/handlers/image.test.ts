@@ -1,15 +1,16 @@
 import { Image } from "mdast";
-import { Profile } from "src/settings/settings";
 import { image } from "./image";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
+import { CustomOptions } from "../toCustom";
 
 describe("testing image", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return correct string for an image node with only a URL", () => {
@@ -20,11 +21,11 @@ describe("testing image", () => {
             alt: null,
         };
         const expected = '<img src="https://example.com/image.png" alt="" />';
-        expect(image(input, profile)).toBe(expected);
+        expect(image(input, opts)).toBe(expected);
     });
 
     test("should return correct string for an image node with a URL and title", () => {
-        profile.templates.image =
+        opts.profile.templates.image =
             '<img src="$src" title="$title" alt="$alt" />';
         const input: Image = {
             type: "image",
@@ -34,7 +35,7 @@ describe("testing image", () => {
         };
         const expected =
             '<img src="https://example.com/image.png" title="Example Image" alt="" />';
-        expect(image(input, profile)).toBe(expected);
+        expect(image(input, opts)).toBe(expected);
     });
 
     test("should return correct string for an image node with a URL and alt text", () => {
@@ -46,6 +47,6 @@ describe("testing image", () => {
         };
         const expected =
             '<img src="https://example.com/image.png" alt="An example image" />';
-        expect(image(input, profile)).toBe(expected);
+        expect(image(input, opts)).toBe(expected);
     });
 });

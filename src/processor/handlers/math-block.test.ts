@@ -1,16 +1,18 @@
 import { Profile } from "src/settings/settings";
 import { mathBlock } from "./math-block";
 import { Math as MathNode } from "mdast-util-math/lib";
+import { CustomOptions } from "../toCustom";
 
 describe("testing mathBlock", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = {
+        const profile = {
             templates: {
                 mathBlock: "\\[$value\\]",
             },
         } as Profile;
+        opts = { profile };
     });
 
     test("should return correct string for a math block node with content", () => {
@@ -19,7 +21,7 @@ describe("testing mathBlock", () => {
             value: "\\frac{a}{b}",
         };
         const expected = "\\[\\frac{a}{b}\\]";
-        expect(mathBlock(input, profile)).toBe(expected);
+        expect(mathBlock(input, opts)).toBe(expected);
     });
 
     test("should return correct string for an empty math block node", () => {
@@ -28,11 +30,11 @@ describe("testing mathBlock", () => {
             value: "",
         };
         const expected = "\\[\\]";
-        expect(mathBlock(input, profile)).toBe(expected);
+        expect(mathBlock(input, opts)).toBe(expected);
     });
 
     test("should replace meta", () => {
-        profile.templates.mathBlock =
+        opts.profile.templates.mathBlock =
             '<div data-meta="$meta">\\[$value\\]</div>';
         const input: MathNode = {
             type: "math",
@@ -41,6 +43,6 @@ describe("testing mathBlock", () => {
         };
         const expected =
             '<div data-meta="some information">\\[\\frac{a}{b}\\]</div>';
-        expect(mathBlock(input, profile)).toBe(expected);
+        expect(mathBlock(input, opts)).toBe(expected);
     });
 });

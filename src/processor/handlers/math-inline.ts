@@ -1,12 +1,12 @@
 import { InlineMath } from "mdast-util-math";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a inline math node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function mathInline(node: InlineMath, profile: Profile): string {
-    return profile.templates.mathInline.replaceAll("$value", node.value);
+export function mathInline(node: InlineMath, opts: CustomOptions): string {
+    return opts.profile.templates.mathInline.replaceAll("$value", node.value);
 }

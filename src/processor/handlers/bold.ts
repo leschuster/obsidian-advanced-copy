@@ -1,17 +1,16 @@
 import { Strong } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 
 /**
  * Convert a bold node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function bold(node: Strong, profile: Profile): string {
+export function bold(node: Strong, opts: CustomOptions): string {
     const content = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => toCustom(child, opts))
         .join("");
 
-    return profile.templates.bold.replaceAll("$value", content);
+    return opts.profile.templates.bold.replaceAll("$value", content);
 }

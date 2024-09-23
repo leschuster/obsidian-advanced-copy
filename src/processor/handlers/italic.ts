@@ -1,17 +1,16 @@
 import { Emphasis } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 
 /**
  * Convert an italic node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function italic(node: Emphasis, profile: Profile): string {
+export function italic(node: Emphasis, opts: CustomOptions): string {
     const content = node.children
-        .map((child) => toCustom(child, { profile }))
+        .map((child) => toCustom(child, opts))
         .join("");
 
-    return profile.templates.italic.replaceAll("$value", content);
+    return opts.profile.templates.italic.replaceAll("$value", content);
 }

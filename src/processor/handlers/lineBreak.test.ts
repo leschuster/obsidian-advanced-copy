@@ -1,15 +1,16 @@
 import { Break } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { lineBreak } from "./lineBreak";
+import { CustomOptions } from "../toCustom";
 
 describe("testing lineBreak", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return break element", () => {
@@ -17,6 +18,6 @@ describe("testing lineBreak", () => {
             type: "break",
         };
         const expected = "<br />";
-        expect(lineBreak(input, profile)).toBe(expected);
+        expect(lineBreak(input, opts)).toBe(expected);
     });
 });

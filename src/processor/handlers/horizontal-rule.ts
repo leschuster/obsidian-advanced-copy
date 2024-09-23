@@ -1,12 +1,15 @@
 import { ThematicBreak } from "mdast";
-import { Profile } from "src/settings/settings";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a horizontal rule node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function horizontalRule(node: ThematicBreak, profile: Profile): string {
-    return profile.templates.horizontalRule;
+export function horizontalRule(
+    node: ThematicBreak,
+    opts: CustomOptions,
+): string {
+    return opts.profile.templates.horizontalRule;
 }

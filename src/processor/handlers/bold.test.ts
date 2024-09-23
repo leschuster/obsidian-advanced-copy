@@ -1,15 +1,16 @@
 import { Emphasis, Strong, Text } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { Profile } from "src/settings/settings";
 import { bold } from "./bold";
+import { CustomOptions } from "../toCustom";
 
 describe("testing bold", () => {
-    let profile: Profile;
+    let opts: CustomOptions;
 
     beforeEach(() => {
-        profile = structuredClone(
+        const profile = structuredClone(
             DEFAULT_SETTINGS.profiles["markdown_to_html"],
         );
+        opts = { profile };
     });
 
     test("should return empty element when there are no children", () => {
@@ -18,7 +19,7 @@ describe("testing bold", () => {
             children: [],
         };
         const expected = "<strong></strong>";
-        expect(bold(input, profile)).toBe(expected);
+        expect(bold(input, opts)).toBe(expected);
     });
 
     test("should return bold element with multiple children", () => {
@@ -35,6 +36,6 @@ describe("testing bold", () => {
             ],
         };
         const expected = "<strong><em>Hello, World!</em>Lorem ipsum!</strong>";
-        expect(bold(input, profile)).toBe(expected);
+        expect(bold(input, opts)).toBe(expected);
     });
 });

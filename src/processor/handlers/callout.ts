@@ -1,28 +1,25 @@
-import { Profile } from "src/settings/settings";
 import { Callout } from "../remark-plugins/remark-callout";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 
 /**
  * Convert a callout node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function callout(node: Callout, profile: Profile): string {
-    const title = node.title
-        .map((child) => toCustom(child, { profile }))
-        .join("");
+export function callout(node: Callout, opts: CustomOptions): string {
+    const title = node.title.map((child) => toCustom(child, opts)).join("");
     const content = node.children
         .map((child) => {
-            const value = toCustom(child, { profile });
-            return profile.templates.calloutContentLine.replaceAll(
+            const value = toCustom(child, opts);
+            return opts.profile.templates.calloutContentLine.replaceAll(
                 "$value",
                 value,
             );
         })
         .join("");
 
-    return profile.templates.callout
+    return opts.profile.templates.callout
         .replaceAll("$type", node.calloutType)
         .replaceAll("$behavior", node.calloutBehavior)
         .replaceAll("$content", content)

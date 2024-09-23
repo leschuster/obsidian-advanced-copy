@@ -1,13 +1,12 @@
 import { Root } from "mdast";
-import { Profile } from "src/settings/settings";
-import toCustom from "../toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 
 /**
  * Convert a root node to string
  * @param node
- * @param profile
+ * @param opts
  * @returns
  */
-export function root(node: Root, profile: Profile): string {
-    return node.children.map((child) => toCustom(child, { profile })).join("");
+export function root(node: Root, opts: CustomOptions): string {
+    return node.children.map((child) => toCustom(child, opts)).join("");
 }
