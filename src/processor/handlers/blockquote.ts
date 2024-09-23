@@ -11,10 +11,21 @@ import toCustom, { CustomOptions } from "src/processor/toCustom";
  * @returns
  */
 export function blockquote(node: Blockquote, opts: CustomOptions): string {
+    const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
+
     const content = node.children
-        .map((child) => toCustom(child, opts))
+        .map((child) => toCustom(child, childOpts))
         .map((line) =>
-            opts.profile.templates.blockquoteLine.replaceAll("$value", line),
+            line
+                .split("\n")
+                .filter((l) => l.trim() !== "")
+                .map((l) =>
+                    opts.profile.templates.blockquoteLine.replaceAll(
+                        "$value",
+                        l,
+                    ),
+                )
+                .join(""),
         )
         .join("");
 

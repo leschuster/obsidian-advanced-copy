@@ -13,13 +13,19 @@ export function callout(node: Callout, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
     const content = node.children
-        .map((child) => {
-            const value = toCustom(child, childOpts);
-            return opts.profile.templates.calloutContentLine.replaceAll(
-                "$value",
-                value,
-            );
-        })
+        .map((child) => toCustom(child, childOpts))
+        .map((line) =>
+            line
+                .split("\n")
+                .filter((l) => l.trim() !== "")
+                .map((l) =>
+                    opts.profile.templates.calloutContentLine.replaceAll(
+                        "$value",
+                        l,
+                    ),
+                )
+                .join(""),
+        )
         .join("");
 
     return opts.profile.templates.callout
