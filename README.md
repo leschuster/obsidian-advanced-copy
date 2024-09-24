@@ -1,23 +1,27 @@
-# Obsidian Sample Plugin
+# Obsidian Advanced Copy
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/leschuster/obsidian-advanced-copy/main.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/leschuster/obsidian-advanced-copy)
 
 A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.
 
-Note: This plugin is still in alpha. Please open issues if you find bugs or have ideas for improvements.
+You can create templates for almost all Markdown elements supported by Obsidian, organized under a "Profile". Templates can include variables such as a headings level, an elements content, the current file name, or date.
+
+When executing the plugin's commands, you need to select a profile. Default profiles are available and can be customized to your preferences.
+
+**Note:** This plugin is currently in an unstable release. Please report any bugs or suggestions for improvements.
 
 ## Example Use Cases
 
--   Insert metadate (e.g., a backlink to the file, current date) into the copied text
--   Convert Markdown to HTML
--   Convert Markdown to HTML with custom classes/styles
--   Convert Markdown to Anki HTML
--   Remove all Markdown syntax elements from the text
+- Copy page as HTML with working links
+- Copy selection as Anki HTML
+- Copy selection with a reference to the source file
+
+https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c
 
 ## 🚀 Quickstart
 
-This project is not yet available in Obsidians community plugin list. You need to install it manually for now.
+This project is not yet available in Obsidians community plugin list. You need to install it manually.
 
 1. From the latest release, download `main.js` and `manifest.json`.
 2. Open your vaults plugin directory:
@@ -35,55 +39,22 @@ To speed things up, you can add separate commands for each profile. You may also
 
 ## ⚙️ Configuration
 
-In the plugins setting tab, you can configure pre-existing profiles, delete or modify them. You can also enable/disable commands for specifc profiles (you need to restart Obsidian after that).
+In the plugins setting tab, you can configure pre-existing profiles, delete or duplicate them. You can also enable/disable commands for specifc profiles (you need to restart Obsidian after that).
 
-Please refer to the wiki for detailed information about a profiles configuration.
+Global variables are listed at the beginning of the `Templates` section in the `Edit` dialog. Local variables are listed in the description of the template.
 
 ## 🤝 Contributing
 
-### Obsidian Test Vault
+Please create a dedicated Dev vault in Obsidian. Do not use your main vault!
 
-For development, please create a dedicated Test or Dev vault for Obsidian. Do not use your main vault for development.
-
-### Clone the repo
-
-Clone the repo into your vaults plugin folder.
-
-```bash
-git clone https://github.com/leschuster/obsidian-advanced-copy.git
-cd obsidian-advanced-copy
-```
-
-### Install dependencies
-
-```bash
-npm i
-```
-
-### Run the project
-
-```bash
-npm run dev
-```
-
-### Run the tests
-
-```bash
-npm run test
-```
-
-or
-
-```bash
-npm run test:watch
-```
-
-### Make changes
-
-You can now go to Obsidian and enable the plugin. After you've made code changes, you need to either restart Obsidian or disable & enable the plugin.
-
-Alternatively, you can use the [Obsidian Hot-Reload Plugin](https://github.com/pjeby/hot-reload).
-
-### Submit a pull request
+1. Go to your vaults plugin folder: `<vault>/.obsidian/plugins/`
+2. Clone this repository: `git clone https://github.com/leschuster/obsidian-advanced-copy.git`
+3. Change into the new directory: `cd obsidian-advanced-copy`
+4. Install dependencies: `npm i`
+5. Run the project: `npm run dev`
+6. Make your changes
+7. Run tests: `npm run test` or `npm run test:watch`
 
 If you'd like to contribute, please fork the repository and open a pull request to the `main` branch.
+
+**Note:** After you've made code changes, you need to either restart Obsidian or disable & enable the plugin. Alternatively, you can use the [Obsidian Hot-Reload Plugin](https://github.com/pjeby/hot-reload).
