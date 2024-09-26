@@ -73,7 +73,7 @@ export default class AdvancedCopyPlugin extends Plugin {
 
     private registerMainCmds(): void {
         this.addCommand({
-            id: `${PLUGIN_NAME}-Selection`,
+            id: `copy-selection`,
             name: "Copy Selection",
             editorCallback: (
                 editor: Editor,
@@ -86,7 +86,7 @@ export default class AdvancedCopyPlugin extends Plugin {
         });
 
         this.addCommand({
-            id: `${PLUGIN_NAME}-Page`,
+            id: `copy-page`,
             name: "Copy Page",
             editorCallback: (
                 editor: Editor,
@@ -105,7 +105,7 @@ export default class AdvancedCopyPlugin extends Plugin {
      */
     private registerCmdToCopySelection(profile: Profile): void {
         this.addCommand({
-            id: `${PLUGIN_NAME}-Profile-${profile.meta.id}-Copy-Selection`,
+            id: `copy-profile-${profile.meta.id}-selection`,
             name: `${profile.meta.name}: Selection`,
             editorCallback: (
                 editor: Editor,
@@ -122,7 +122,7 @@ export default class AdvancedCopyPlugin extends Plugin {
      */
     private registerCmdToCopyPage(profile: Profile): void {
         this.addCommand({
-            id: `${PLUGIN_NAME}-Profile-${profile.meta.id}-Copy-Page`,
+            id: `copy-profile-${profile.meta.id}-page`,
             name: `${profile.meta.name}: Page`,
             editorCallback: (
                 editor: Editor,
