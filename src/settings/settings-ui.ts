@@ -47,8 +47,6 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
             return;
         }
 
-        addHeading(this.containerEl, "General");
-
         new Setting(this.containerEl)
             .setName("Configure Hotkeys")
             .setDesc("Redirect to Hotkeys tab")
