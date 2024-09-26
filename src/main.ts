@@ -44,7 +44,6 @@ export default class AdvancedCopyPlugin extends Plugin {
      * Save user settings
      */
     public async saveSettings(): Promise<void> {
-        console.log("SAVING", this.settings);
         await this.saveData(this.settings);
     }
 
