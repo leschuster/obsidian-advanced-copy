@@ -7,6 +7,8 @@ import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 import { DEFAULT_SETTINGS } from "./default-settings";
 
+const PLUGIN_ID = "advanced-copy";
+
 /**
  * Provides the settings tab for the user interface
  */
@@ -60,8 +62,7 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                         this.app.setting.openTabById("hotkeys");
                         // @ts-ignore
                         const tab = this.app.setting.activeTab;
-                        tab.searchComponent.inputEl.value =
-                            "obsidian-advanced-copy";
+                        tab.searchComponent.inputEl.value = PLUGIN_ID;
                         tab.updateHotkeyVisibility();
                     });
             });
