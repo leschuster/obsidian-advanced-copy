@@ -1,6 +1,6 @@
 {
     "name": "obsidian-advanced-copy",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "description": "A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.",
     "main": "main.js",
     "scripts": {
