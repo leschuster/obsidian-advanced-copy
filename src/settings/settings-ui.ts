@@ -119,11 +119,22 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                     // Button to toggle if the user wants to add an 'selection' command
 
                     const refresh = () => {
-                        extraButton.extraSettingsEl.style.backgroundColor =
-                            profile.meta.cmdSelection
-                                ? "var(--color-green)"
-                                : "var(--color-red)";
-                        extraButton.extraSettingsEl.style.color = "white";
+                        if (profile.meta.cmdSelection) {
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        } else {
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        }
+
                         extraButton.setTooltip(
                             profile.meta.cmdSelection
                                 ? 'Disable "Copy Selection" command'
@@ -142,11 +153,22 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                     // Button to toggle if the user wants to add a 'page' command
 
                     const refresh = () => {
-                        extraButton.extraSettingsEl.style.backgroundColor =
-                            profile.meta.cmdPage
-                                ? "var(--color-green)"
-                                : "var(--color-red)";
-                        extraButton.extraSettingsEl.style.color = "white";
+                        if (profile.meta.cmdPage) {
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        } else {
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        }
+
                         extraButton.setTooltip(
                             profile.meta.cmdPage
                                 ? 'Disable "Copy Page" command'
