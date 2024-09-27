@@ -23,7 +23,7 @@ https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c
 
 This project is not yet available in Obsidians community plugin list. You need to install it manually.
 
-1. From the latest release, download `main.js` and `manifest.json`.
+1. From the latest release, download `main.js`, `manifest.json` and `styles.css`.
 2. Open your vaults plugin directory: `<vault>/.obsidian/plugins/`
 3. Create a new directory called `advanced-copy` and place the downloaded files there.
 4. Restart Obsidian or reload the community plugins list.

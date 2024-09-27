@@ -119,11 +119,22 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                     // Button to toggle if the user wants to add an 'selection' command
 
                     const refresh = () => {
-                        extraButton.extraSettingsEl.style.backgroundColor =
-                            profile.meta.cmdSelection
-                                ? "var(--color-green)"
-                                : "var(--color-red)";
-                        extraButton.extraSettingsEl.style.color = "white";
+                        if (profile.meta.cmdSelection) {
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        } else {
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        }
+
                         extraButton.setTooltip(
                             profile.meta.cmdSelection
                                 ? 'Disable "Copy Selection" command'
@@ -142,11 +153,22 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                     // Button to toggle if the user wants to add a 'page' command
 
                     const refresh = () => {
-                        extraButton.extraSettingsEl.style.backgroundColor =
-                            profile.meta.cmdPage
-                                ? "var(--color-green)"
-                                : "var(--color-red)";
-                        extraButton.extraSettingsEl.style.color = "white";
+                        if (profile.meta.cmdPage) {
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        } else {
+                            extraButton.extraSettingsEl.classList.remove(
+                                "advanced-copy-plugin__green-btn",
+                            );
+                            extraButton.extraSettingsEl.classList.add(
+                                "advanced-copy-plugin__red-btn",
+                            );
+                        }
+
                         extraButton.setTooltip(
                             profile.meta.cmdPage
                                 ? 'Disable "Copy Page" command'
@@ -287,19 +309,48 @@ class EditProfileModal extends Modal {
                 addHeading(this.contentEl, heading);
             }
 
+            // prettier-ignore
             if (sectionKey === "templates") {
-                new Setting(this.contentEl).descEl.innerHTML =
-                    `Templates are used to define the output of the copied text. 
+                const descEl = new Setting(this.contentEl).descEl
+
+                descEl.createSpan({
+                    text: `Templates are used to define the output of the copied text. 
                     You can use variables to insert dynamic content. 
-                    Each Markdown element has their own set of variables available.<br>
-                    In addition, the following global variables can be used:<br>
-                    <b>$vaultName</b>: The name of the vault<br>
-                    <b>$fileBasename</b>: The name of the file without the extension<br>
-                    <b>$fileExtension</b>: The extension of the file<br>
-                    <b>$fileName</b>: The name of the file with the extension<br>
-                    <b>$filePath</b>: The path of the file relative to the vaults root<br>
-                    <b>$date</b>: The current date (e.g. "23/09/2024")<br>
-                    <b>$time</b>: The current time (e.g. "10:10:00")<br>`;
+                    Each Markdown element has their own set of variables available.`,
+                });
+                descEl.createEl("br");
+                descEl.createEl("span", {
+                    text: "In addition, the following global variables can be used:",
+                });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$vaultName" });
+                descEl.createEl("span", { text: ": The name of the vault" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$fileBasename" });
+                descEl.createEl("span", { text: ": The name of the file without the extension" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$fileExtension" });
+                descEl.createEl("span", { text: ": The extension of the file" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$fileName" });
+                descEl.createEl("span", { text: ": The name of the file with the extension" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$filePath" });
+                descEl.createEl("span", { text: ": The path of the file relative to the vaults root" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$date" });
+                descEl.createEl("span", { text: ": The current date (e.g. '23/09/2024')" });
+                descEl.createEl("br");
+
+                descEl.createEl("b", { text: "$time" });
+                descEl.createEl("span", { text: ": The current time (e.g. '10:10:00')" });
+                descEl.createEl("br");
             }
 
             for (const [settingKey, setting] of Object.entries(section)) {
@@ -330,13 +381,19 @@ class EditProfileModal extends Modal {
                                     .setValue(initialValue as string)
                                     .onChange(update),
                             );
-                        let desc = setting.desc;
+                        set.descEl.createSpan({ text: setting.desc });
+
                         if (setting.vars) {
                             for (const variable of setting.vars) {
-                                desc += `<br><b>${variable.name}</b>: ${variable.desc}`;
+                                set.descEl.createEl("br");
+                                set.descEl.createEl("b", {
+                                    text: variable.name,
+                                });
+                                set.descEl.createSpan({
+                                    text: `: ${variable.desc}`,
+                                });
                             }
                         }
-                        set.descEl.innerHTML = desc;
 
                         break;
                     case "boolean":
