@@ -184,7 +184,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 mathInline: "<anki-mathjax>$value</anki-mathjax>",
                 orderedList: "<ol>$content</ol>",
                 paragraph: "<p>$value</p>",
-                paragraphNested: "<p>$value</p>",
+                paragraphNested: "$value",
                 strikethrough: "<del>$value</del>",
                 text: "$value",
                 unorderedList: "<ul>$content</ul>",
