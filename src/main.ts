@@ -73,7 +73,7 @@ export default class AdvancedCopyPlugin extends Plugin {
     private registerMainCmds(): void {
         this.addCommand({
             id: `copy-selection`,
-            name: "Copy Selection",
+            name: "Copy selection",
             editorCallback: (
                 editor: Editor,
                 _: MarkdownView | MarkdownFileInfo,
@@ -86,7 +86,7 @@ export default class AdvancedCopyPlugin extends Plugin {
 
         this.addCommand({
             id: `copy-page`,
-            name: "Copy Page",
+            name: "Copy page",
             editorCallback: (
                 editor: Editor,
                 _: MarkdownView | MarkdownFileInfo,
@@ -105,7 +105,7 @@ export default class AdvancedCopyPlugin extends Plugin {
     private registerCmdToCopySelection(profile: Profile): void {
         this.addCommand({
             id: `copy-profile-${profile.meta.id}-selection`,
-            name: `${profile.meta.name}: Selection`,
+            name: `${profile.meta.name}: selection`,
             editorCallback: (
                 editor: Editor,
                 _: MarkdownView | MarkdownFileInfo,
@@ -122,7 +122,7 @@ export default class AdvancedCopyPlugin extends Plugin {
     private registerCmdToCopyPage(profile: Profile): void {
         this.addCommand({
             id: `copy-profile-${profile.meta.id}-page`,
-            name: `${profile.meta.name}: Page`,
+            name: `${profile.meta.name}: page`,
             editorCallback: (
                 editor: Editor,
                 _: MarkdownView | MarkdownFileInfo,

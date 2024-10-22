@@ -50,13 +50,13 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
         }
 
         new Setting(this.containerEl)
-            .setName("Configure Hotkeys")
-            .setDesc("Redirect to Hotkeys tab")
+            .setName("Configure hotkeys")
+            .setDesc("Redirect to hotkeys tab")
             .addButton((button) => {
                 button
-                    .setButtonText("Configure Macros")
+                    .setButtonText("Configure macros")
                     .setIcon("square-asterisk")
-                    .setTooltip("Configure Macros")
+                    .setTooltip("Configure macros")
                     .onClick(() => {
                         // @ts-ignore
                         this.app.setting.openTabById("hotkeys");
@@ -137,8 +137,8 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
                         extraButton.setTooltip(
                             profile.meta.cmdSelection
-                                ? 'Disable "Copy Selection" command'
-                                : 'Enable "Copy Selection" command',
+                                ? 'Disable "copy selection" command'
+                                : 'Enable "copy selection" command',
                         );
                     };
                     refresh();
@@ -171,8 +171,8 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
                         extraButton.setTooltip(
                             profile.meta.cmdPage
-                                ? 'Disable "Copy Page" command'
-                                : 'Enable "Copy Page" command',
+                                ? 'Disable "copy page" command'
+                                : 'Enable "copy page" command',
                         );
                     };
                     refresh();

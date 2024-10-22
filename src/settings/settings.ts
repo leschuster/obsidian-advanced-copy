@@ -94,22 +94,22 @@ export const profileDesc: {
             type: "string",
         },
         cmdSelection: {
-            name: "Command: Copy Selection",
+            name: "Command: copy selection",
             desc: "Add a command to copy the current selection",
             type: "boolean",
         },
         cmdPage: {
-            name: "Command: Copy Page",
+            name: "Command: copy page",
             desc: "Add a command to copy the entire page",
             type: "boolean",
         },
         replaceGemojiShortcodes: {
-            name: "Replace Gemoji Shortcodes",
-            desc: "Replace Gemoji shortcodes with their unicode equivalent",
+            name: "Replace gemoji shortcodes",
+            desc: "Replace gemoji shortcodes with their unicode equivalent",
             type: "boolean",
         },
         configVersion: {
-            name: "Configuration Version",
+            name: "Configuration version",
             desc: "Version of the profile configuration",
             type: "number",
             visible: false,
@@ -117,13 +117,13 @@ export const profileDesc: {
     },
     templates: {
         blockquoteLine: {
-            name: "Blockquote Line",
+            name: "Blockquote line",
             desc: "Template for a single blockquote line",
             vars: [{ name: "$value", desc: "Blockquote line content" }],
             type: "string",
         },
         blockquoteWrapper: {
-            name: "Blockquote Wrapper",
+            name: "Blockquote wrapper",
             desc: "Template for a blockquote. Contains all blockquote lines.",
             vars: [{ name: "$content", desc: "Blockquote lines" }],
             type: "string",
@@ -154,29 +154,29 @@ export const profileDesc: {
             type: "string",
         },
         calloutContentLine: {
-            name: "Callout Content Line",
+            name: "Callout content line",
             desc: "Template for a single callout content line",
             vars: [{ name: "$value", desc: "Callout content line" }],
             type: "string",
         },
         codeBlock: {
-            name: "Code Block",
+            name: "Code block",
             desc: "Template for a code block",
             vars: [
                 { name: "$value", desc: "Code block content" },
-                { name: "$lang", desc: "programming language, if provided" },
+                { name: "$lang", desc: "Programming language, if provided" },
                 { name: "$meta", desc: "Metadata, if provided" },
             ],
             type: "string",
         },
         codeInline: {
-            name: "Code Inline",
+            name: "Code inline",
             desc: "Template for inline code",
             vars: [{ name: "$value", desc: "Code content" }],
             type: "string",
         },
         embeddedWikilink: {
-            name: "Embedded Wikilink",
+            name: "Embedded wikilink",
             desc: "Template for an embedded wikilink",
             vars: [
                 { name: "$link", desc: "Wikilink target" },
@@ -239,7 +239,7 @@ export const profileDesc: {
             type: "string",
         },
         horizontalRule: {
-            name: "Horizontal Rule",
+            name: "Horizontal rule",
             desc: "Template for a horizontal rule",
             type: "string",
         },
@@ -260,7 +260,7 @@ export const profileDesc: {
             type: "string",
         },
         lineBreak: {
-            name: "Line Break",
+            name: "Line break",
             desc: "Template for a line break",
             type: "string",
         },
@@ -275,7 +275,7 @@ export const profileDesc: {
             type: "string",
         },
         listItemOrdered: {
-            name: "Ordered List Item",
+            name: "Ordered list item",
             desc: "Template for an ordered list item",
             vars: [
                 { name: "$value", desc: "List item content" },
@@ -285,7 +285,7 @@ export const profileDesc: {
             type: "string",
         },
         listItemUnordered: {
-            name: "Unordered List Item",
+            name: "Unordered list item",
             desc: "Template for an unordered list item",
             vars: [
                 { name: "$value", desc: "List item content" },
@@ -294,7 +294,7 @@ export const profileDesc: {
             type: "string",
         },
         mathBlock: {
-            name: "Math Block",
+            name: "Math block",
             desc: "Template for a math block",
             vars: [
                 { name: "$value", desc: "Math block content" },
@@ -303,13 +303,13 @@ export const profileDesc: {
             type: "string",
         },
         mathInline: {
-            name: "Math Inline",
+            name: "Math inline",
             desc: "Template for inline math",
             vars: [{ name: "$value", desc: "Math content" }],
             type: "string",
         },
         orderedList: {
-            name: "Ordered List",
+            name: "Ordered list",
             desc: "Template for an ordered list",
             vars: [
                 { name: "$content", desc: "List items" },
@@ -324,7 +324,7 @@ export const profileDesc: {
             type: "string",
         },
         paragraphNested: {
-            name: "Paragraph Nested",
+            name: "Paragraph nested",
             desc: "Template for a paragraph that is nested inside another element",
             vars: [{ name: "$value", desc: "Paragraph content" }],
             type: "string",
@@ -342,7 +342,7 @@ export const profileDesc: {
             type: "string",
         },
         unorderedList: {
-            name: "Unordered List",
+            name: "Unordered list",
             desc: "Template for an unordered list",
             vars: [{ name: "$content", desc: "List items" }],
             type: "string",
