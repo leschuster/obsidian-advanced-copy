@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import remarkCallout from "./remark-plugins/remark-callout";
 import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
+import remarkHighlight from "./remark-plugins/highlight";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -52,7 +53,8 @@ export class Processor {
             .use(remarkMath)
             .use(remarkGfm)
             .use(remarkCallout)
-            .use(remarkWikilink);
+            .use(remarkWikilink)
+            .use(remarkHighlight);
 
         if (this.profile.meta.replaceGemojiShortcodes) {
             processor = processor.use(remarkGemoji);

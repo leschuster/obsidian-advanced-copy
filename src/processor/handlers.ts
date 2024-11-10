@@ -22,6 +22,7 @@ import { strikethrough } from "./handlers/strikethrough";
 import { callout } from "./handlers/callout";
 import { wikilink } from "./handlers/wikilink";
 import { CustomOptions } from "./toCustom";
+import { highlight } from "./handlers/highlight";
 
 export type HandlerFunc = (node: Nodes, options: CustomOptions) => string;
 
@@ -32,6 +33,7 @@ export const handlers: Record<string, HandlerFunc> = {
     code: codeBlock,
     inlineCode: codeInline,
     heading: heading,
+    highlight: highlight,
     thematicBreak: horizontalRule,
     image: image,
     emphasis: italic,

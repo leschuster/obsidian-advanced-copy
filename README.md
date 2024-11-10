@@ -21,7 +21,9 @@ https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c
 
 ## 🚀 Quickstart
 
-This project is not yet available in Obsidians community plugin list. You need to install it manually.
+You can download this plugin in the **Obsidian Community plugins tab**.
+
+Here is how to do it manually:
 
 1. From the latest release, download `main.js`, `manifest.json` and `styles.css`.
 2. Open your vaults plugin directory: `<vault>/.obsidian/plugins/`

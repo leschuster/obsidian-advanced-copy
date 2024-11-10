@@ -1,7 +1,7 @@
 {
     "id": "advanced-copy",
     "name": "Advanced Copy",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "minAppVersion": "1.6.0",
     "description": "Copy Markdown and transform it according to your needs.",
     "author": "leschuster",
