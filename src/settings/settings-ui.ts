@@ -309,6 +309,17 @@ class EditProfileModal extends Modal {
                 addHeading(this.contentEl, heading);
             }
 
+            if (this.profile[sectionKey as keyof Profile] === undefined) {
+                // profile is missing the section
+
+                // @ts-ignore because missing properties are added below
+                this.profile[sectionKey as keyof Profile] = {};
+
+                Logger.warn(`Created missing section: "${sectionKey}"`);
+
+                this.save();
+            }
+
             // prettier-ignore
             if (sectionKey === "templates") {
                 const descEl = new Setting(this.contentEl).descEl
@@ -363,6 +374,19 @@ class EditProfileModal extends Modal {
                 const initialValue = (
                     this.profile[sectionKey as keyof Profile] as any
                 )[settingKey];
+
+                if (initialValue === undefined) {
+                    // profile is missing the setting
+
+                    // initialize the setting with an empty string
+                    (this.profile[sectionKey as keyof Profile] as any)[
+                        settingKey
+                    ] = "";
+
+                    Logger.warn(`Created missing setting: "${settingKey}"`);
+
+                    this.save();
+                }
 
                 const update = async (value: any) => {
                     (this.profile[sectionKey as keyof Profile] as any)[

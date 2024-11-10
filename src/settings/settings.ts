@@ -34,6 +34,7 @@ export type Profile = {
         heading4: string;
         heading5: string;
         heading6: string;
+        highlight: string;
         horizontalRule: string;
         image: string;
         italic: string;
@@ -236,6 +237,12 @@ export const profileDesc: {
                 { name: "$value", desc: "Heading content" },
                 { name: "$level", desc: "6" },
             ],
+            type: "string",
+        },
+        highlight: {
+            name: "Highlight",
+            desc: "Template for highlighted text",
+            vars: [{ name: "$value", desc: "Highlight content" }],
             type: "string",
         },
         horizontalRule: {
