@@ -52,6 +52,8 @@
         "remark-math": "^6.0.0",
         "remark-parse": "^11.0.0",
         "unified": "^11.0.5",
+        "unist-util-find-after": "^5.0.0",
+        "unist-util-find-between-all": "^1.0.5",
         "unist-util-visit": "^5.0.0",
         "vfile": "^6.0.3",
         "zwitch": "^2.0.4"
