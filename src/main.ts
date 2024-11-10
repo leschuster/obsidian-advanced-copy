@@ -1,11 +1,16 @@
 import { Editor, MarkdownFileInfo, MarkdownView, Plugin } from "obsidian";
-import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
+import {
+    AdvancedCopyPluginSettings,
+    Profile,
+    profileDesc,
+} from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
 import { ClipboardHelper } from "./utils/ClipboardHelper";
 import { GlobalVariables, Processor } from "./processor/processor";
 import { ProfileSelectionModal } from "./modals/profile-selection-modal";
+import { ErrorModal } from "./modals/error-modal";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -138,6 +143,8 @@ export default class AdvancedCopyPlugin extends Plugin {
      * @param profile profile to use
      */
     private async copy(input: string, profile: Profile): Promise<void> {
+        if (this.profileIsIncomplete(profile)) return;
+
         const globalVars = this.getGlobalVariables();
 
         const output = await Processor.process(input, profile, globalVars);
@@ -159,5 +166,77 @@ export default class AdvancedCopyPlugin extends Plugin {
             date: date.toLocaleDateString(),
             time: date.toLocaleTimeString(),
         };
+    }
+
+    /**
+     * Check if the profile is incomplete and show an error modal if it is
+     * @param profile profile to check
+     * @returns boolean indicating if the profile is incomplete
+     */
+    private profileIsIncomplete(profile: any): profile is Profile {
+        // Use profileDesc as reference for required sections and properties
+        const schema = profileDesc;
+
+        const missingSections = Object.keys(schema).filter(
+            (key) => profile[key] === undefined,
+        );
+
+        if (missingSections.length > 0) {
+            const err = `Profile is missing the following sections: ${missingSections.join(", ")}`;
+
+            Logger.error(err);
+
+            new ErrorModal(
+                this.app,
+                "Profile incomplete",
+                err,
+                "Complete Profile",
+                () => {
+                    // Redirect to settings tab
+                    // Opening the profile will create missing sections and properties
+
+                    // @ts-ignore
+                    this.app.setting.open();
+                    // @ts-ignore
+                    this.app.setting.openTabById("advanced-copy");
+                },
+            ).open();
+
+            return true;
+        }
+
+        const missingProperties = Object.keys(schema)
+            .map((section) =>
+                Object.keys(schema[section as keyof Profile])
+                    .filter((key) => profile[section][key] === undefined)
+                    .map((key) => `${section}.${key}`),
+            )
+            .flat();
+
+        if (missingProperties.length > 0) {
+            const err = `Profile is missing the following properties: ${missingProperties.join(", ")}`;
+
+            Logger.error(err);
+
+            new ErrorModal(
+                this.app,
+                "Profile incomplete",
+                err,
+                "Complete Profile",
+                () => {
+                    // Redirect to settings tab
+                    // Opening the profile will create missing and properties
+
+                    // @ts-ignore
+                    this.app.setting.open();
+                    // @ts-ignore
+                    this.app.setting.openTabById("advanced-copy");
+                },
+            ).open();
+
+            return true;
+        }
+
+        return false;
     }
 }
