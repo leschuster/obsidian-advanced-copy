@@ -1,3 +1,4 @@
+import { convertChildren, getTemplate } from "../handlerUtils";
 import { Callout } from "../remark-plugins/remark-callout";
 import toCustom, { CustomOptions } from "../toCustom";
 
@@ -12,23 +13,23 @@ export function callout(node: Callout, opts: CustomOptions): string {
 
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
+    const lineTemplate = getTemplate(
+        opts.profile.templates.calloutContentLine,
+        opts,
+    );
+    const calloutTemplate = getTemplate(opts.profile.templates.callout, opts);
+
+    const content = convertChildren(node.children, childOpts)
         .map((line) =>
             line
                 .split("\n")
                 .filter((l) => l.trim() !== "")
-                .map((l) =>
-                    opts.profile.templates.calloutContentLine.replaceAll(
-                        "$value",
-                        l,
-                    ),
-                )
+                .map((l) => lineTemplate.replaceAll("$value", l))
                 .join(""),
         )
         .join("");
 
-    return opts.profile.templates.callout
+    return calloutTemplate
         .replaceAll("$type", node.calloutType)
         .replaceAll("$behavior", node.calloutBehavior)
         .replaceAll("$content", content)

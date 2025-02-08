@@ -1,5 +1,6 @@
 import { Link } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../handlerUtils";
 
 /**
  * Convert a link node to string
@@ -10,14 +11,12 @@ import toCustom, { CustomOptions } from "../toCustom";
 export function link(node: Link, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const alt = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("");
+    const template = getTemplate(opts.profile.templates.link, opts);
 
-    let content = opts.profile.templates.link
+    const alt = convertChildren(node.children, childOpts).join("");
+
+    return template
         .replaceAll("$src", node.url)
         .replaceAll("$alt", alt)
         .replaceAll("$title", node.title ?? "");
-
-    return content;
 }

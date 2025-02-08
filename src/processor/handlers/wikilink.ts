@@ -1,3 +1,4 @@
+import { getTemplate } from "../handlerUtils";
 import { Wikilink } from "../remark-plugins/wikilink";
 import { CustomOptions } from "../toCustom";
 
@@ -22,7 +23,9 @@ export function wikilink(node: Wikilink, opts: CustomOptions): string {
  * @returns
  */
 function normalWikilink(node: Wikilink, opts: CustomOptions): string {
-    return opts.profile.templates.wikilink
+    const template = getTemplate(opts.profile.templates.wikilink, opts);
+
+    return template
         .replaceAll("$text", node.value || node.link)
         .replaceAll("$link", node.link);
 }
@@ -34,7 +37,9 @@ function normalWikilink(node: Wikilink, opts: CustomOptions): string {
  * @returns
  */
 function embeddedWikilink(node: Wikilink, opts: CustomOptions): string {
-    return opts.profile.templates.embeddedWikilink
+    const template = getTemplate(opts.profile.templates.embeddedWikilink, opts);
+
+    return template
         .replaceAll("$text", node.value || node.link)
         .replaceAll("$link", node.link);
 }

@@ -1,5 +1,6 @@
 import { List, ListItem } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../handlerUtils";
 
 const ONE_LEVEL_INDENT = 4;
 
@@ -26,12 +27,14 @@ export function list(node: List, opts: CustomOptions): string {
 function orderedList(node: List, opts: CustomOptions): string {
     const start = node.start ?? 1;
 
+    const template = getTemplate(opts.profile.templates.orderedList, opts);
+
     const children = node.children
         .map((child, idx) => listItem(child, opts, true, idx + start))
         .join("")
         .trimEnd();
 
-    return opts.profile.templates.orderedList
+    return template
         .replaceAll("$content", children)
         .replaceAll("$start", start + "");
 }
@@ -43,15 +46,14 @@ function orderedList(node: List, opts: CustomOptions): string {
  * @returns
  */
 function unorderedList(node: List, opts: CustomOptions): string {
+    const template = getTemplate(opts.profile.templates.unorderedList, opts);
+
     const children = node.children
         .map((child) => listItem(child, opts, false))
         .join("")
         .trimEnd();
 
-    return opts.profile.templates.unorderedList.replaceAll(
-        "$content",
-        children,
-    );
+    return template.replaceAll("$content", children);
 }
 
 function listItem(
@@ -66,20 +68,19 @@ function listItem(
         indentation: (opts.indentation ?? 0) + ONE_LEVEL_INDENT,
     };
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
+    const content = convertChildren(node.children, childOpts)
         .join("\n")
         .trimEnd();
 
     let template: string;
     if (ordered) {
         const num = index === undefined ? 1 : index;
-        template = opts.profile.templates.listItemOrdered.replaceAll(
-            "$index",
-            num + "",
-        );
+        template = getTemplate(
+            opts.profile.templates.listItemOrdered,
+            opts,
+        ).replaceAll("$index", num + "");
     } else {
-        template = opts.profile.templates.listItemUnordered;
+        template = getTemplate(opts.profile.templates.listItemUnordered, opts);
     }
 
     const indent = " ".repeat(opts.indentation ?? 0);

@@ -5,6 +5,16 @@ export type AdvancedCopyPluginSettings = {
     profiles: { [key: string]: Profile };
 };
 
+export type ProfileTemplate =
+    | string
+    | {
+          template: string;
+          templateFirstOfType?: string;
+          templateLastOfType?: string;
+          templateFirstChild?: string;
+          templateLastChild?: string;
+      };
+
 /**
  * A profile holds the configuration to convert a markdown AST to a string
  * using user-defined templates.
@@ -20,41 +30,41 @@ export type Profile = {
         configVersion: number;
     };
     templates: {
-        blockquoteLine: string;
-        blockquoteWrapper: string;
-        bold: string;
-        callout: string;
-        calloutContentLine: string;
-        codeBlock: string;
-        codeInline: string;
-        embeddedWikilink: string;
-        heading1: string;
-        heading2: string;
-        heading3: string;
-        heading4: string;
-        heading5: string;
-        heading6: string;
-        highlight: string;
-        horizontalRule: string;
-        image: string;
-        italic: string;
-        lineBreak: string;
-        link: string;
-        listItemOrdered: string;
-        listItemUnordered: string;
-        mathBlock: string;
-        mathInline: string;
-        orderedList: string;
-        paragraph: string;
-        paragraphNested: string;
-        strikethrough: string;
-        text: string;
-        unorderedList: string;
-        wikilink: string;
+        blockquoteLine: ProfileTemplate;
+        blockquoteWrapper: ProfileTemplate;
+        bold: ProfileTemplate;
+        callout: ProfileTemplate;
+        calloutContentLine: ProfileTemplate;
+        codeBlock: ProfileTemplate;
+        codeInline: ProfileTemplate;
+        embeddedWikilink: ProfileTemplate;
+        heading1: ProfileTemplate;
+        heading2: ProfileTemplate;
+        heading3: ProfileTemplate;
+        heading4: ProfileTemplate;
+        heading5: ProfileTemplate;
+        heading6: ProfileTemplate;
+        highlight: ProfileTemplate;
+        horizontalRule: ProfileTemplate;
+        image: ProfileTemplate;
+        italic: ProfileTemplate;
+        lineBreak: ProfileTemplate;
+        link: ProfileTemplate;
+        listItemOrdered: ProfileTemplate;
+        listItemUnordered: ProfileTemplate;
+        mathBlock: ProfileTemplate;
+        mathInline: ProfileTemplate;
+        orderedList: ProfileTemplate;
+        paragraph: ProfileTemplate;
+        paragraphNested: ProfileTemplate;
+        strikethrough: ProfileTemplate;
+        text: ProfileTemplate;
+        unorderedList: ProfileTemplate;
+        wikilink: ProfileTemplate;
     };
     extra: {
-        before: string;
-        after: string;
+        before: ProfileTemplate;
+        after: ProfileTemplate;
     };
 };
 
@@ -377,3 +387,184 @@ export const profileDesc: {
         },
     },
 };
+/*
+export class Profile {
+    public meta: ProfileSectionMeta;
+    public templates: ProfileSectionTemplates;
+    public extra: ProfileSectionExtra;
+
+    constructor(serialized?: ProfileSerialized) {
+        if (serialized) {
+            this.meta = new ProfileSectionMeta(serialized.meta);
+            this.templates = new ProfileSectionTemplates(serialized.templates);
+            this.extra = new ProfileSectionExtra(serialized.extra);
+        } else {
+            this.meta = new ProfileSectionMeta();
+            this.templates = new ProfileSectionTemplates();
+            this.extra = new ProfileSectionExtra();
+        }
+    }
+
+    public serialize(): ProfileSerialized {
+        return {
+            meta: this.meta.serialize(),
+            templates: this.templates.serialize(),
+            extra: this.extra.serialize(),
+        };
+    }
+}
+
+class ProfileSectionMeta {
+    public id: string;
+    public name: string;
+    public description: string;
+    public cmdSelection: boolean;
+    public cmdPage: boolean;
+    public replaceGemojiShortcodes: boolean;
+    public configVersion: number;
+
+    constructor(serialized?: ProfileSerialized["meta"]) {
+        if (serialized) {
+            this.id = serialized.id;
+            this.name = serialized.name;
+            this.description = serialized.description;
+            this.cmdSelection = serialized.cmdSelection;
+            this.cmdPage = serialized.cmdPage;
+            this.replaceGemojiShortcodes = serialized.replaceGemojiShortcodes;
+            this.configVersion = serialized.configVersion;
+        } else {
+            this.id = "";
+            this.name = "";
+            this.description = "";
+            this.cmdSelection = false;
+            this.cmdPage = false;
+            this.replaceGemojiShortcodes = false;
+            this.configVersion = 1;
+        }
+    }
+
+    public serialize(): ProfileSerialized["meta"] {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            cmdSelection: this.cmdSelection,
+            cmdPage: this.cmdPage,
+            replaceGemojiShortcodes: this.replaceGemojiShortcodes,
+            configVersion: this.configVersion,
+        };
+    }
+}
+
+class ProfileTemplate {
+    public template: string;
+    public templateFirstOfType?: string;
+    public templateLastOfType?: string;
+    public templateFirstChild?: string;
+    public templateLastChild?: string;
+
+    constructor(serialized: ProfileSerializedTemplate) {
+        if (typeof serialized === "string") {
+            this.template = serialized;
+        } else {
+            this.template = serialized.template;
+            this.templateFirstOfType = serialized.templateFirstOfType;
+            this.templateLastOfType = serialized.templateLastOfType;
+            this.templateFirstChild = serialized.templateFirstChild;
+            this.templateLastChild = serialized.templateLastChild;
+        }
+    }
+
+    public serialize(): ProfileSerializedTemplate {
+        return {
+            template: this.template,
+            templateFirstOfType: this.templateFirstOfType,
+            templateLastOfType: this.templateLastOfType,
+            templateFirstChild: this.templateFirstChild,
+            templateLastChild: this.templateLastChild,
+        };
+    }
+
+    public chooseTemplate({
+        isFirstOfType,
+        isLastOfType,
+        isFirstChild,
+        isLastChild,
+    }: {
+        isFirstOfType: boolean;
+        isLastOfType: boolean;
+        isFirstChild: boolean;
+        isLastChild: boolean;
+    }): string {
+        switch (true) {
+            case this.templateFirstChild && isFirstChild:
+                return this.templateFirstChild;
+            case this.templateLastChild && isLastChild:
+                return this.templateLastChild;
+            case this.templateFirstOfType && isFirstOfType:
+                return this.templateFirstOfType;
+            case this.templateLastOfType && isLastOfType:
+                return this.templateLastOfType;
+            default:
+                return this.template;
+        }
+    }
+}
+
+class ProfileSectionTemplates {
+    [key: string]: ProfileTemplate;
+
+    public blockquoteLine: ProfileTemplate = new ProfileTemplate("");
+    public blockquoteWrapper: ProfileTemplate = new ProfileTemplate("");
+    public bold: ProfileTemplate = new ProfileTemplate("");
+    public callout: ProfileTemplate = new ProfileTemplate("");
+    public calloutContentLine: ProfileTemplate = new ProfileTemplate("");
+    public codeBlock: ProfileTemplate = new ProfileTemplate("");
+    public codeInline: ProfileTemplate = new ProfileTemplate("");
+    public embeddedWikilink: ProfileTemplate = new ProfileTemplate("");
+    public heading1: ProfileTemplate = new ProfileTemplate("");
+    public heading2: ProfileTemplate = new ProfileTemplate("");
+    public heading3: ProfileTemplate = new ProfileTemplate("");
+    public heading4: ProfileTemplate = new ProfileTemplate("");
+    public heading5: ProfileTemplate = new ProfileTemplate("");
+    public heading6: ProfileTemplate = new ProfileTemplate("");
+    public highlight: ProfileTemplate = new ProfileTemplate("");
+    public horizontalRule: ProfileTemplate = new ProfileTemplate("");
+    public image: ProfileTemplate = new ProfileTemplate("");
+    public italic: ProfileTemplate = new ProfileTemplate("");
+    public lineBreak: ProfileTemplate = new ProfileTemplate("");
+    public link: ProfileTemplate = new ProfileTemplate("");
+    public listItemOrdered: ProfileTemplate = new ProfileTemplate("");
+    public listItemUnordered: ProfileTemplate = new ProfileTemplate("");
+    public mathBlock: ProfileTemplate = new ProfileTemplate("");
+    public mathInline: ProfileTemplate = new ProfileTemplate("");
+    public orderedList: ProfileTemplate = new ProfileTemplate("");
+    public paragraph: ProfileTemplate = new ProfileTemplate("");
+    public paragraphNested: ProfileTemplate = new ProfileTemplate("");
+    public strikethrough: ProfileTemplate = new ProfileTemplate("");
+    public text: ProfileTemplate = new ProfileTemplate("");
+    public unorderedList: ProfileTemplate = new ProfileTemplate("");
+    public wikilink: ProfileTemplate = new ProfileTemplate("");
+
+    constructor(serialized?: TemplatesType) {
+        for (const key in this) {
+            const value = serialized?.[key] ?? "";
+            this[key] = new ProfileTemplate(value);
+        }
+    }
+}
+
+type TemplatesType = {
+    [K in keyof ProfileSectionTemplates]: ProfileSerializedTemplate;
+};
+
+class ProfileSectionExtra {
+    [key: string]: ProfileTemplate;
+
+    public before: ProfileTemplate;
+    public after: ProfileTemplate;
+
+
+}
+
+*/

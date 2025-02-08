@@ -7,10 +7,16 @@ import { Logger } from "src/utils/Logger";
 export interface CustomOptions {
     profile: Profile;
     topLevel?: boolean;
+    isFirstOfType?: boolean;
+    isLastOfType?: boolean;
+    isFirstChild?: boolean;
+    isLastChild?: boolean;
     indentation?: number;
 }
 
 export default function toCustom(node: Nodes, options: CustomOptions): string {
+    console.log("toCustom", node, options);
+
     const handle = zwitch("type", {
         invalid,
         unknown,

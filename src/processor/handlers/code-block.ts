@@ -1,5 +1,6 @@
 import { Code } from "mdast";
 import { CustomOptions } from "../toCustom";
+import { getTemplate } from "../handlerUtils";
 
 /**
  * Convert a code block node to string
@@ -8,7 +9,9 @@ import { CustomOptions } from "../toCustom";
  * @returns
  */
 export function codeBlock(node: Code, opts: CustomOptions): string {
-    const content = opts.profile.templates.codeBlock
+    const template = getTemplate(opts.profile.templates.codeBlock, opts);
+
+    const content = template
         .replaceAll("$value", node.value)
         .replaceAll("$lang", node.lang ?? "")
         .replaceAll("$meta", node.meta ?? "");

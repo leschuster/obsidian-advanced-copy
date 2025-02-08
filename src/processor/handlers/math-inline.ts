@@ -1,5 +1,6 @@
 import { InlineMath } from "mdast-util-math";
 import { CustomOptions } from "../toCustom";
+import { getTemplate } from "../handlerUtils";
 
 /**
  * Convert a inline math node to string
@@ -8,5 +9,7 @@ import { CustomOptions } from "../toCustom";
  * @returns
  */
 export function mathInline(node: InlineMath, opts: CustomOptions): string {
-    return opts.profile.templates.mathInline.replaceAll("$value", node.value);
+    const template = getTemplate(opts.profile.templates.mathInline, opts);
+
+    return template.replaceAll("$value", node.value);
 }

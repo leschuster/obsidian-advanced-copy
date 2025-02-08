@@ -1,5 +1,6 @@
 import { Paragraph } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../handlerUtils";
 
 /**
  * Convert a paragraph to string
@@ -9,14 +10,12 @@ import toCustom, { CustomOptions } from "../toCustom";
  */
 export function paragraph(node: Paragraph, opts: CustomOptions): string {
     const template = opts.topLevel
-        ? opts.profile.templates.paragraph
-        : opts.profile.templates.paragraphNested;
+        ? getTemplate(opts.profile.templates.paragraph, opts)
+        : getTemplate(opts.profile.templates.paragraphNested, opts);
 
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("");
+    const content = convertChildren(node.children, childOpts).join("");
 
     return template.replaceAll("$value", content);
 }
