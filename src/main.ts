@@ -1,9 +1,5 @@
 import { Editor, MarkdownFileInfo, MarkdownView, Plugin } from "obsidian";
-import {
-    AdvancedCopyPluginSettings,
-    Profile,
-    profileDesc,
-} from "./settings/settings";
+import { AdvancedCopyPluginSettings, Profile } from "./settings/settings";
 import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
@@ -11,6 +7,7 @@ import { ClipboardHelper } from "./utils/ClipboardHelper";
 import { GlobalVariables, Processor } from "./processor/processor";
 import { ProfileSelectionModal } from "./modals/profile-selection-modal";
 import { ErrorModal } from "./modals/error-modal";
+import { profileDesc } from "./settings/profile-desc";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -209,6 +206,7 @@ export default class AdvancedCopyPlugin extends Plugin {
             .map((section) =>
                 Object.keys(schema[section as keyof Profile])
                     .filter((key) => profile[section][key] === undefined)
+                    .filter((key) => !key.startsWith("_")) // Ignore internal properties
                     .map((key) => `${section}.${key}`),
             )
             .flat();

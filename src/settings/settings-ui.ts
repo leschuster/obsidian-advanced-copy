@@ -1,11 +1,19 @@
-import { App, Modal, Notice, PluginSettingTab, Setting } from "obsidian";
+import {
+    App,
+    Modal,
+    Notice,
+    PluginSettingTab,
+    setIcon,
+    Setting,
+} from "obsidian";
 import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
-import { Profile, profileDesc } from "./settings";
+import { Profile, MDTemplate } from "./settings";
 import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 import { DEFAULT_SETTINGS } from "./default-settings";
+import { profileDesc, ProfileDescSetting } from "./profile-desc";
 
 const PLUGIN_ID = "advanced-copy";
 
@@ -36,14 +44,23 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
         this.addProfileOverview();
     }
 
+    /**
+     * Save the settings
+     */
     private async save(): Promise<void> {
         await this.plugin.saveSettings();
     }
 
+    /**
+     * Rerenader the settings ui
+     */
     private reload(): void {
         this.display();
     }
 
+    /**
+     * Add general plugin settings to the DOM
+     */
     private addGeneralSettings(): void {
         if (!this.plugin.settings) {
             return;
@@ -82,6 +99,33 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
             )
             .addButton((button) =>
                 button
+                    .setButtonText("Paste settings")
+                    .setTooltip("Paste settings")
+                    .setWarning()
+                    .onClick(async () => {
+                        new ConfirmationModal(
+                            this.app,
+                            "Import settings from clipboard",
+                            "This will erase your current settings. Are you sure you want to continue?",
+                            async () => {
+                                const input =
+                                    await navigator.clipboard.readText();
+                                try {
+                                    const settings = JSON.parse(input);
+                                    this.plugin.settings = settings;
+                                    await this.save();
+                                    this.reload();
+                                    new Notice("Settings pasted");
+                                } catch (e) {
+                                    new Notice("Failed to paste settings");
+                                    Logger.error("Failed to paste settings");
+                                }
+                            },
+                        ).open();
+                    }),
+            )
+            .addButton((button) =>
+                button
                     .setButtonText("Reset settings")
                     .setTooltip("Reset settings")
                     .setWarning()
@@ -102,6 +146,9 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
             );
     }
 
+    /**
+     * Add overview of all profiles to the DOM
+     */
     private addProfileOverview(): void {
         if (!this.plugin.settings) {
             return;
@@ -278,6 +325,9 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
     }
 }
 
+/**
+ * Modal to edit a single profile
+ */
 class EditProfileModal extends Modal {
     constructor(
         public app: App,
@@ -288,7 +338,8 @@ class EditProfileModal extends Modal {
     }
 
     public onOpen(): void {
-        this.buildUI();
+        this.fixMissingProperties();
+        this.display();
     }
 
     public onClose(): void {
@@ -299,84 +350,34 @@ class EditProfileModal extends Modal {
         await this.plugin.saveSettings();
     }
 
-    private buildUI(): void {
-        this.setTitle(`Edit: ${this.profile.meta.name}`);
-
-        for (const [sectionKey, section] of Object.entries(profileDesc)) {
-            if (sectionKey !== "") {
-                const heading =
-                    sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1);
-                addHeading(this.contentEl, heading);
-            }
-
+    /**
+     * Add missing properties with default values to the profile
+     */
+    private fixMissingProperties(): void {
+        // Iterate through sectionKeys the profile should have
+        for (const sectionKey of Object.keys(profileDesc)) {
             if (this.profile[sectionKey as keyof Profile] === undefined) {
-                // profile is missing the section
+                // profile is missing the section entirely
 
-                // @ts-ignore because missing properties are added below
+                // @ts-ignore TS disallows {}, but missing properties are added below
                 this.profile[sectionKey as keyof Profile] = {};
 
                 Logger.warn(`Created missing section: "${sectionKey}"`);
-
-                this.save();
             }
 
-            // prettier-ignore
-            if (sectionKey === "templates") {
-                const descEl = new Setting(this.contentEl).descEl
-
-                descEl.createSpan({
-                    text: `Templates are used to define the output of the copied text. 
-                    You can use variables to insert dynamic content. 
-                    Each Markdown element has their own set of variables available.`,
-                });
-                descEl.createEl("br");
-                descEl.createEl("span", {
-                    text: "In addition, the following global variables can be used:",
-                });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$vaultName" });
-                descEl.createEl("span", { text: ": The name of the vault" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$fileBasename" });
-                descEl.createEl("span", { text: ": The name of the file without the extension" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$fileExtension" });
-                descEl.createEl("span", { text: ": The extension of the file" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$fileName" });
-                descEl.createEl("span", { text: ": The name of the file with the extension" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$filePath" });
-                descEl.createEl("span", { text: ": The path of the file relative to the vaults root" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$date" });
-                descEl.createEl("span", { text: ": The current date (e.g. '23/09/2024')" });
-                descEl.createEl("br");
-
-                descEl.createEl("b", { text: "$time" });
-                descEl.createEl("span", { text: ": The current time (e.g. '10:10:00')" });
-                descEl.createEl("br");
-            }
-
-            for (const [settingKey, setting] of Object.entries(section)) {
-                if (setting.visible === false) {
+            // Iterate through settings the profile should have
+            for (const settingKey of Object.keys(profileDesc[sectionKey])) {
+                if (settingKey.startsWith("_")) {
+                    // Skip internal properties
                     continue;
                 }
 
-                const name = setting.name;
-
-                const initialValue = (
+                const currValue = (
                     this.profile[sectionKey as keyof Profile] as any
                 )[settingKey];
 
-                if (initialValue === undefined) {
-                    // profile is missing the setting
+                if (currValue === undefined) {
+                    // profile is missing this setting
 
                     // initialize the setting with an empty string
                     (this.profile[sectionKey as keyof Profile] as any)[
@@ -384,56 +385,209 @@ class EditProfileModal extends Modal {
                     ] = "";
 
                     Logger.warn(`Created missing setting: "${settingKey}"`);
-
-                    this.save();
-                }
-
-                const update = async (value: any) => {
-                    (this.profile[sectionKey as keyof Profile] as any)[
-                        settingKey
-                    ] = value;
-                    await this.save();
-                };
-
-                switch (setting.type) {
-                    case "string":
-                        const set = new Setting(this.contentEl)
-                            .setName(name)
-                            .addTextArea((text) =>
-                                text
-                                    .setPlaceholder(name)
-                                    .setValue(initialValue as string)
-                                    .onChange(update),
-                            );
-                        set.descEl.createSpan({ text: setting.desc });
-
-                        if (setting.vars) {
-                            for (const variable of setting.vars) {
-                                set.descEl.createEl("br");
-                                set.descEl.createEl("b", {
-                                    text: variable.name,
-                                });
-                                set.descEl.createSpan({
-                                    text: `: ${variable.desc}`,
-                                });
-                            }
-                        }
-
-                        break;
-                    case "boolean":
-                        addToggleInput(
-                            this.contentEl,
-                            name,
-                            setting.desc,
-                            initialValue as boolean,
-                            update,
-                        );
-                        break;
                 }
             }
         }
+
+        this.save();
+    }
+
+    private display(): void {
+        this.setTitle(`Edit: ${this.profile.meta.name}`);
+
+        // profileDesc describes each configurable property with
+        // the same structure as the profile object
+        Object.keys(profileDesc).forEach((sectionKey) => {
+            this.addSection(this.contentEl, sectionKey);
+        });
+    }
+
+    private addSection(containerEl: HTMLElement, sectionKey: string): void {
+        const sectionDesc = profileDesc[sectionKey];
+        const sectionEl = containerEl.createDiv();
+
+        if (sectionKey !== "") {
+            const h = sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1);
+            addHeading(sectionEl, h);
+        }
+
+        if (sectionDesc.hasOwnProperty("_desc")) {
+            const descEl = new Setting(sectionEl).descEl;
+            descEl.createSpan({ text: sectionDesc._desc?.desc });
+        }
+
+        Object.keys(sectionDesc).forEach((settingKey) => {
+            this.addSettingToSection(sectionEl, sectionKey, settingKey);
+        });
+    }
+
+    private addSettingToSection(
+        sectionEl: HTMLElement,
+        sectionKey: string,
+        settingKey: string,
+    ): void {
+        const settingDesc: ProfileDescSetting =
+            profileDesc[sectionKey][settingKey];
+
+        if (settingDesc !== undefined && settingDesc.visible === false) {
+            return;
+        }
+
+        const currValue = (this.profile[sectionKey as keyof Profile] as any)[
+            settingKey
+        ];
+
+        const update = async (value: any) => {
+            (this.profile[sectionKey as keyof Profile] as any)[settingKey] =
+                value;
+            await this.save();
+        };
+
+        switch (settingDesc.type) {
+            case "string":
+                addTextInput(
+                    sectionEl,
+                    settingDesc.name,
+                    settingDesc.desc,
+                    currValue,
+                    update,
+                );
+                break;
+            case "number":
+                throw new Error("Number settings not implemented");
+            case "boolean":
+                addToggleInput(
+                    sectionEl,
+                    settingDesc.name,
+                    settingDesc.desc,
+                    currValue,
+                    update,
+                );
+                break;
+            case "template":
+                new TemplateSetting(sectionEl, settingDesc, update, currValue);
+                break;
+            default:
+                Logger.error(`Unknown setting type: ${settingDesc.type}`);
+        }
     }
 }
+
+class TemplateSetting {
+    private isOpen = false;
+    private setting: Setting;
+    private currValue: MDTemplate;
+    private contentContainer: HTMLElement;
+    private contentElements: HTMLElement[] = [];
+
+    constructor(
+        private containerEl: HTMLElement,
+        private settingDesc: ProfileDescSetting,
+        private update: (value: MDTemplate) => void,
+        initialValue: string | MDTemplate,
+    ) {
+        this.currValue = this.convertLegacyStringTemplate(initialValue);
+        this.setting = this.createSetting();
+        this.contentContainer = this.createContentContainer();
+    }
+
+    private convertLegacyStringTemplate(
+        initialValue: string | MDTemplate,
+    ): MDTemplate {
+        if (typeof initialValue !== "string") return initialValue;
+
+        const template: MDTemplate = {
+            template: initialValue,
+        };
+
+        if (this.settingDesc.additionalTemplates) {
+            for (const key in this.settingDesc.additionalTemplates) {
+                // @ts-ignore
+                template[key] = "";
+            }
+        }
+
+        this.update(template);
+        return template;
+    }
+
+    private createSetting(): Setting {
+        const el = new Setting(this.containerEl)
+            .setName(this.settingDesc.name)
+            .setDesc(this.settingDesc.desc)
+            .setClass("advanced-copy-plugin__template-setting")
+            .addTextArea((text) =>
+                text
+                    .setPlaceholder(this.settingDesc.name)
+                    .setValue(this.currValue.template)
+                    .onChange((value) => {
+                        this.currValue.template = value;
+                        this.update(this.currValue);
+                    }),
+            );
+
+        const iconEl = el.settingEl.createEl("span", {
+            cls: "advanced-copy-plugin__template-setting__icon",
+        });
+        setIcon(iconEl, "right-triangle");
+        iconEl.addEventListener("click", () => this.toggleVisibility());
+        el.settingEl.prepend(iconEl);
+
+        return el;
+    }
+
+    private createContentContainer(): HTMLElement {
+        return this.containerEl.createDiv({
+            cls: "advanced-copy-plugin__content-container",
+        });
+    }
+
+    public onClose(): void {}
+
+    private toggleVisibility(): void {
+        this.isOpen = !this.isOpen;
+        this.setting.settingEl.toggleClass(
+            "advanced-copy-plugin__template-setting--open",
+            this.isOpen,
+        );
+        this.isOpen ? this.showContent() : this.removeContent();
+    }
+
+    private showContent(): void {
+        if (!this.settingDesc.additionalTemplates) return;
+
+        for (const key in this.settingDesc.additionalTemplates) {
+            const desc = this.settingDesc.additionalTemplates[key];
+            if (desc.type != "string") {
+                throw new Error(
+                    `Additional template type '${desc.type}' not yet supported.`,
+                );
+            }
+
+            const value = this.currValue[key as keyof MDTemplate] ?? "";
+
+            const el = new Setting(this.contentContainer)
+                .setName(desc.name)
+                .setDesc(desc.desc)
+                .addTextArea((text) =>
+                    text
+                        .setPlaceholder(desc.name)
+                        .setValue(value)
+                        .onChange((value: string) => {
+                            this.currValue[key as keyof MDTemplate] = value;
+                            this.update(this.currValue);
+                        }),
+                );
+            this.contentElements.push(el.settingEl);
+        }
+    }
+
+    private removeContent(): void {
+        this.contentElements.forEach((el) => el.remove());
+    }
+}
+
+// Helper functions
 
 function addHeading(containerEl: HTMLElement, name: string): void {
     new Setting(containerEl).setName(name).setHeading();

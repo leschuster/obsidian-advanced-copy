@@ -1,4 +1,4 @@
-import { ProfileTemplate } from "src/settings/settings";
+import { MDTemplate } from "src/settings/settings";
 import toCustom, { CustomOptions } from "./toCustom";
 import { Nodes } from "mdast";
 
@@ -9,7 +9,7 @@ import { Nodes } from "mdast";
  * @returns
  */
 export function getTemplate(
-    profileTemplate: ProfileTemplate,
+    profileTemplate: string | MDTemplate,
     opts: CustomOptions,
 ): string {
     if (typeof profileTemplate === "string") {

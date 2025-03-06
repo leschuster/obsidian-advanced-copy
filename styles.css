@@ -9,3 +9,15 @@
     background-color: var(--background-modifier-success);
     color: var(--text-on-accent);
 }
+
+.advanced-copy-plugin__template-setting__icon {
+    transform: rotate(-90deg);
+}
+.advanced-copy-plugin__template-setting--open
+    .advanced-copy-plugin__template-setting__icon {
+    transform: rotate(0deg);
+}
+
+.advanced-copy-plugin__content-container {
+    padding-left: 3rem;
+}

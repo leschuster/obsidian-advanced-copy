@@ -69,7 +69,7 @@ function listItem(
     };
 
     const content = convertChildren(node.children, childOpts)
-        .join("\n")
+        .join("")
         .trimEnd();
 
     let template: string;
