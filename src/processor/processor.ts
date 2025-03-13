@@ -8,6 +8,7 @@ import remarkCallout from "./remark-plugins/remark-callout";
 import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
 import remarkHighlight from "./remark-plugins/highlight";
+import { modifiers } from "./modifiers";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -73,7 +74,9 @@ export class Processor {
     }
 
     private postprocess(input: string): string {
-        return this.replaceGlobalVariables(input);
+        input = this.replaceGlobalVariables(input);
+        input = this.applyModifiers(input);
+        return input;
     }
 
     private replaceGlobalVariables(text: string): string {
@@ -82,5 +85,19 @@ export class Processor {
         }
 
         return text;
+    }
+
+    private applyModifiers(text: string): string {
+        return text.replace(
+            /\$(\w+)\{([^}]+)\}/gm,
+            (match, modifier, value) => {
+                const args = value.split(",");
+                const modifierFunc = modifiers[modifier];
+                if (modifierFunc) {
+                    return modifierFunc(...args);
+                }
+                return match;
+            },
+        );
     }
 }
