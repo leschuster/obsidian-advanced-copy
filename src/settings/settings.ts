@@ -47,8 +47,8 @@ export type Profile = {
         italic: string | MDTemplate;
         lineBreak: string | MDTemplate;
         link: string | MDTemplate;
-        listItemOrdered: string | MDTemplate;
-        listItemUnordered: string | MDTemplate;
+        listItemOrdered: string | MDTemplateListItem;
+        listItemUnordered: string | MDTemplateListItem;
         mathBlock: string | MDTemplate;
         mathInline: string | MDTemplate;
         orderedList: string | MDTemplate;
@@ -78,4 +78,12 @@ export type MDTemplate = {
     templateLastOfType?: string;
     templateFirstChild?: string;
     templateLastChild?: string;
+};
+
+/**
+ * Extended version of MDTemplate for list items.
+ */
+export type MDTemplateListItem = MDTemplate & {
+    templateFirstChildNested?: string;
+    templateLastChildNested?: string;
 };

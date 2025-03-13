@@ -35,12 +35,12 @@ const defaultAdditionalTemplates: Record<string, ProfileDescSetting> = {
     },
     templateFirstChild: {
         name: "Template first child",
-        desc: "Template for the first child of this element",
+        desc: "Template for the element that is the first child of its parent",
         type: "string",
     },
     templateLastChild: {
         name: "Template last child",
-        desc: "Template for the last child of this element",
+        desc: "Template for the element that is the last child of its parent",
         type: "string",
     },
 };
@@ -297,27 +297,6 @@ export const profileDesc: {
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
-        listItemOrdered: {
-            name: "Ordered list item",
-            desc: "Template for an ordered list item",
-            vars: [
-                { name: "$value", desc: "List item content" },
-                { name: "$index", desc: "List item index" },
-                { name: "$indent", desc: "List item indentation" },
-            ],
-            type: "template",
-            additionalTemplates: defaultAdditionalTemplates,
-        },
-        listItemUnordered: {
-            name: "Unordered list item",
-            desc: "Template for an unordered list item",
-            vars: [
-                { name: "$value", desc: "List item content" },
-                { name: "$indent", desc: "List item indentation" },
-            ],
-            type: "template",
-            additionalTemplates: defaultAdditionalTemplates,
-        },
         mathBlock: {
             name: "Math block",
             desc: "Template for a math block",
@@ -344,6 +323,29 @@ export const profileDesc: {
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
+        },
+        listItemOrdered: {
+            name: "Ordered list item",
+            desc: "Template for an ordered list item",
+            vars: [
+                { name: "$value", desc: "List item content" },
+                { name: "$index", desc: "List item index" },
+                { name: "$indent", desc: "List item indentation" },
+            ],
+            type: "template",
+            additionalTemplates: {
+                ...defaultAdditionalTemplates,
+                templateFirstChildNested: {
+                    name: "Template first child (nested)",
+                    desc: "Template for the element that is the first child of its parent and is in a nested list",
+                    type: "string",
+                },
+                templateLastChildNested: {
+                    name: "Template last child (nested)",
+                    desc: "Template for the element that is the last child of its parent and is in a nested list",
+                    type: "string",
+                },
+            },
         },
         paragraph: {
             name: "Paragraph",
@@ -379,6 +381,28 @@ export const profileDesc: {
             vars: [{ name: "$content", desc: "List items" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
+        },
+        listItemUnordered: {
+            name: "Unordered list item",
+            desc: "Template for an unordered list item",
+            vars: [
+                { name: "$value", desc: "List item content" },
+                { name: "$indent", desc: "List item indentation" },
+            ],
+            type: "template",
+            additionalTemplates: {
+                ...defaultAdditionalTemplates,
+                templateFirstChildNested: {
+                    name: "Template first child (nested)",
+                    desc: "Template for the element that is the first child of its parent and is in a nested list",
+                    type: "string",
+                },
+                templateLastChildNested: {
+                    name: "Template last child (nested)",
+                    desc: "Template for the element that is the last child of its parent and is in a nested list",
+                    type: "string",
+                },
+            },
         },
         wikilink: {
             name: "Wikilink",

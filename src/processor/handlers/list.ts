@@ -1,6 +1,8 @@
 import { List, ListItem } from "mdast";
 import { CustomOptions } from "../toCustom";
 import { convertChildren, getTemplate } from "../handlerUtils";
+import { get } from "http";
+import { MDTemplate, MDTemplateListItem } from "src/settings/settings";
 
 const ONE_LEVEL_INDENT = 4;
 
@@ -29,13 +31,10 @@ function orderedList(node: List, opts: CustomOptions): string {
 
     const template = getTemplate(opts.profile.templates.orderedList, opts);
 
-    const children = node.children
-        .map((child, idx) => listItem(child, opts, true, idx + start))
-        .join("")
-        .trimEnd();
+    const content = convertListItems(node.children, opts, true, start);
 
     return template
-        .replaceAll("$content", children)
+        .replaceAll("$content", content.trimEnd())
         .replaceAll("$start", start + "");
 }
 
@@ -48,12 +47,38 @@ function orderedList(node: List, opts: CustomOptions): string {
 function unorderedList(node: List, opts: CustomOptions): string {
     const template = getTemplate(opts.profile.templates.unorderedList, opts);
 
-    const children = node.children
-        .map((child) => listItem(child, opts, false))
-        .join("")
-        .trimEnd();
+    const content = convertListItems(node.children, opts, false);
 
-    return template.replaceAll("$content", children);
+    return template.replaceAll("$content", content.trimEnd());
+}
+
+function convertListItems(
+    children: ListItem[],
+    opts: CustomOptions,
+    ordered: boolean,
+    start: number = 1,
+): string {
+    let content = "";
+
+    for (const [idx, child] of children.entries()) {
+        const isFirstChild = idx === 0;
+        const isLastChild = idx === children.length - 1;
+        const isFirstOfType = isFirstChild;
+        const isLastOfType = isLastChild;
+
+        const childOpts = {
+            ...opts,
+            isFirstOfType,
+            isLastOfType,
+            isFirstChild,
+            isLastChild,
+            topLevel: false,
+        };
+
+        content += listItem(child, childOpts, ordered, idx + start);
+    }
+
+    return content;
 }
 
 function listItem(
@@ -75,15 +100,40 @@ function listItem(
     let template: string;
     if (ordered) {
         const num = index === undefined ? 1 : index;
-        template = getTemplate(
+        template = getListItemTemplate(
             opts.profile.templates.listItemOrdered,
             opts,
         ).replaceAll("$index", num + "");
     } else {
-        template = getTemplate(opts.profile.templates.listItemUnordered, opts);
+        template = getListItemTemplate(
+            opts.profile.templates.listItemUnordered,
+            opts,
+        );
     }
 
     const indent = " ".repeat(opts.indentation ?? 0);
 
     return template.replaceAll("$value", content).replaceAll("$indent", indent);
+}
+
+function getListItemTemplate(
+    tmp: string | MDTemplateListItem,
+    opts: CustomOptions,
+): string {
+    if (typeof tmp === "string") {
+        return tmp;
+    }
+
+    switch (true) {
+        case tmp.templateFirstChildNested &&
+            (opts.indentation ?? 0) > 0 &&
+            opts.isFirstChild:
+            return tmp.templateFirstChildNested;
+        case tmp.templateLastChildNested &&
+            (opts.indentation ?? 0) > 0 &&
+            opts.isLastChild:
+            return tmp.templateLastChildNested;
+        default:
+            return getTemplate(tmp, opts);
+    }
 }
