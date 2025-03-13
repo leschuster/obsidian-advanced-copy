@@ -1,3 +1,13 @@
+.advanced-copy-plugin__template-setting {
+    align-items: stretch;
+}
+.advanced-copy-plugin__template-setting p {
+    margin: 0; /* Avoid large gaps because of the p elements RemarkJS adds. */
+}
+.advanced-copy-plugin__template-setting textarea {
+    height: 100%;
+}
+
 .advanced-copy-plugin__restart-warning {
     color: var(--text-on-accent);
     background-color: var(--background-modifier-error);

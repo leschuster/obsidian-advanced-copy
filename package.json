@@ -47,10 +47,12 @@
     },
     "dependencies": {
         "mdast-util-find-and-replace": "^3.0.1",
+        "rehype-stringify": "^10.0.1",
         "remark-gemoji": "^8.0.0",
         "remark-gfm": "^4.0.0",
         "remark-math": "^6.0.0",
         "remark-parse": "^11.0.0",
+        "remark-rehype": "^11.1.1",
         "unified": "^11.0.5",
         "unist-util-find-after": "^5.0.0",
         "unist-util-find-between-all": "^1.0.5",

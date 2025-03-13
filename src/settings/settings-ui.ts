@@ -14,6 +14,10 @@ import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 import { DEFAULT_SETTINGS } from "./default-settings";
 import { profileDesc, ProfileDescSetting } from "./profile-desc";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeStringify from "rehype-stringify";
 
 const PLUGIN_ID = "advanced-copy";
 
@@ -404,17 +408,20 @@ class EditProfileModal extends Modal {
         this.save();
     }
 
-    private display(): void {
+    private async display(): Promise<void> {
         this.setTitle(`Edit: ${this.profile.meta.name}`);
 
         // profileDesc describes each configurable property with
         // the same structure as the profile object
-        Object.keys(profileDesc).forEach((sectionKey) => {
-            this.addSection(this.contentEl, sectionKey);
-        });
+        for (const sectionKey of Object.keys(profileDesc)) {
+            await this.addSection(this.contentEl, sectionKey);
+        }
     }
 
-    private addSection(containerEl: HTMLElement, sectionKey: string): void {
+    private async addSection(
+        containerEl: HTMLElement,
+        sectionKey: string,
+    ): Promise<void> {
         const sectionDesc = profileDesc[sectionKey];
         const sectionEl = containerEl.createDiv();
 
@@ -425,7 +432,13 @@ class EditProfileModal extends Modal {
 
         if (sectionDesc.hasOwnProperty("_desc")) {
             const descEl = new Setting(sectionEl).descEl;
-            descEl.createSpan({ text: sectionDesc._desc?.desc });
+            console.log(sectionDesc._desc?.desc);
+            const html = await unified()
+                .use(remarkParse)
+                .use(remarkRehype)
+                .use(rehypeStringify)
+                .process(sectionDesc._desc?.desc);
+            descEl.innerHTML = html.toString();
         }
 
         Object.keys(sectionDesc).forEach((settingKey) => {
@@ -526,7 +539,6 @@ class TemplateSetting {
     private createSetting(): Setting {
         const el = new Setting(this.containerEl)
             .setName(this.settingDesc.name)
-            .setDesc(this.settingDesc.desc)
             .setClass("advanced-copy-plugin__template-setting")
             .addTextArea((text) =>
                 text
@@ -544,6 +556,18 @@ class TemplateSetting {
         setIcon(iconEl, "right-triangle");
         iconEl.addEventListener("click", () => this.toggleVisibility());
         el.settingEl.prepend(iconEl);
+
+        const vars = this.settingDesc.vars
+            ?.map(({ name, desc }) => `- **${name}**: ${desc}`)
+            .join("\n");
+        const desc = `${this.settingDesc.desc}\n${vars}`;
+        unified()
+            .use(remarkParse)
+            .use(remarkRehype)
+            .use(rehypeStringify)
+            .process(desc)
+            .then((v) => v.toString())
+            .then((v) => (el.descEl.innerHTML = v));
 
         return el;
     }

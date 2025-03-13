@@ -91,10 +91,9 @@ export class Processor {
         return text.replace(
             /\$(\w+)\{([^}]+)\}/gm,
             (match, modifier, value) => {
-                const args = value.split(",");
                 const modifierFunc = modifiers[modifier];
                 if (modifierFunc) {
-                    return modifierFunc(...args);
+                    return modifierFunc(value);
                 }
                 return match;
             },

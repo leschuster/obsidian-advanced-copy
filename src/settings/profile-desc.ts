@@ -97,19 +97,28 @@ export const profileDesc: {
     templates: {
         _desc: {
             name: "METADATA",
-            desc: `Templates are used to define the output of the copied text. 
-            You can use variables to insert dynamic content. 
-            Each Markdown element has their own set of variables available.
-            
-            In addition, the following global variables can be used:
-            
-            **$vaultName**: The name of the vault
-            **$fileBasename**: The name of the file without the extension
-            **$fileExtension**: The extension of the file
-            **$fileName**: The name of the file with the extension
-            **$filePath**: The path of the file relative to the vaults root
-            **$date**: The current date (e.g. '23/09/2024')
-            **$time**: The current time (e.g. '10:10:00')`,
+            desc: `Templates are used to define the output of the copied text. You can use variables to insert dynamic content. Each Markdown element has their own set of variables available.
+
+In addition, the following global variables can be used:
+
+- **$vaultName**: The name of the vault
+- **$fileBasename**: The name of the file without the extension
+- **$fileExtension**: The extension of the file
+- **$fileName**: The name of the file with the extension
+- **$filePath**: The path of the file relative to the vaults root
+- **$date**: The current date (e.g. '23/09/2024')
+- **$time**: The current time (e.g. '10:10:00')
+
+You may also use modifiers to transform text in a custom way. The following modifiers are available:
+- **$upper{text}**: Convert text to uppercase
+- **$lower{text}**: Convert text to lowercase
+- **$capitalize{text}**: Capitalize the first letter of text
+- **$reverse{text}**: Reverse the text
+- **$blank{text}**: Replace text with an empty string
+- **$replace{text,from,to}**: Replace all occurrences of 'from' with 'to' in text
+
+Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
+`,
             type: "string",
             visible: false,
         },

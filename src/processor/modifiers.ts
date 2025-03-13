@@ -1,4 +1,4 @@
-export type ModifierFunc = (...args: string[]) => string;
+export type ModifierFunc = (args: string) => string;
 
 /**
  * Modifiers are a way to transform text in a custom way.
@@ -10,6 +10,12 @@ export const modifiers: Record<string, ModifierFunc> = {
     capitalize: (text: string) => text.charAt(0).toUpperCase() + text.slice(1),
     reverse: (text: string) => text.split("").reverse().join(""),
     blank: (_) => "",
-    replace: (text: string, from: string, to: string) =>
-        text.split(from).join(to),
+    replace: (args: string) => {
+        const split = args.split(",");
+        if (split.length !== 3) {
+            return args;
+        }
+        const [text, from, to] = split;
+        return text.split(from).join(to);
+    },
 };
