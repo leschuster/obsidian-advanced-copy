@@ -1,3 +1,13 @@
+.advanced-copy-plugin__restart-warning {
+    color: var(--text-on-accent);
+    background-color: var(--background-modifier-error);
+    padding: 0.5rem;
+    display: none; /* Hide by default */
+}
+.advanced-copy-plugin__restart-warning--show {
+    display: block;
+}
+
 .advanced-copy-plugin__red-btn,
 .advanced-copy-plugin__red-btn:hover {
     background-color: var(--background-modifier-error);

@@ -156,6 +156,12 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
         addHeading(this.containerEl, "Profiles");
 
+        const restartWarning = new Setting(this.containerEl)
+            .setName(
+                "You probably need to restart Obsidian for changes to take effect.",
+            )
+            .setClass("advanced-copy-plugin__restart-warning");
+
         for (const [id, profile] of Object.entries(
             this.plugin.settings.profiles,
         )) {
@@ -194,6 +200,9 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                         profile.meta.cmdSelection = !profile.meta.cmdSelection;
                         refresh();
                         await this.save();
+                        restartWarning.setClass(
+                            "advanced-copy-plugin__restart-warning--show",
+                        );
                     });
                 })
                 .addExtraButton((extraButton) => {
@@ -228,6 +237,9 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                         profile.meta.cmdPage = !profile.meta.cmdPage;
                         refresh();
                         await this.save();
+                        restartWarning.setClass(
+                            "advanced-copy-plugin__restart-warning--show",
+                        );
                     });
                 })
                 .addButton((button) => {
