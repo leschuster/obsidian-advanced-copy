@@ -13,7 +13,7 @@ export const modifiers: Record<string, ModifierFunc> = {
     replace: (args: string) => {
         const split = args.split(",");
         if (split.length !== 3) {
-            return args;
+            throw new Error("Invalid number of arguments for replace modifier");
         }
         const [text, from, to] = split;
         return text.split(from).join(to);
