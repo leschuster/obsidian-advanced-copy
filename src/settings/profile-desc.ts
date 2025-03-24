@@ -20,6 +20,7 @@ export type ProfileDescSetting = {
     vars?: { name: string; desc: string }[];
     visible?: boolean;
     additionalTemplates?: Record<string, ProfileDescSetting>;
+    optional?: boolean;
 };
 
 const defaultAdditionalTemplates: Record<string, ProfileDescSetting> = {
@@ -92,6 +93,12 @@ export const profileDesc: {
             desc: "Version of the profile configuration",
             type: "number",
             visible: false,
+        },
+        doNotUpdate: {
+            name: "Do not update",
+            desc: "Applies only if this is a default profile. Check this to prevent the profile from being updated when the plugin is updated. If you leave this unchecked, you will be asked if you want to update or keep the changes.",
+            type: "boolean",
+            optional: true,
         },
     },
     templates: {

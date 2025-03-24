@@ -141,12 +141,62 @@ export default class AdvancedCopyPlugin extends Plugin {
      */
     private async copy(input: string, profile: Profile): Promise<void> {
         if (this.profileIsIncomplete(profile)) return;
+        this.checkProfileUpdate(profile);
 
         const globalVars = this.getGlobalVariables();
 
         const output = await Processor.process(input, profile, globalVars);
 
         ClipboardHelper.copy(output);
+    }
+
+    private checkProfileUpdate(profile: Profile): void {
+        if (profile.meta.doNotUpdate) {
+            return;
+        }
+        if (!DEFAULT_SETTINGS.profiles.hasOwnProperty(profile.meta.id)) {
+            return;
+        }
+
+        const defaultProfile = DEFAULT_SETTINGS.profiles[profile.meta.id];
+        // check if all properties are the same
+        let changed = false;
+        for (const [sectionKey, section] of Object.entries(profile)) {
+            if (sectionKey === "meta") {
+                continue;
+            }
+            for (const [key, value] of Object.entries(section)) {
+                // @ts-ignore
+                if (defaultProfile[sectionKey][key] !== value) {
+                    changed = true;
+                    break;
+                }
+            }
+        }
+
+        if (!changed) {
+            return;
+        }
+
+        new ErrorModal(
+            this.app,
+            "Profile Update Detected",
+            `The profile "${profile.meta.name}" has changes compared to the default settings. This could be due to remote updates or local modifications. Would you like to apply the default settings or retain your current configuration?`,
+            "Apply Default",
+            async () => {
+                const { meta } = profile;
+                this.settings!.profiles[profile.meta.id] = {
+                    ...defaultProfile,
+                    meta,
+                };
+                await this.saveSettings();
+            },
+            "Keep Current",
+            async () => {
+                profile.meta.doNotUpdate = true;
+                await this.saveSettings();
+            },
+        ).open();
     }
 
     private getGlobalVariables(): GlobalVariables {
@@ -205,6 +255,7 @@ export default class AdvancedCopyPlugin extends Plugin {
         const missingProperties = Object.keys(schema)
             .map((section) =>
                 Object.keys(schema[section as keyof Profile])
+                    .filter((key) => !schema[section][key].optional)
                     .filter((key) => profile[section][key] === undefined)
                     .filter((key) => !key.startsWith("_")) // Ignore internal properties
                     .map((key) => `${section}.${key}`),
@@ -218,7 +269,7 @@ export default class AdvancedCopyPlugin extends Plugin {
 
             new ErrorModal(
                 this.app,
-                "Profile incomplete",
+                "Error: Profile incomplete",
                 err,
                 "Complete Profile",
                 () => {

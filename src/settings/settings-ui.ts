@@ -626,7 +626,10 @@ class TemplateSetting {
 // Helper functions
 
 function addHeading(containerEl: HTMLElement, name: string): void {
-    new Setting(containerEl).setName(name).setHeading();
+    new Setting(containerEl)
+        .setName(name)
+        .setHeading()
+        .setClass("advanced-copy-plugin__heading");
 }
 
 function addTextInput(

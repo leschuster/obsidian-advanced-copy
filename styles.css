@@ -1,3 +1,7 @@
+.advanced-copy-plugin__heading {
+    margin-top: 1.5rem;
+}
+
 .advanced-copy-plugin__template-setting {
     align-items: stretch;
 }
@@ -30,11 +34,12 @@
     color: var(--text-on-accent);
 }
 
-.advanced-copy-plugin__template-setting__icon {
+.advanced-copy-plugin__template-setting__icon > svg {
     transform: rotate(-90deg);
 }
 .advanced-copy-plugin__template-setting--open
-    .advanced-copy-plugin__template-setting__icon {
+    .advanced-copy-plugin__template-setting__icon
+    > svg {
     transform: rotate(0deg);
 }
 

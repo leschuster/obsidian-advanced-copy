@@ -25,6 +25,7 @@ export type Profile = {
         cmdPage: boolean;
         replaceGemojiShortcodes: boolean;
         configVersion: number;
+        doNotUpdate?: boolean; // do not update this profile when updating the plugin
     };
     templates: {
         blockquoteLine: string | MDTemplate;
