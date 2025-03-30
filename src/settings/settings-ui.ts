@@ -395,10 +395,27 @@ class EditProfileModal extends Modal {
                 if (currValue === undefined) {
                     // profile is missing this setting
 
-                    // initialize the setting with an empty string
+                    let initialValue: any = "";
+                    switch (profileDesc[sectionKey][settingKey].type) {
+                        case "string":
+                            initialValue = "";
+                            break;
+                        case "number":
+                            initialValue = 0;
+                            break;
+                        case "boolean":
+                            initialValue = false;
+                            break;
+                        case "template":
+                            initialValue = {
+                                template: "",
+                            } satisfies MDTemplate;
+                    }
+
+                    // initialize the setting depending on its type
                     (this.profile[sectionKey as keyof Profile] as any)[
                         settingKey
-                    ] = "";
+                    ] = initialValue;
 
                     Logger.warn(`Created missing setting: "${settingKey}"`);
                 }
@@ -432,7 +449,6 @@ class EditProfileModal extends Modal {
 
         if (sectionDesc.hasOwnProperty("_desc")) {
             const descEl = new Setting(sectionEl).descEl;
-            console.log(sectionDesc._desc?.desc);
             const html = await unified()
                 .use(remarkParse)
                 .use(remarkRehype)
