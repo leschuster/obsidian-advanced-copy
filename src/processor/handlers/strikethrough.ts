@@ -1,4 +1,4 @@
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 import { CustomOptions } from "../toCustom";
 import { Delete } from "mdast";
 

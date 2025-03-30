@@ -1,4 +1,4 @@
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 import { Callout } from "../remark-plugins/remark-callout";
 import toCustom, { CustomOptions } from "../toCustom";
 

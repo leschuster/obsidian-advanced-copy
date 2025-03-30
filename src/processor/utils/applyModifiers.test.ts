@@ -65,6 +65,13 @@ describe("testing applyModifiers", () => {
         expect(applyModifiers(input)).toBe(expected);
     });
 
+    test("should concatenate first inputs if there are more than 3 arguments in 'replace' modifier", () => {
+        const input = "$replace{Hello, World!,o,0}";
+        const expected = "Hell0, W0rld!";
+
+        expect(applyModifiers(input)).toBe(expected);
+    });
+
     test("should apply multiple modifiers in series correctly", () => {
         const input =
             "Hello $upper{world} $lower{WORLD} $capitalize{world} $reverse{world}";

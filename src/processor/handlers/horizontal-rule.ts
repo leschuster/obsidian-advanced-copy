@@ -1,6 +1,6 @@
 import { ThematicBreak } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../handlerUtils";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a horizontal rule node to string

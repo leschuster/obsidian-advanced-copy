@@ -1,6 +1,6 @@
 import { Math as MathNode } from "mdast-util-math";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../handlerUtils";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a math block node to string

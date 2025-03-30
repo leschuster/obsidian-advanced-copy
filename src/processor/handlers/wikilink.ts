@@ -1,4 +1,4 @@
-import { getTemplate } from "../handlerUtils";
+import { getTemplate } from "../utils/handlerUtils";
 import { Wikilink } from "../remark-plugins/wikilink";
 import { CustomOptions } from "../toCustom";
 

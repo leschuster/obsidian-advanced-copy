@@ -1,6 +1,6 @@
 import { InlineMath } from "mdast-util-math";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../handlerUtils";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a inline math node to string

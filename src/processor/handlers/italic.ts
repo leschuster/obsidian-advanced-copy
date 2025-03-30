@@ -1,6 +1,6 @@
 import { Emphasis } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert an italic node to string

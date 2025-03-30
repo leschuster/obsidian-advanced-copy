@@ -1,7 +1,7 @@
 import { Heading } from "mdast";
 import { CustomOptions } from "../toCustom";
 import { Logger } from "src/utils/Logger";
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a heading node to string

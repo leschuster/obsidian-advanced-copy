@@ -1,5 +1,5 @@
 import { MDTemplate } from "src/settings/settings";
-import toCustom, { CustomOptions } from "./toCustom";
+import toCustom, { CustomOptions } from "../toCustom";
 import { Nodes } from "mdast";
 
 /**
@@ -44,14 +44,7 @@ export function convertChildren(
         return [];
     }
 
-    // Count the total number of children of each type
-    const totalTypeCount = children.reduce(
-        (acc, curr) => {
-            acc[curr.type] = (acc[curr.type] || 0) + 1;
-            return acc;
-        },
-        {} as Record<string, number>,
-    );
+    const totalTypeCount = countNodeTypes(children);
 
     // Keep track of the number of children of each type
     // as we iterate through them
@@ -81,4 +74,19 @@ export function convertChildren(
     }
 
     return output;
+}
+
+/**
+ * Count the number of nodes of each type in a list
+ * @param nodes list of nodes
+ * @returns object with node type as key and count as value
+ */
+export function countNodeTypes(nodes: Nodes[]): Record<string, number> {
+    return nodes.reduce(
+        (acc, curr) => {
+            acc[curr.type] = (acc[curr.type] || 0) + 1;
+            return acc;
+        },
+        {} as Record<string, number>,
+    );
 }

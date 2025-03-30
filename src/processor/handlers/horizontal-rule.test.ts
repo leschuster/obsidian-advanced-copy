@@ -17,7 +17,7 @@ describe("testing horizontalRule", () => {
         const input: ThematicBreak = {
             type: "thematicBreak",
         };
-        const expected = "<hr />";
+        const expected = "<hr />\n\n";
         expect(horizontalRule(input, opts)).toBe(expected);
     });
 });

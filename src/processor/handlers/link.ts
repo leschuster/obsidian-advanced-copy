@@ -1,6 +1,6 @@
 import { Link } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a link node to string

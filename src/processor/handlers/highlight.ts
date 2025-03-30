@@ -1,4 +1,4 @@
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 import { Highlight } from "../remark-plugins/highlight";
 import { CustomOptions } from "../toCustom";
 

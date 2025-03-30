@@ -1,6 +1,6 @@
 import { Root } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren } from "../handlerUtils";
+import { convertChildren } from "../utils/handlerUtils";
 
 /**
  * Convert a root node to string

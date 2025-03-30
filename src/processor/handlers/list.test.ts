@@ -14,6 +14,7 @@ describe("testing list", () => {
         profile.templates.unorderedList = "<ul>$content</ul>";
         profile.templates.listItemOrdered = "<li ordered>$value</li>";
         profile.templates.listItemUnordered = "<li unordered>$value</li>";
+        profile.templates.paragraphNested = "<p>$value</p>\n";
 
         opts = { profile };
     });

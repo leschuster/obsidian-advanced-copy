@@ -2,6 +2,7 @@ import { Code } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { codeBlock } from "./code-block";
 import { CustomOptions } from "../toCustom";
+import { MDTemplate } from "src/settings/settings";
 
 describe("testing codeBlock", () => {
     let opts: CustomOptions;
@@ -19,33 +20,37 @@ describe("testing codeBlock", () => {
             value: "console.log('Hello, world!');",
         };
         const expected =
-            "<pre><code>console.log('Hello, world!');</code></pre>";
+            "<pre><code>console.log('Hello, world!');</code></pre>\n\n";
         expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should return code block with language", () => {
-        opts.profile.templates.codeBlock =
-            '<pre><code class="$lang">$value</code></pre>';
+        opts.profile.templates.codeBlock = {
+            template: '<pre><code class="$lang">$value</code></pre>\n\n',
+        } satisfies MDTemplate;
+
         const input: Code = {
             type: "code",
             value: "console.log('Hello, world!');",
             lang: "javascript",
         };
         const expected =
-            "<pre><code class=\"javascript\">console.log('Hello, world!');</code></pre>";
+            "<pre><code class=\"javascript\">console.log('Hello, world!');</code></pre>\n\n";
         expect(codeBlock(input, opts)).toBe(expected);
     });
 
     test("should return code block with metadata", () => {
-        opts.profile.templates.codeBlock =
-            '<pre><code data-meta="$meta">$value</code></pre>';
+        opts.profile.templates.codeBlock = {
+            template: '<pre><code data-meta="$meta">$value</code></pre>\n\n',
+        } satisfies MDTemplate;
+
         const input: Code = {
             type: "code",
             value: "console.log('Hello, world!');",
             meta: "line-numbers",
         };
         const expected =
-            "<pre><code data-meta=\"line-numbers\">console.log('Hello, world!');</code></pre>";
+            "<pre><code data-meta=\"line-numbers\">console.log('Hello, world!');</code></pre>\n\n";
         expect(codeBlock(input, opts)).toBe(expected);
     });
 

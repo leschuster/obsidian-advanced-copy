@@ -15,8 +15,6 @@ export interface CustomOptions {
 }
 
 export default function toCustom(node: Nodes, options: CustomOptions): string {
-    console.log("toCustom", node, options);
-
     const handle = zwitch("type", {
         invalid,
         unknown,

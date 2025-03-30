@@ -1,6 +1,6 @@
 import { Blockquote } from "mdast";
-import toCustom, { CustomOptions } from "src/processor/toCustom";
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { CustomOptions } from "src/processor/toCustom";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a blockquote node to string

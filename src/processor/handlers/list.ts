@@ -1,6 +1,6 @@
 import { List, ListItem } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../handlerUtils";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 import { get } from "http";
 import { MDTemplate, MDTemplateListItem } from "src/settings/settings";
 

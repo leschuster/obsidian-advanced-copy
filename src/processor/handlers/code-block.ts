@@ -1,6 +1,6 @@
 import { Code } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../handlerUtils";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a code block node to string
