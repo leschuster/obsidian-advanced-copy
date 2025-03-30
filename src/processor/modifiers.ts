@@ -12,10 +12,12 @@ export const modifiers: Record<string, ModifierFunc> = {
     blank: (_) => "",
     replace: (args: string) => {
         const split = args.split(",");
-        if (split.length !== 3) {
+        if (split.length < 3) {
             throw new Error("Invalid number of arguments for replace modifier");
         }
-        const [text, from, to] = split;
+        const from = split[split.length - 2];
+        const to = split[split.length - 1];
+        const text = split.slice(0, -2).join(",");
         return text.split(from).join(to);
     },
 };
