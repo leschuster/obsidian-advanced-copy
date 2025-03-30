@@ -1,7 +1,7 @@
 {
     "name": "obsidian-advanced-copy",
     "version": "0.6.0",
-    "description": "A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.",
+    "description": "A plugin for Obsidian (https://obsidian.md) to copy Markdown and transform it into HTML, Anki, or any custom format.",
     "main": "main.js",
     "scripts": {
         "dev": "node esbuild.config.mjs",
