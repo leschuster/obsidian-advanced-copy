@@ -1,5 +1,6 @@
 import { Root } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren } from "../utils/handlerUtils";
 
 /**
  * Convert a root node to string
@@ -9,8 +10,6 @@ import toCustom, { CustomOptions } from "../toCustom";
  */
 export function root(node: Root, opts: CustomOptions): string {
     const childOpts = { ...opts, topLevel: true };
-    return node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("")
-        .trim();
+
+    return convertChildren(node.children, childOpts).join("").trim();
 }

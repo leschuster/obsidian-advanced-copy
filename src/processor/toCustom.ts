@@ -7,6 +7,10 @@ import { Logger } from "src/utils/Logger";
 export interface CustomOptions {
     profile: Profile;
     topLevel?: boolean;
+    isFirstOfType?: boolean;
+    isLastOfType?: boolean;
+    isFirstChild?: boolean;
+    isLastChild?: boolean;
     indentation?: number;
 }
 

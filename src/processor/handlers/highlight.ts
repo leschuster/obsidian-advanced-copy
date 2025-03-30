@@ -1,5 +1,6 @@
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 import { Highlight } from "../remark-plugins/highlight";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
 
 /**
  * Convert a highlight node to string
@@ -10,9 +11,9 @@ import toCustom, { CustomOptions } from "../toCustom";
 export function highlight(node: Highlight, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("");
+    const template = getTemplate(opts.profile.templates.highlight, opts);
 
-    return opts.profile.templates.highlight.replaceAll("$value", content);
+    const content = convertChildren(node.children, childOpts).join("");
+
+    return template.replaceAll("$value", content);
 }

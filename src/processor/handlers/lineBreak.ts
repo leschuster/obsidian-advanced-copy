@@ -1,5 +1,6 @@
 import { Break } from "mdast";
 import { CustomOptions } from "../toCustom";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a break node to string
@@ -8,5 +9,5 @@ import { CustomOptions } from "../toCustom";
  * @returns
  */
 export function lineBreak(node: Break, opts: CustomOptions): string {
-    return opts.profile.templates.lineBreak;
+    return getTemplate(opts.profile.templates.lineBreak, opts);
 }

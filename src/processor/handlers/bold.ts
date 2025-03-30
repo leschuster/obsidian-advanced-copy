@@ -1,5 +1,6 @@
 import { Strong } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a bold node to string
@@ -10,9 +11,9 @@ import toCustom, { CustomOptions } from "../toCustom";
 export function bold(node: Strong, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("");
+    const template = getTemplate(opts.profile.templates.bold, opts);
 
-    return opts.profile.templates.bold.replaceAll("$value", content);
+    const content = convertChildren(node.children, childOpts).join("");
+
+    return template.replaceAll("$value", content);
 }

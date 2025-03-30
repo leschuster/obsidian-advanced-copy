@@ -27,7 +27,7 @@ describe("testing heading", () => {
             children: [{ type: "text", value: "Hello" }] satisfies Text[],
         };
 
-        const expected = "<h1>Hello</h1>";
+        const expected = "<h1>Hello</h1>\n\n";
         expect(heading(input, opts)).toBe(expected);
     });
 
@@ -38,7 +38,7 @@ describe("testing heading", () => {
             children: [{ type: "text", value: "Hello" }] satisfies Text[],
         };
 
-        const expected = "<h6>Hello</h6>";
+        const expected = "<h6>Hello</h6>\n\n";
         expect(heading(input, opts)).toBe(expected);
     });
 
@@ -52,7 +52,7 @@ describe("testing heading", () => {
             ],
         };
 
-        const expected = "<h2>Hello World</h2>";
+        const expected = "<h2>Hello World</h2>\n\n";
         expect(heading(input, opts)).toBe(expected);
     });
 });

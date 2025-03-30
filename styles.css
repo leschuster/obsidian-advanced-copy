@@ -1,3 +1,27 @@
+.advanced-copy-plugin__heading {
+    margin-top: 1.5rem;
+}
+
+.advanced-copy-plugin__template-setting {
+    align-items: stretch;
+}
+.advanced-copy-plugin__template-setting p {
+    margin: 0; /* Avoid large gaps because of the p elements RemarkJS adds. */
+}
+.advanced-copy-plugin__template-setting textarea {
+    height: 100%;
+}
+
+.advanced-copy-plugin__restart-warning {
+    color: var(--text-on-accent);
+    background-color: var(--background-modifier-error);
+    padding: 0.5rem;
+    display: none; /* Hide by default */
+}
+.advanced-copy-plugin__restart-warning--show {
+    display: block;
+}
+
 .advanced-copy-plugin__red-btn,
 .advanced-copy-plugin__red-btn:hover {
     background-color: var(--background-modifier-error);
@@ -8,4 +32,17 @@
 .advanced-copy-plugin__green-btn:hover {
     background-color: var(--background-modifier-success);
     color: var(--text-on-accent);
+}
+
+.advanced-copy-plugin__template-setting__icon > svg {
+    transform: rotate(-90deg);
+}
+.advanced-copy-plugin__template-setting--open
+    .advanced-copy-plugin__template-setting__icon
+    > svg {
+    transform: rotate(0deg);
+}
+
+.advanced-copy-plugin__content-container {
+    padding-left: 3rem;
 }
