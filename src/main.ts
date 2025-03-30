@@ -159,18 +159,19 @@ export default class AdvancedCopyPlugin extends Plugin {
         }
 
         const defaultProfile = DEFAULT_SETTINGS.profiles[profile.meta.id];
+
         // check if all properties are the same
         let changed = false;
         for (const [sectionKey, section] of Object.entries(profile)) {
             if (sectionKey === "meta") {
                 continue;
             }
-            for (const [key, value] of Object.entries(section)) {
-                // @ts-ignore
-                if (defaultProfile[sectionKey][key] !== value) {
-                    changed = true;
-                    break;
-                }
+            if (
+                JSON.stringify(section) !==
+                JSON.stringify((defaultProfile as any)[sectionKey])
+            ) {
+                changed = true;
+                break;
             }
         }
 
