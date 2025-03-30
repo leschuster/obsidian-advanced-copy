@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { GlobalVariables, Processor } from "src/processor/processor";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
+import { Profile } from "src/settings/settings";
 
 const MOCK_GLOAL_VARIABLES: GlobalVariables = {
     vaultName: "My Vault",
@@ -12,38 +13,59 @@ const MOCK_GLOAL_VARIABLES: GlobalVariables = {
     time: "03:00:00",
 };
 
+const testCases: {
+    name: string;
+    inputFile: string;
+    outputFile: string;
+    profile: Profile;
+}[] = [
+    {
+        name: "Markdown to Markdown - Test Case 1",
+        inputFile: "__fixtures__/input1.md",
+        outputFile: "__fixtures__/output1.md",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+    },
+    {
+        name: "Markdown to HTML - Test Case 1",
+        inputFile: "__fixtures__/input1.md",
+        outputFile: "__fixtures__/output1.html",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_html,
+    },
+    {
+        name: "Markdown to Markdown - Test Case 2",
+        inputFile: "__fixtures__/input2.md",
+        outputFile: "__fixtures__/output2.md",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+    },
+    {
+        name: "Markdown to HTML - Test Case 2",
+        inputFile: "__fixtures__/input2.md",
+        outputFile: "__fixtures__/output2.html",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_html,
+    },
+    {
+        name: "Markdown to Markdown - Test Case 3",
+        inputFile: "__fixtures__/input3.md",
+        outputFile: "__fixtures__/output3.md",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+    },
+    {
+        name: "Markdown to HTML - Test Case 3",
+        inputFile: "__fixtures__/input3.md",
+        outputFile: "__fixtures__/output3.html",
+        profile: DEFAULT_SETTINGS.profiles.markdown_to_html,
+    },
+];
+
 describe("Processor", () => {
-    let input: string;
-
-    beforeAll(() => {
-        input = readFileSync("__fixtures__/input.md", "utf-8");
-    });
-
-    it("should test markdown_to_markdown", async () => {
-        const expected = readFileSync(
-            "__fixtures__/markdown_to_markdown.md",
-            "utf-8",
-        );
+    it.each(testCases)("$name", async ({ inputFile, outputFile, profile }) => {
+        const input = readFileSync(inputFile, "utf-8");
+        const expected = readFileSync(outputFile, "utf-8");
         const output = await Processor.process(
             input,
-            DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+            profile,
             MOCK_GLOAL_VARIABLES,
         );
-
-        expect(output).toEqual(expected);
-    });
-
-    it("should test markdown_to_html", async () => {
-        const expected = readFileSync(
-            "__fixtures__/markdown_to_html.html",
-            "utf-8",
-        );
-        const output = await Processor.process(
-            input,
-            DEFAULT_SETTINGS.profiles.markdown_to_html,
-            MOCK_GLOAL_VARIABLES,
-        );
-
         expect(output).toEqual(expected);
     });
 });

@@ -8,6 +8,7 @@ import remarkCallout from "./remark-plugins/remark-callout";
 import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
 import remarkHighlight from "./remark-plugins/highlight";
+import { applyModifiers } from "./utils/applyModifiers";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -73,14 +74,15 @@ export class Processor {
     }
 
     private postprocess(input: string): string {
-        return this.replaceGlobalVariables(input);
+        input = this.replaceGlobalVariables(input);
+        input = applyModifiers(input);
+        return input;
     }
 
     private replaceGlobalVariables(text: string): string {
         for (const [key, value] of Object.entries(this.globalVars)) {
             text = text.replaceAll(`\$${key}`, value);
         }
-
         return text;
     }
 }

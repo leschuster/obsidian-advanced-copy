@@ -18,7 +18,7 @@ describe("testing paragraph", () => {
             type: "paragraph",
             children: [],
         };
-        const expected = "<p></p>";
+        const expected = "<p></p>\n\n";
         expect(paragraph(input, opts)).toBe(expected);
     });
 
@@ -31,7 +31,7 @@ describe("testing paragraph", () => {
             ],
         };
 
-        const expected = "<p>Hello World</p>";
+        const expected = "<p>Hello World</p>\n\n";
         expect(paragraph(input, opts)).toBe(expected);
     });
 
@@ -47,7 +47,7 @@ describe("testing paragraph", () => {
             ],
         };
 
-        const expected = "<p>Hello <em>World</em></p>";
+        const expected = "<p>Hello <em>World</em></p>\n\n";
         expect(paragraph(input, opts)).toBe(expected);
     });
 

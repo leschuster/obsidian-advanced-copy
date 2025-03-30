@@ -25,7 +25,7 @@ describe("testing callout", () => {
             children: [],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true">\n<h2></h2>\n<div></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -54,7 +54,7 @@ describe("testing callout", () => {
             children: [],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2>test <em>emphasis</em></h2><div></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true">\n<h2>test <em>emphasis</em></h2>\n<div></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -88,7 +88,7 @@ describe("testing callout", () => {
             ],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><p>Hello</p><p>World</p></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true">\n<h2></h2>\n<div>HelloWorld</div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -123,7 +123,7 @@ describe("testing callout", () => {
         };
         opts.profile.templates.calloutContentLine = "<line>$value</line>";
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-true"><h2></h2><div><line><p>Hello</p></line><line><p>World</p></line></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-true">\n<h2></h2>\n<div><line>Hello</line><line>World</line></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -138,7 +138,7 @@ describe("testing callout", () => {
             children: [],
         };
         const expected =
-            '<div class="callout callout-danger callout-closeable-false callout-default-open-true"><h2></h2><div></div></div>';
+            '<div class="callout callout-danger callout-closeable-false callout-default-open-true">\n<h2></h2>\n<div></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -153,7 +153,7 @@ describe("testing callout", () => {
             children: [],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-true callout-default-open-true"><h2></h2><div></div></div>';
+            '<div class="callout callout-info callout-closeable-true callout-default-open-true">\n<h2></h2>\n<div></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 
@@ -168,7 +168,7 @@ describe("testing callout", () => {
             children: [],
         };
         const expected =
-            '<div class="callout callout-info callout-closeable-false callout-default-open-false"><h2></h2><div></div></div>';
+            '<div class="callout callout-info callout-closeable-false callout-default-open-false">\n<h2></h2>\n<div></div>\n</div>\n\n';
         expect(callout(input, opts)).toBe(expected);
     });
 

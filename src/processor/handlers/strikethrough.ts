@@ -1,4 +1,5 @@
-import toCustom, { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import { CustomOptions } from "../toCustom";
 import { Delete } from "mdast";
 
 /**
@@ -10,9 +11,9 @@ import { Delete } from "mdast";
 export function strikethrough(node: Delete, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("");
+    const template = getTemplate(opts.profile.templates.strikethrough, opts);
 
-    return opts.profile.templates.strikethrough.replaceAll("$value", content);
+    const content = convertChildren(node.children, childOpts).join("");
+
+    return template.replaceAll("$value", content);
 }

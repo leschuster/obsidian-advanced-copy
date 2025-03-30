@@ -1,5 +1,6 @@
 import { Blockquote } from "mdast";
-import toCustom, { CustomOptions } from "src/processor/toCustom";
+import { CustomOptions } from "src/processor/toCustom";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a blockquote node to string
@@ -13,24 +14,24 @@ import toCustom, { CustomOptions } from "src/processor/toCustom";
 export function blockquote(node: Blockquote, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
+    const lineTemplate = getTemplate(
+        opts.profile.templates.blockquoteLine,
+        opts,
+    );
+    const wrapperTemplate = getTemplate(
+        opts.profile.templates.blockquoteWrapper,
+        opts,
+    );
+
+    const content = convertChildren(node.children, childOpts)
         .map((line) =>
             line
                 .split("\n")
                 .filter((l) => l.trim() !== "")
-                .map((l) =>
-                    opts.profile.templates.blockquoteLine.replaceAll(
-                        "$value",
-                        l,
-                    ),
-                )
+                .map((l) => lineTemplate.replaceAll("$value", l))
                 .join(""),
         )
         .join("");
 
-    return opts.profile.templates.blockquoteWrapper.replaceAll(
-        "$content",
-        content,
-    );
+    return wrapperTemplate.replaceAll("$content", content);
 }

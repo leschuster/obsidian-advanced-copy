@@ -1,5 +1,8 @@
 import { List, ListItem } from "mdast";
-import toCustom, { CustomOptions } from "../toCustom";
+import { CustomOptions } from "../toCustom";
+import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import { get } from "http";
+import { MDTemplate, MDTemplateListItem } from "src/settings/settings";
 
 const ONE_LEVEL_INDENT = 4;
 
@@ -26,13 +29,12 @@ export function list(node: List, opts: CustomOptions): string {
 function orderedList(node: List, opts: CustomOptions): string {
     const start = node.start ?? 1;
 
-    const children = node.children
-        .map((child, idx) => listItem(child, opts, true, idx + start))
-        .join("")
-        .trimEnd();
+    const template = getTemplate(opts.profile.templates.orderedList, opts);
 
-    return opts.profile.templates.orderedList
-        .replaceAll("$content", children)
+    const content = convertListItems(node.children, opts, true, start);
+
+    return template
+        .replaceAll("$content", content.trimEnd())
         .replaceAll("$start", start + "");
 }
 
@@ -43,15 +45,40 @@ function orderedList(node: List, opts: CustomOptions): string {
  * @returns
  */
 function unorderedList(node: List, opts: CustomOptions): string {
-    const children = node.children
-        .map((child) => listItem(child, opts, false))
-        .join("")
-        .trimEnd();
+    const template = getTemplate(opts.profile.templates.unorderedList, opts);
 
-    return opts.profile.templates.unorderedList.replaceAll(
-        "$content",
-        children,
-    );
+    const content = convertListItems(node.children, opts, false);
+
+    return template.replaceAll("$content", content.trimEnd());
+}
+
+function convertListItems(
+    children: ListItem[],
+    opts: CustomOptions,
+    ordered: boolean,
+    start: number = 1,
+): string {
+    let content = "";
+
+    for (const [idx, child] of children.entries()) {
+        const isFirstChild = idx === 0;
+        const isLastChild = idx === children.length - 1;
+        const isFirstOfType = isFirstChild;
+        const isLastOfType = isLastChild;
+
+        const childOpts = {
+            ...opts,
+            isFirstOfType,
+            isLastOfType,
+            isFirstChild,
+            isLastChild,
+            topLevel: false,
+        };
+
+        content += listItem(child, childOpts, ordered, idx + start);
+    }
+
+    return content;
 }
 
 function listItem(
@@ -66,23 +93,47 @@ function listItem(
         indentation: (opts.indentation ?? 0) + ONE_LEVEL_INDENT,
     };
 
-    const content = node.children
-        .map((child) => toCustom(child, childOpts))
-        .join("\n")
+    const content = convertChildren(node.children, childOpts)
+        .join("")
         .trimEnd();
 
     let template: string;
     if (ordered) {
         const num = index === undefined ? 1 : index;
-        template = opts.profile.templates.listItemOrdered.replaceAll(
-            "$index",
-            num + "",
-        );
+        template = getListItemTemplate(
+            opts.profile.templates.listItemOrdered,
+            opts,
+        ).replaceAll("$index", num + "");
     } else {
-        template = opts.profile.templates.listItemUnordered;
+        template = getListItemTemplate(
+            opts.profile.templates.listItemUnordered,
+            opts,
+        );
     }
 
     const indent = " ".repeat(opts.indentation ?? 0);
 
     return template.replaceAll("$value", content).replaceAll("$indent", indent);
+}
+
+function getListItemTemplate(
+    tmp: string | MDTemplateListItem,
+    opts: CustomOptions,
+): string {
+    if (typeof tmp === "string") {
+        return tmp;
+    }
+
+    switch (true) {
+        case tmp.templateFirstChildNested &&
+            (opts.indentation ?? 0) > 0 &&
+            opts.isFirstChild:
+            return tmp.templateFirstChildNested;
+        case tmp.templateLastChildNested &&
+            (opts.indentation ?? 0) > 0 &&
+            opts.isLastChild:
+            return tmp.templateLastChildNested;
+        default:
+            return getTemplate(tmp, opts);
+    }
 }

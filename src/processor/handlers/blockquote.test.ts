@@ -19,7 +19,7 @@ describe("testing blockquote", () => {
             type: "blockquote",
             children: [],
         };
-        const expected = "<blockquote></blockquote>";
+        const expected = "<blockquote>\n\n</blockquote>\n\n";
         expect(blockquote(input, opts)).toBe(expected);
     });
 
@@ -58,7 +58,7 @@ describe("testing blockquote", () => {
             ],
         };
         const expected =
-            "<blockquote><line><p>Hello</p></line><line><p>World</p></line><line><p>!</p></line></blockquote>";
+            "<blockquote>\n<line>Hello</line><line>World</line><line>!</line>\n</blockquote>\n\n";
         expect(blockquote(input, opts)).toBe(expected);
     });
 

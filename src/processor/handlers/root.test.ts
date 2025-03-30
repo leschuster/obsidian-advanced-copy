@@ -41,7 +41,7 @@ describe("testing root", () => {
             ],
         };
 
-        const expected = "<p>Hello </p><p>World</p>";
+        const expected = "<p>Hello </p>\n\n<p>World</p>";
         expect(root(input, opts)).toBe(expected);
     });
 });

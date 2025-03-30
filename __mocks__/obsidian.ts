@@ -24,3 +24,6 @@ export class Vault {}
 export class Workspace {}
 
 export interface MarkdownFileInfo {}
+
+export type IconName = string;
+export function setIcon(parent: HTMLElement, iconId: IconName): void {}

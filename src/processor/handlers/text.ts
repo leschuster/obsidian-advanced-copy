@@ -1,5 +1,6 @@
 import { Text } from "mdast";
 import { CustomOptions } from "../toCustom";
+import { getTemplate } from "../utils/handlerUtils";
 
 /**
  * Convert a text node to string
@@ -8,5 +9,7 @@ import { CustomOptions } from "../toCustom";
  * @returns
  */
 export function text(node: Text, opts: CustomOptions): string {
-    return opts.profile.templates.text.replaceAll("$value", node.value);
+    const template = getTemplate(opts.profile.templates.text, opts);
+
+    return template.replaceAll("$value", node.value);
 }

@@ -3,21 +3,20 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/leschuster/obsidian-advanced-copy/main.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/leschuster/obsidian-advanced-copy)
 
-A plugin for Obsidian (https://obsidian.md) that lets you copy text and transform it according to your needs.
+An [Obsidian](https://obsidian.md) plugin to copy Markdown and transform it into HTML, Anki, or any custom format. Create custom profiles with versatile templates tailored to your workflow.
 
-You can create templates for almost all Markdown elements supported by Obsidian, organized under a "Profile". Templates can include variables such as a headings level, an elements content, the current file name, or date.
+You can create templates for almost all Markdown elements supported by Obsidian, organized under a "Profile". Templates can include variables such as the heading level, element content, current filename, and date.
 
-When executing the plugin's commands, you need to select a profile. Default profiles are available and can be customized to your preferences.
-
-**Note:** This plugin is currently in an unstable release. Please report any bugs or suggestions for improvements.
+When running the plugin's commands, you need to select a profile. Default profiles are available and can be customized to your preferences.
 
 ## 💡 Example Use Cases
 
--   Copy page as HTML with working links
--   Copy selection as Anki HTML
--   Copy selection with a reference to the source file
+- Copy notes as HTML with functioning links
+- Export selected Markdown as Anki-compatible HTML
+- Copy content along with a source reference to the original note
+- Quickly share text snippets by pasting them into platforms like Slack
 
-https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c
+![Demo video](https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c)
 
 ## 🚀 Quickstart
 

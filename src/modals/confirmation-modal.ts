@@ -20,7 +20,7 @@ export class ConfirmationModal extends Modal {
         new Setting(contentEl)
             .addButton((button) => {
                 button
-                    .setButtonText("Delete")
+                    .setButtonText("Continue")
                     .setWarning()
                     .onClick(() => {
                         this.onConfirm();
