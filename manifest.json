@@ -1,6 +1,7 @@
 {
     "id": "advanced-copy",
     "name": "Advanced Copy",
+    "version": "0.6.1",
     "minAppVersion": "1.6.0",
     "description": "Copy Markdown and transform it into HTML, Anki, or any custom format. Create custom profiles with versatile templates tailored to your workflow.",
     "author": "leschuster",
