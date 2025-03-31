@@ -8,6 +8,7 @@ import { GlobalVariables, Processor } from "./processor/processor";
 import { ProfileSelectionModal } from "./modals/profile-selection-modal";
 import { ErrorModal } from "./modals/error-modal";
 import { profileDesc } from "./settings/profile-desc";
+import { isEquivalent } from "./utils/isEquivalent";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -160,16 +161,11 @@ export default class AdvancedCopyPlugin extends Plugin {
 
         const defaultProfile = DEFAULT_SETTINGS.profiles[profile.meta.id];
 
-        // check if all properties are the same
         let changed = false;
-        for (const [sectionKey, section] of Object.entries(profile)) {
-            if (sectionKey === "meta") {
-                continue;
-            }
-            if (
-                JSON.stringify(section) !==
-                JSON.stringify((defaultProfile as any)[sectionKey])
-            ) {
+        for (const [sectionKey, section] of Object.entries(defaultProfile)) {
+            if (sectionKey === "meta") continue;
+
+            if (!isEquivalent(section, (profile as any)[sectionKey])) {
                 changed = true;
                 break;
             }
