@@ -297,6 +297,7 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                                         JSON.stringify(profile),
                                     ) as Profile;
                                     newProfile.meta.name = name;
+                                    newProfile.meta.id = newId;
                                     this.plugin.settings!.profiles[name] =
                                         newProfile;
 
