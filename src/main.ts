@@ -182,10 +182,9 @@ export default class AdvancedCopyPlugin extends Plugin {
             "Apply Default",
             async () => {
                 const { meta } = profile;
-                this.settings!.profiles[profile.meta.id] = {
-                    ...defaultProfile,
-                    meta,
-                };
+                this.settings!.profiles[profile.meta.id] =
+                    structuredClone(defaultProfile);
+                this.settings!.profiles[profile.meta.id].meta = meta;
                 await this.saveSettings();
             },
             "Keep Current",
