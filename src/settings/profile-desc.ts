@@ -61,7 +61,6 @@ export const profileDesc: {
             name: "ID",
             desc: "Unique identifier for the profile",
             type: "string",
-            visible: false,
         },
         name: {
             name: "Name",
