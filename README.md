@@ -58,6 +58,20 @@ If you'd like to contribute, please fork the repository and open a pull request 
 
 **Note:** After you've made code changes, you need to either restart Obsidian or disable & enable the plugin. Alternatively, you can use the [Obsidian Hot-Reload Plugin](https://github.com/pjeby/hot-reload).
 
+## 🚢 How to Release
+
+1. Update the version in the following files:
+    - `manifest.json`
+    - `version-bump.mjs`
+    - `package.json`
+2. Run `npm i` to update the version in `package-lock.json`.
+3. Commit your changes.
+4. Tag the commit with the new release version:
+    ```bash
+    git tag -s 0.x.y -m "Release 0.x.y"
+    ```
+5. Push the changes and open Pull Request.
+
 ## 🙏 Acknowledgements
 
 The core functionality of this project, converting Markdown to a custom format, relies heavily on the incredible work done by the [unified](https://github.com/unifiedjs) and [remark](https://github.com/remarkjs) projects. I am deeply grateful for their contributions.
