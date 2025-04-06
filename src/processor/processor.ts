@@ -9,6 +9,8 @@ import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
 import remarkHighlight from "./remark-plugins/highlight";
 import { applyModifiers } from "./utils/applyModifiers";
+import he from "he";
+import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -45,7 +47,29 @@ export class Processor {
 
     private preprocess(input: string): string {
         // Standardize line endings
-        return input.replace(/\r\n|\r/g, "\n");
+        input = input.replace(/\r\n|\r/g, "\n");
+
+        // console.log("Preprocessing input:", input);
+
+        // if (this.profile.meta.decodeHTMLEntities === true) {
+        //     // This must be first to handle cases where both
+        //     // encoded and decoded entities exist in the text.
+        //     // By enabling both decodeHTMLEntities and encodeHTMLEntities, all encoded entities
+        //     // are decoded first, then everything is encoded again.
+        //     // Otherwise, the `&` character of the already encoded entity will be
+        //     // encoded again which may not be the desired behavior.
+        //     input = he.decode(input);
+        // }
+        // if (this.profile.meta.encodeHTMLEntities === true) {
+        //     input = he.encode(input, { useNamedReferences: true });
+        // }
+        // if (this.profile.meta.encodeHTMLEntitiesHexOnly === true) {
+        //     input = he.encode(input, { useNamedReferences: false });
+        // }
+
+        // console.log("Preprocessed input 2:", input);
+
+        return input;
     }
 
     private async process(input: string): Promise<string> {
@@ -59,6 +83,19 @@ export class Processor {
 
         if (this.profile.meta.replaceGemojiShortcodes) {
             processor = processor.use(remarkGemoji);
+        }
+        if (this.profile.meta.encodeHTMLEntities) {
+            processor = processor.use(remarkEncodeHTMLEntities, {
+                useNamedReferences: true,
+            });
+        }
+        if (
+            !this.profile.meta.encodeHTMLEntities &&
+            this.profile.meta.encodeHTMLEntitiesHexOnly
+        ) {
+            processor = processor.use(remarkEncodeHTMLEntities, {
+                useNamedReferences: false,
+            });
         }
 
         const content = await processor

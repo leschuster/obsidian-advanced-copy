@@ -129,3 +129,7 @@ Central to the series is the eponymous guidebook, [[The Hitchhiker's Guide to th
 The series is renowned for its wit, satire, and philosophical musings. Adams uses the absurdity of the galaxy to explore themes such as the meaning of life, the nature of reality, and the absurdity of bureaucracy. One of the most famous elements of the series is the answer to the ultimate question of life, the universe, and everything: the number 42. This seemingly arbitrary answer has sparked endless debate and analysis among fans and scholars alike.
 
 [[The Hitchhiker's Guide to the Galaxy|The guide]] has left a lasting legacy in the world of science fiction and comedy. Its unique blend of humor and philosophical insight has influenced countless writers and creators. The series continues to be beloved by fans around the world, who find solace and laughter in its pages, and who, like [[Arthur Dent]], learn to navigate the chaos of the universe with a sense of humor and a towel always at hand.
+
+## Some HTML entities
+
+©, ®, ™, <, >, &

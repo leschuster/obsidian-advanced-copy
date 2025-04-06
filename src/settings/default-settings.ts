@@ -1,5 +1,12 @@
 import { AdvancedCopyPluginSettings } from "./settings";
 
+/**
+ * The default settings contain four profiles:
+ * - markdown_to_markdown: Convert Markdown to Markdown
+ * - copy_with_backlink: Copy with backlink to source file
+ * - markdown_to_html: Convert Markdown to HTML
+ * - markdown_to_anki: Convert Markdown to Anki HTML
+ */
 export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
     profiles: {
         markdown_to_markdown: {
@@ -10,6 +17,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: false,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -249,6 +258,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: false,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -488,6 +499,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: true,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -730,6 +743,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: true,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },

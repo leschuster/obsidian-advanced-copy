@@ -24,6 +24,8 @@ export type Profile = {
         cmdSelection: boolean;
         cmdPage: boolean;
         replaceGemojiShortcodes: boolean;
+        encodeHTMLEntities: boolean;
+        encodeHTMLEntitiesHexOnly: boolean;
         configVersion: number;
         doNotUpdate?: boolean; // do not update this profile when updating the plugin
     };

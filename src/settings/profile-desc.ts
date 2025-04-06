@@ -84,7 +84,17 @@ export const profileDesc: {
         },
         replaceGemojiShortcodes: {
             name: "Replace gemoji shortcodes",
-            desc: "Replace gemoji shortcodes with their unicode equivalent",
+            desc: "Example: ':wave:' will be replaced with '👋'",
+            type: "boolean",
+        },
+        encodeHTMLEntities: {
+            name: "Encode HTML entities",
+            desc: "Example: '©' will be replaced with '&copy;'",
+            type: "boolean",
+        },
+        encodeHTMLEntitiesHexOnly: {
+            name: "Encode HTML entities (hex only)",
+            desc: "Example: '©' will be replaced with '&#x00A9;' (better support for older browsers)",
             type: "boolean",
         },
         configVersion: {
