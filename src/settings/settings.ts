@@ -26,6 +26,7 @@ export type Profile = {
         replaceGemojiShortcodes: boolean;
         encodeHTMLEntities: boolean;
         encodeHTMLEntitiesHexOnly: boolean;
+        htmlCopy: boolean;
         configVersion: number;
         doNotUpdate?: boolean; // do not update this profile when updating the plugin
     };
@@ -113,6 +114,7 @@ export function createNewProfile(id: string, name: string): Profile {
             replaceGemojiShortcodes: false,
             encodeHTMLEntities: false,
             encodeHTMLEntitiesHexOnly: false,
+            htmlCopy: false,
             configVersion: 0,
             doNotUpdate: false,
         },
