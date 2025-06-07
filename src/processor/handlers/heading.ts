@@ -19,11 +19,6 @@ export function heading(node: Heading, opts: CustomOptions): string {
         opts,
     );
 
-    if (!template) {
-        Logger.error(`could not find template 'heading${node.depth}'`);
-        return "";
-    }
-
     return template
         .replaceAll("$value", content)
         .replaceAll("$level", node.depth + "");

@@ -90,3 +90,63 @@ export type MDTemplateListItem = MDTemplate & {
     templateFirstChildNested?: string;
     templateLastChildNested?: string;
 };
+
+/**
+ * Returns a new profile.
+ * @param id
+ * @param name
+ * @returns profile object
+ */
+export function createNewProfile(id: string, name: string): Profile {
+    return {
+        meta: {
+            id,
+            name,
+            description: "",
+            cmdSelection: false,
+            cmdPage: false,
+            replaceGemojiShortcodes: false,
+            encodeHTMLEntities: false,
+            encodeHTMLEntitiesHexOnly: false,
+            configVersion: 0,
+            doNotUpdate: false,
+        },
+        templates: {
+            blockquoteLine: "",
+            blockquoteWrapper: "",
+            bold: "",
+            callout: "",
+            calloutContentLine: "",
+            codeBlock: "",
+            codeInline: "",
+            embeddedWikilink: "",
+            heading1: "",
+            heading2: "",
+            heading3: "",
+            heading4: "",
+            heading5: "",
+            heading6: "",
+            highlight: "",
+            horizontalRule: "",
+            image: "",
+            italic: "",
+            lineBreak: "",
+            link: "",
+            listItemOrdered: "",
+            listItemUnordered: "",
+            mathBlock: "",
+            mathInline: "",
+            orderedList: "",
+            paragraph: "",
+            paragraphNested: "",
+            strikethrough: "",
+            text: "",
+            unorderedList: "",
+            wikilink: "",
+        },
+        extra: {
+            before: "",
+            after: "",
+        },
+    };
+}

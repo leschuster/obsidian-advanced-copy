@@ -19,6 +19,7 @@ export type ProfileDescSetting = {
     type: "string" | "boolean" | "number" | "template";
     vars?: { name: string; desc: string }[];
     visible?: boolean;
+    readonly?: boolean;
     additionalTemplates?: Record<string, ProfileDescSetting>;
     optional?: boolean;
 };
@@ -61,6 +62,7 @@ export const profileDesc: {
             name: "ID",
             desc: "Unique identifier for the profile",
             type: "string",
+            readonly: true,
         },
         name: {
             name: "Name",
