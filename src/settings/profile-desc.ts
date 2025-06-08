@@ -401,6 +401,10 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             vars: [
                 { name: "$header", desc: "Row of header cells" },
                 { name: "$content", desc: "Rows of data cells" },
+                {
+                    name: "$mdDelRow",
+                    desc: "Delimiter row in Markdown, e.g. `| --- | :-: | --: |`",
+                },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
@@ -423,8 +427,8 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             vars: [
                 { name: "$content", desc: "Header cell content" },
                 {
-                    name: "align",
-                    desc: "How the content is aligned: left | center | right | default",
+                    name: "$align",
+                    desc: "how the content is aligned: `left | center | right | default`",
                 },
             ],
             type: "template",
@@ -436,8 +440,8 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             vars: [
                 { name: "$content", desc: "Cell content" },
                 {
-                    name: "align",
-                    desc: "How the content is aligned: left | center | right | default",
+                    name: "$align",
+                    desc: "how the content is aligned: `left | center | right | default`",
                 },
             ],
             type: "template",

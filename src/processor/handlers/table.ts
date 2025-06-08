@@ -21,12 +21,19 @@ export function table(node: Table, opts: CustomOptions): string {
         return "";
     }
 
-    const header = convertHeaderRow(headerRow, opts, node.align ?? null);
-    const content = convertContentRows(contentRows, opts, node.align ?? null);
+    const colAlignments: AlignType[] | null = node.align ?? null;
+
+    const header = convertHeaderRow(headerRow, opts, colAlignments);
+    const content = convertContentRows(contentRows, opts, colAlignments);
+    const mdDelimiterRow = generateMDDelimiterRow(
+        headerRow.children.length,
+        colAlignments,
+    );
 
     return template
         .replaceAll("$header", header)
-        .replaceAll("$content", content);
+        .replaceAll("$content", content)
+        .replaceAll("$mdDelRow", mdDelimiterRow);
 }
 
 /**
@@ -116,4 +123,45 @@ function convertCells(
                 .replaceAll("$content", children)
         );
     }, "");
+}
+
+/**
+ * Generate the Markdown Delimiter Row based on number of columns and alignments.
+ *
+ * Example: `| --- | :-: | --: |`
+ *
+ * @param numCols
+ * @param colAlignments
+ * @returns
+ */
+function generateMDDelimiterRow(
+    numCols: number,
+    colAlignments: AlignType[] | null,
+): string {
+    if (numCols === 0) {
+        return "";
+    }
+
+    if (!colAlignments) {
+        return "| --- ".repeat(numCols) + "|";
+    }
+
+    const inner = [...Array(numCols)]
+        .map((_, idx) => {
+            const align: AlignType =
+                idx < colAlignments.length ? colAlignments[idx] : null;
+            switch (align) {
+                case "left":
+                    return ":--";
+                case "center":
+                    return ":-:";
+                case "right":
+                    return "--:";
+                default:
+                    return "---";
+            }
+        })
+        .join(" | ");
+
+    return `| ${inner} |`;
 }

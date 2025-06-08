@@ -224,28 +224,28 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateLastChild: "",
                 },
                 table: {
-                    template: "",
+                    template: "$header$mdDelRow\n$content\n\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableRow: {
-                    template: "",
+                    template: "$content|\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableHeaderCell: {
-                    template: "",
+                    template: "| $content ",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableCell: {
-                    template: "",
+                    template: "| $content ",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -493,28 +493,28 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateLastChild: "",
                 },
                 table: {
-                    template: "",
+                    template: "$header$mdDelRow\n$content\n\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableRow: {
-                    template: "",
+                    template: "$content|\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableHeaderCell: {
-                    template: "",
+                    template: "| $content ",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
                 tableCell: {
-                    template: "",
+                    template: "| $content ",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -765,7 +765,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 table: {
                     template:
-                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>",
+                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -1039,7 +1039,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 table: {
                     template:
-                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>",
+                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
