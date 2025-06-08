@@ -1,8 +1,8 @@
 import { List, ListItem } from "mdast";
 import { CustomOptions } from "../toCustom";
 import { convertChildren, getTemplate } from "../utils/handlerUtils";
-import { get } from "http";
-import { MDTemplate, MDTemplateListItem } from "src/settings/settings";
+import { MDTemplateListItem } from "src/settings/settings";
+import { modifyOptsBasedOnListIdx } from "../utils/modifyOptsBasedOnListIdx";
 
 const ONE_LEVEL_INDENT = 4;
 
@@ -61,20 +61,7 @@ function convertListItems(
     let content = "";
 
     for (const [idx, child] of children.entries()) {
-        const isFirstChild = idx === 0;
-        const isLastChild = idx === children.length - 1;
-        const isFirstOfType = isFirstChild;
-        const isLastOfType = isLastChild;
-
-        const childOpts = {
-            ...opts,
-            isFirstOfType,
-            isLastOfType,
-            isFirstChild,
-            isLastChild,
-            topLevel: false,
-        };
-
+        const childOpts = modifyOptsBasedOnListIdx(opts, idx, children.length);
         content += listItem(child, childOpts, ordered, idx + start);
     }
 

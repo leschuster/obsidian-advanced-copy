@@ -58,6 +58,10 @@ export type Profile = {
         paragraph: string | MDTemplate;
         paragraphNested: string | MDTemplate;
         strikethrough: string | MDTemplate;
+        table: string | MDTemplate;
+        tableRow: string | MDTemplate;
+        tableHeaderCell: string | MDTemplate;
+        tableCell: string | MDTemplate;
         text: string | MDTemplate;
         unorderedList: string | MDTemplate;
         wikilink: string | MDTemplate;
@@ -140,6 +144,10 @@ export function createNewProfile(id: string, name: string): Profile {
             paragraph: "",
             paragraphNested: "",
             strikethrough: "",
+            table: "",
+            tableRow: "",
+            tableHeaderCell: "",
+            tableCell: "",
             text: "",
             unorderedList: "",
             wikilink: "",

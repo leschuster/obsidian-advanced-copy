@@ -395,6 +395,54 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
+        table: {
+            name: "Table",
+            desc: "Template for a table",
+            vars: [
+                { name: "$header", desc: "Row of header cells" },
+                { name: "$content", desc: "Rows of data cells" },
+            ],
+            type: "template",
+            additionalTemplates: defaultAdditionalTemplates,
+        },
+        tableRow: {
+            name: "Table row",
+            desc: "Template for a table row. Header and content rows use the same template.",
+            vars: [
+                {
+                    name: "$content",
+                    desc: "Header cells or data cells respectively",
+                },
+            ],
+            type: "template",
+            additionalTemplates: defaultAdditionalTemplates,
+        },
+        tableHeaderCell: {
+            name: "Table header cell",
+            desc: "Template for a table header cell",
+            vars: [
+                { name: "$content", desc: "Header cell content" },
+                {
+                    name: "align",
+                    desc: "How the content is aligned: left | center | right | default",
+                },
+            ],
+            type: "template",
+            additionalTemplates: defaultAdditionalTemplates,
+        },
+        tableCell: {
+            name: "Table cell",
+            desc: "Template for a table cell",
+            vars: [
+                { name: "$content", desc: "Cell content" },
+                {
+                    name: "align",
+                    desc: "How the content is aligned: left | center | right | default",
+                },
+            ],
+            type: "template",
+            additionalTemplates: defaultAdditionalTemplates,
+        },
         text: {
             name: "Text",
             desc: "Template for plain text",
