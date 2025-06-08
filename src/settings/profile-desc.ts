@@ -1,6 +1,6 @@
 /**
  * This file contains the description of all available properties in a profile.
- * It is used in the settings ui to display a description for each property.
+ * It is used in the settings UI to display a description for each property.
  */
 
 export type ProfileDesc = {
@@ -10,7 +10,7 @@ export type ProfileDesc = {
 export type ProfileDescSection = {
     [key: string]: ProfileDescSetting;
 } & {
-    _desc?: ProfileDescSetting; // metadata add a description to the section
+    _desc?: ProfileDescSetting; // metadata to add a description to the section
 };
 
 export type ProfileDescSetting = {
@@ -27,22 +27,22 @@ export type ProfileDescSetting = {
 const defaultAdditionalTemplates: Record<string, ProfileDescSetting> = {
     templateFirstOfType: {
         name: "Template first of type",
-        desc: "Template for the first element of this type",
+        desc: "Special template applied **only to the first element** of this type",
         type: "string",
     },
     templateLastOfType: {
         name: "Template last of type",
-        desc: "Template for the last element of this type",
+        desc: "Special template applied **only to the last element** of this type",
         type: "string",
     },
     templateFirstChild: {
         name: "Template first child",
-        desc: "Template for the element that is the first child of its parent",
+        desc: "Special template applied when this element is the **first child** of its parent element",
         type: "string",
     },
     templateLastChild: {
         name: "Template last child",
-        desc: "Template for the element that is the last child of its parent",
+        desc: "Special template applied when this element is the **last child** of its parent element",
         type: "string",
     },
 };
@@ -60,54 +60,54 @@ export const profileDesc: {
     meta: {
         id: {
             name: "ID",
-            desc: "Unique identifier for the profile",
+            desc: "Unique identifier for the profile. This cannot be changed once created.",
             type: "string",
             readonly: true,
         },
         name: {
             name: "Name",
-            desc: "Name of the profile",
+            desc: "Display name for the profile.",
             type: "string",
         },
         description: {
             name: "Description",
-            desc: "Description of the profile",
+            desc: "Detailed description of the profile's purpose and behavior.",
             type: "string",
         },
         cmdSelection: {
             name: "Command: copy selection",
-            desc: "Add a command to copy the current selection",
+            desc: "When enabled, adds a command to copy the currently selected text using this profile.",
             type: "boolean",
         },
         cmdPage: {
             name: "Command: copy page",
-            desc: "Add a command to copy the entire page",
+            desc: "When enabled, adds a command to copy the entire current document using this profile.",
             type: "boolean",
         },
         replaceGemojiShortcodes: {
             name: "Replace gemoji shortcodes",
-            desc: "Example: ':wave:' will be replaced with '👋'",
+            desc: "Example: ':wave:' will be replaced with '👋'.",
             type: "boolean",
         },
         encodeHTMLEntities: {
             name: "Encode HTML entities",
-            desc: "Example: '©' will be replaced with '&copy;'",
+            desc: "Converts special characters to their HTML entity representations. For example, `©` becomes `&copy;`.",
             type: "boolean",
         },
         encodeHTMLEntitiesHexOnly: {
             name: "Encode HTML entities (hex only)",
-            desc: "Example: '©' will be replaced with '&#x00A9;' (better support for older browsers)",
+            desc: "Converts special characters to their hexadecimal HTML entity representations. For example, `©` becomes `&#x00A9;`. Provides better compatibility with older browsers.",
             type: "boolean",
         },
         configVersion: {
             name: "Configuration version",
-            desc: "Version of the profile configuration",
+            desc: "Internal version number of the profile configuration.",
             type: "number",
             visible: false,
         },
         doNotUpdate: {
             name: "Do not update",
-            desc: "Applies only if this is a default profile. Check this to prevent the profile from being updated when the plugin is updated. If you leave this unchecked, you will be asked if you want to update or keep the changes.",
+            desc: "**Only applies to default profiles.** When checked, prevents this profile from being automatically updated when the plugin is updated. If unchecked, you'll be asked whether to update or keep your customizations.",
             type: "boolean",
             optional: true,
         },
@@ -115,7 +115,7 @@ export const profileDesc: {
     templates: {
         _desc: {
             name: "METADATA",
-            desc: `Templates are used to define the output of the copied text. You can use variables to insert dynamic content. Each Markdown element has their own set of variables available.
+            desc: `Templates define how your Markdown elements are formatted when copied. Each template can include variables to insert dynamic content. Each Markdown element has their own set of variables available
 
 In addition, the following global variables can be used:
 
@@ -142,8 +142,8 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         blockquoteLine: {
             name: "Blockquote line",
-            desc: "Template for a single blockquote line",
-            vars: [{ name: "$value", desc: "Blockquote line content" }],
+            desc: "Template for a single line within a blockquote.",
+            vars: [{ name: "$value", desc: "Content of this blockquote line" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
@@ -156,26 +156,35 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         bold: {
             name: "Bold",
-            desc: "Template for bold text",
-            vars: [{ name: "$value", desc: "Bold text content" }],
+            desc: "Template for bold/strong text.",
+            vars: [{ name: "$value", desc: "The text with bold formatting" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         callout: {
             name: "Callout",
-            desc: "Template for a callout",
+            desc: "Template for callout blocks.",
             vars: [
-                { name: "$type", desc: "Callout type, e.g. 'info'" },
-                { name: "$behavior", desc: "either '+', '-', or ''" },
-                { name: "$content", desc: "Callout content lines" },
-                { name: "$title", desc: "Callout title" },
+                {
+                    name: "$type",
+                    desc: "Callout type (e.g., 'info', 'warning', 'error')",
+                },
+                {
+                    name: "$behavior",
+                    desc: "Fold behavior: '+' (folded), '-' (expanded), or '' (default)",
+                },
+                {
+                    name: "$content",
+                    desc: "The formatted content of the callout",
+                },
+                { name: "$title", desc: "The title of the callout" },
                 {
                     name: "$closeable",
-                    desc: "boolean, whether it can be closed or not",
+                    desc: "Boolean indicating if the callout can be closed",
                 },
                 {
                     name: "$default_open",
-                    desc: "boolean, whether it is open by defual",
+                    desc: "Boolean indicating if the callout is open by default",
                 },
             ],
             type: "template",
@@ -183,118 +192,127 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         calloutContentLine: {
             name: "Callout content line",
-            desc: "Template for a single callout content line",
-            vars: [{ name: "$value", desc: "Callout content line" }],
+            desc: "Template for a single line of content within a callout.",
+            vars: [{ name: "$value", desc: "Content of this callout line" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         codeBlock: {
             name: "Code block",
-            desc: "Template for a code block",
+            desc: "Template for a code block.",
             vars: [
-                { name: "$value", desc: "Code block content" },
-                { name: "$lang", desc: "Programming language, if provided" },
-                { name: "$meta", desc: "Metadata, if provided" },
+                { name: "$value", desc: "The code content" },
+                {
+                    name: "$lang",
+                    desc: "Programming language (if specified)",
+                },
+                {
+                    name: "$meta",
+                    desc: "Additional metadata for the code block (if provided)",
+                },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         codeInline: {
             name: "Code inline",
-            desc: "Template for inline code",
-            vars: [{ name: "$value", desc: "Code content" }],
+            desc: "Template for inline code.",
+            vars: [{ name: "$value", desc: "The inline code content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         embeddedWikilink: {
             name: "Embedded wikilink",
-            desc: "Template for an embedded wikilink",
+            desc: "Template for embedded wikilinks that display the target note's content (`![[Note]]`).",
             vars: [
-                { name: "$link", desc: "Wikilink target" },
-                { name: "$text", desc: "Link text" },
+                { name: "$link", desc: "Target note or file being embedded" },
+                {
+                    name: "$text",
+                    desc: "Display text",
+                },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading1: {
             name: "Heading 1",
-            desc: "Template for heading 1",
+            desc: "Template for level 1 headings (# in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "1" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 1)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading2: {
             name: "Heading 2",
-            desc: "Template for heading 2",
+            desc: "Template for level 2 headings (## in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "2" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 2)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading3: {
             name: "Heading 3",
-            desc: "Template for heading 3",
+            desc: "Template for level 3 headings (### in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "3" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 3)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading4: {
             name: "Heading 4",
-            desc: "Template for heading 4",
+            desc: "Template for level 4 headings (#### in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "4" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 4)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading5: {
             name: "Heading 5",
-            desc: "Template for heading 5",
+            desc: "Template for level 5 headings (##### in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "5" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 5)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         heading6: {
             name: "Heading 6",
-            desc: "Template for heading 6",
+            desc: "Template for level 6 headings (###### in MD).",
             vars: [
-                { name: "$value", desc: "Heading content" },
-                { name: "$level", desc: "6" },
+                { name: "$value", desc: "The heading text content" },
+                { name: "$level", desc: "The heading level (always 6)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         highlight: {
             name: "Highlight",
-            desc: "Template for highlighted text",
-            vars: [{ name: "$value", desc: "Highlight content" }],
+            desc: "Template for highlighted/marked text (==text== in MD).",
+            vars: [{ name: "$value", desc: "The highlighted text content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         horizontalRule: {
             name: "Horizontal rule",
-            desc: "Template for a horizontal rule",
+            desc: "Template for horizontal rule/divider (--- in MD).",
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         image: {
             name: "Image",
-            desc: "Template for an image in Markdown syntax",
+            desc: "Template for images.",
             vars: [
-                { name: "$src", desc: "Image source" },
-                { name: "$alt", desc: "Image alt text" },
+                { name: "$src", desc: "Image source or URL" },
+                { name: "$alt", desc: "Alternative text for the image" },
                 { name: "$title", desc: "Image title" },
             ],
             type: "template",
@@ -302,108 +320,119 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         italic: {
             name: "Italic",
-            desc: "Template for italic text",
-            vars: [{ name: "$value", desc: "Italic text content" }],
+            desc: "Template for italic text.",
+            vars: [{ name: "$value", desc: "The text with italic formatting" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         lineBreak: {
             name: "Line break",
-            desc: "Template for a line break",
+            desc: "Template for line breaks.",
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         link: {
             name: "Link",
-            desc: "Template for a link in Markdown syntax",
+            desc: "Template for a link in Markdown syntax (`[alt](src)`).",
             vars: [
-                { name: "$src", desc: "Link target" },
-                { name: "$alt", desc: "Link text" },
-                { name: "$title", desc: "Link title" },
+                { name: "$src", desc: "Link URL or target" },
+                { name: "$alt", desc: "Visible link text" },
+                { name: "$title", desc: "Optional title" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         mathBlock: {
             name: "Math block",
-            desc: "Template for a math block",
+            desc: "Template for block math expressions ($$...$$).",
             vars: [
-                { name: "$value", desc: "Math block content" },
-                { name: "$meta", desc: "Metadata" },
+                { name: "$value", desc: "Math expression content" },
+                { name: "$meta", desc: "Additional metadata (if provided)" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         mathInline: {
             name: "Math inline",
-            desc: "Template for inline math",
-            vars: [{ name: "$value", desc: "Math content" }],
+            desc: "Template for inline math expressions ($...$).",
+            vars: [{ name: "$value", desc: "Inline math expression content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         orderedList: {
             name: "Ordered list",
-            desc: "Template for an ordered list",
+            desc: "Template for ordered (numbered) lists.",
             vars: [
-                { name: "$content", desc: "List items" },
-                { name: "$start", desc: "Start number" },
+                {
+                    name: "$content",
+                    desc: "Combined content of all list items",
+                },
+                { name: "$start", desc: "Starting number of the list" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         listItemOrdered: {
             name: "Ordered list item",
-            desc: "Template for an ordered list item",
+            desc: "Template for individual items in an ordered list.\n\n**Available variables:**\n- `$value` - The content of this list item\n- `$index` - The item's numerical position in the list\n- `$indent` - The indentation level of this item",
             vars: [
-                { name: "$value", desc: "List item content" },
-                { name: "$index", desc: "List item index" },
-                { name: "$indent", desc: "List item indentation" },
+                { name: "$value", desc: "Content of this list item" },
+                { name: "$index", desc: "Numerical position in the list" },
+                {
+                    name: "$indent",
+                    desc: "Indentation level (for nested lists)",
+                },
             ],
             type: "template",
             additionalTemplates: {
                 ...defaultAdditionalTemplates,
                 templateFirstChildNested: {
                     name: "Template first child (nested)",
-                    desc: "Template for the element that is the first child of its parent and is in a nested list",
+                    desc: "Special template applied when this item is the first child in a nested list",
                     type: "string",
                 },
                 templateLastChildNested: {
                     name: "Template last child (nested)",
-                    desc: "Template for the element that is the last child of its parent and is in a nested list",
+                    desc: "Special template applied when this item is the last child in a nested list",
                     type: "string",
                 },
             },
         },
         paragraph: {
             name: "Paragraph",
-            desc: "Template for a paragraph",
-            vars: [{ name: "$value", desc: "Paragraph content" }],
+            desc: "Template for standard paragraphs (on top level).",
+            vars: [{ name: "$value", desc: "The paragraph content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         paragraphNested: {
             name: "Paragraph nested",
-            desc: "Template for a paragraph that is nested inside another element",
-            vars: [{ name: "$value", desc: "Paragraph content" }],
+            desc: "Template for paragraphs nested inside another element (like a list item).",
+            vars: [{ name: "$value", desc: "The nested paragraph content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         strikethrough: {
             name: "Strikethrough",
-            desc: "Template for strikethrough text",
-            vars: [{ name: "$value", desc: "Strikethrough text content" }],
+            desc: "Template for strikethrough text (~~text~~ in MD).",
+            vars: [
+                {
+                    name: "$value",
+                    desc: "The text with strikethrough formatting",
+                },
+            ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         table: {
             name: "Table",
-            desc: "Template for a table",
+            desc: "Template for tables. Supports alignment of cell content specified in the delimiter row: `---` none, `:--` left, `:-:` center, `--:` right.",
             vars: [
-                { name: "$header", desc: "Row of header cells" },
-                { name: "$content", desc: "Rows of data cells" },
+                { name: "$header", desc: "Formatted table header row" },
+                { name: "$content", desc: "All formatted content rows" },
                 {
                     name: "$mdDelRow",
-                    desc: "Delimiter row in Markdown, e.g. `| --- | :-: | --: |`",
+                    desc: "Markdown delimiter row (e.g., `| --- | :-: | --: |`)",
                 },
             ],
             type: "template",
@@ -411,24 +440,21 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         tableRow: {
             name: "Table row",
-            desc: "Template for a table row. Header and content rows use the same template.",
+            desc: "Template for table rows (used for both header and data rows).",
             vars: [
-                {
-                    name: "$content",
-                    desc: "Header cells or data cells respectively",
-                },
+                { name: "$content", desc: "All formatted cells in this row" },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         tableHeaderCell: {
             name: "Table header cell",
-            desc: "Template for a table header cell",
+            desc: "Template for cells in the table header row.",
             vars: [
-                { name: "$content", desc: "Header cell content" },
+                { name: "$content", desc: "Cell content" },
                 {
                     name: "$align",
-                    desc: "how the content is aligned: `left | center | right | default`",
+                    desc: "Cell alignment: 'left', 'center', 'right', or 'default'",
                 },
             ],
             type: "template",
@@ -436,12 +462,12 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         tableCell: {
             name: "Table cell",
-            desc: "Template for a table cell",
+            desc: "Template for standard data cells.",
             vars: [
                 { name: "$content", desc: "Cell content" },
                 {
                     name: "$align",
-                    desc: "how the content is aligned: `left | center | right | default`",
+                    desc: "Cell alignment: 'left', 'center', 'right', or 'default'",
                 },
             ],
             type: "template",
@@ -449,46 +475,57 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         text: {
             name: "Text",
-            desc: "Template for plain text",
-            vars: [{ name: "$value", desc: "Text content" }],
+            desc: "Template for plain text.",
+            vars: [{ name: "$value", desc: "Plain text content" }],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         unorderedList: {
             name: "Unordered list",
-            desc: "Template for an unordered list",
-            vars: [{ name: "$content", desc: "List items" }],
+            desc: "Template for unordered (bullet) lists.",
+            vars: [
+                {
+                    name: "$content",
+                    desc: "Combined content of all list items",
+                },
+            ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
         listItemUnordered: {
             name: "Unordered list item",
-            desc: "Template for an unordered list item",
+            desc: "Template for individual items in an unordered list.",
             vars: [
-                { name: "$value", desc: "List item content" },
-                { name: "$indent", desc: "List item indentation" },
+                { name: "$value", desc: "Content of this list item" },
+                {
+                    name: "$indent",
+                    desc: "Indentation spacing (for nested lists)",
+                },
             ],
             type: "template",
             additionalTemplates: {
                 ...defaultAdditionalTemplates,
                 templateFirstChildNested: {
                     name: "Template first child (nested)",
-                    desc: "Template for the element that is the first child of its parent and is in a nested list",
+                    desc: "Special template applied when this item is the first child in a nested list",
                     type: "string",
                 },
                 templateLastChildNested: {
                     name: "Template last child (nested)",
-                    desc: "Template for the element that is the last child of its parent and is in a nested list",
+                    desc: "Special template applied when this item is the last child in a nested list",
                     type: "string",
                 },
             },
         },
         wikilink: {
             name: "Wikilink",
-            desc: "Template for a wikilink",
+            desc: "Template for internal links ([[Note]] in Obsidian).",
             vars: [
-                { name: "$link", desc: "Wikilink target" },
-                { name: "$text", desc: "Link text" },
+                { name: "$link", desc: "Target note or file" },
+                {
+                    name: "$text",
+                    desc: "Display text",
+                },
             ],
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
@@ -497,12 +534,12 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
     extra: {
         before: {
             name: "Before",
-            desc: "Text to be added before the content",
+            desc: "Text to add at the very beginning of the copied content. Useful for adding opening tags or prefixes.",
             type: "string",
         },
         after: {
             name: "After",
-            desc: "Text to be added after the content",
+            desc: "Text to add at the very end of the copied content. Useful for adding closing tags or suffixes.",
             type: "string",
         },
     },
