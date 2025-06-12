@@ -224,7 +224,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateLastChild: "",
                 },
                 table: {
-                    template: "$header$mdDelRow\n$content\n\n",
+                    template: "$header$mdDelRow\n$content\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -493,7 +493,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateLastChild: "",
                 },
                 table: {
-                    template: "$header$mdDelRow\n$content\n\n",
+                    template: "$header$mdDelRow\n$content\n",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",

@@ -13,13 +13,12 @@ import { modifyOptsBasedOnListIdx } from "../utils/modifyOptsBasedOnListIdx";
 export function table(node: Table, opts: CustomOptions): string {
     const template = getTemplate(opts.profile.templates.table, opts);
 
-    const headerRow = node.children.first(); // there must only be one header row
-    const contentRows = node.children.slice(1);
-
-    if (!headerRow) {
-        // missing content is allowed but not missing header
+    if (node.children.length === 0) {
         return "";
     }
+
+    const headerRow = node.children[0]; // there must only be one header row
+    const contentRows = node.children.slice(1);
 
     const colAlignments: AlignType[] | null = node.align ?? null;
 
