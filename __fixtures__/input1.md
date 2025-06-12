@@ -133,3 +133,10 @@ The series is renowned for its wit, satire, and philosophical musings. Adams use
 ## Some HTML entities
 
 ©, ®, ™, <, >, &
+
+## Tables
+
+| Header1 | **Bold Header2** | ==Header3== | Header 4 |
+| :------ | :--------------: | ----------: | -------- |
+| **lorem** | [[ipsum]] | ![[dolor]] | __sit amet__ |
+| lorem | ipsum | > dolor | sit amet |
