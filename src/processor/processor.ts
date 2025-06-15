@@ -47,29 +47,7 @@ export class Processor {
 
     private preprocess(input: string): string {
         // Standardize line endings
-        input = input.replace(/\r\n|\r/g, "\n");
-
-        // console.log("Preprocessing input:", input);
-
-        // if (this.profile.meta.decodeHTMLEntities === true) {
-        //     // This must be first to handle cases where both
-        //     // encoded and decoded entities exist in the text.
-        //     // By enabling both decodeHTMLEntities and encodeHTMLEntities, all encoded entities
-        //     // are decoded first, then everything is encoded again.
-        //     // Otherwise, the `&` character of the already encoded entity will be
-        //     // encoded again which may not be the desired behavior.
-        //     input = he.decode(input);
-        // }
-        // if (this.profile.meta.encodeHTMLEntities === true) {
-        //     input = he.encode(input, { useNamedReferences: true });
-        // }
-        // if (this.profile.meta.encodeHTMLEntitiesHexOnly === true) {
-        //     input = he.encode(input, { useNamedReferences: false });
-        // }
-
-        // console.log("Preprocessed input 2:", input);
-
-        return input;
+        return input.replace(/\r\n|\r/g, "\n");
     }
 
     private async process(input: string): Promise<string> {
