@@ -1,5 +1,12 @@
 import { AdvancedCopyPluginSettings } from "./settings";
 
+/**
+ * The default settings contain four profiles:
+ * - markdown_to_markdown: Convert Markdown to Markdown
+ * - copy_with_backlink: Copy with backlink to source file
+ * - markdown_to_html: Convert Markdown to HTML
+ * - markdown_to_anki: Convert Markdown to Anki HTML
+ */
 export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
     profiles: {
         markdown_to_markdown: {
@@ -10,6 +17,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: false,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -209,6 +218,34 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 strikethrough: {
                     template: "~~$value~~",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                table: {
+                    template: "$header$mdDelRow\n$content\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableRow: {
+                    template: "$content|\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableHeaderCell: {
+                    template: "| $content ",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableCell: {
+                    template: "| $content ",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -249,6 +286,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: false,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -453,6 +492,34 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
+                table: {
+                    template: "$header$mdDelRow\n$content\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableRow: {
+                    template: "$content|\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableHeaderCell: {
+                    template: "| $content ",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableCell: {
+                    template: "| $content ",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
                 text: {
                     template: "$value",
                     templateFirstOfType: "",
@@ -488,6 +555,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: true,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -694,6 +763,35 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
+                table: {
+                    template:
+                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableRow: {
+                    template: "<tr>\n$content</tr>\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableHeaderCell: {
+                    template: '<th class="text-$align">$content</th>\n',
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableCell: {
+                    template: '<td class="text-$align">$content</td>\n',
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
                 text: {
                     template: "$value",
                     templateFirstOfType: "",
@@ -730,6 +828,8 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 cmdSelection: false,
                 cmdPage: false,
                 replaceGemojiShortcodes: true,
+                encodeHTMLEntities: false,
+                encodeHTMLEntitiesHexOnly: false,
                 configVersion: 1,
                 doNotUpdate: false,
             },
@@ -932,6 +1032,35 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 strikethrough: {
                     template: "<del>$value</del>",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                table: {
+                    template:
+                        "<table>\n<thead>\n$header</thead>\n<tbody>\n$content</tbody>\n</table>\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableRow: {
+                    template: "<tr>\n$content</tr>\n",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableHeaderCell: {
+                    template: '<th class="text-$align">$content</th>\n',
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                tableCell: {
+                    template: '<td class="text-$align">$content</td>\n',
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",

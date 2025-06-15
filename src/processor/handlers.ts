@@ -23,28 +23,33 @@ import { callout } from "./handlers/callout";
 import { wikilink } from "./handlers/wikilink";
 import { CustomOptions } from "./toCustom";
 import { highlight } from "./handlers/highlight";
+import { table } from "./handlers/table";
 
 export type HandlerFunc = (node: Nodes, options: CustomOptions) => string;
 
+/**
+ * Mapping of node type to handler function.
+ */
 export const handlers: Record<string, HandlerFunc> = {
     strong: bold,
-    blockquote: blockquote,
-    callout: callout,
+    blockquote,
+    callout,
     code: codeBlock,
     inlineCode: codeInline,
-    heading: heading,
-    highlight: highlight,
+    heading,
+    highlight,
     thematicBreak: horizontalRule,
-    image: image,
+    image,
     emphasis: italic,
     break: lineBreak,
-    link: link,
-    list: list,
+    link,
+    list,
     math: mathBlock,
     inlineMath: mathInline,
-    paragraph: paragraph,
-    root: root,
+    paragraph,
+    root,
     delete: strikethrough,
-    text: text,
-    wikilink: wikilink,
+    table,
+    text,
+    wikilink,
 };

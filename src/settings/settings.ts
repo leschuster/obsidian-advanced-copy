@@ -24,6 +24,8 @@ export type Profile = {
         cmdSelection: boolean;
         cmdPage: boolean;
         replaceGemojiShortcodes: boolean;
+        encodeHTMLEntities: boolean;
+        encodeHTMLEntitiesHexOnly: boolean;
         configVersion: number;
         doNotUpdate?: boolean; // do not update this profile when updating the plugin
     };
@@ -56,6 +58,10 @@ export type Profile = {
         paragraph: string | MDTemplate;
         paragraphNested: string | MDTemplate;
         strikethrough: string | MDTemplate;
+        table: string | MDTemplate;
+        tableRow: string | MDTemplate;
+        tableHeaderCell: string | MDTemplate;
+        tableCell: string | MDTemplate;
         text: string | MDTemplate;
         unorderedList: string | MDTemplate;
         wikilink: string | MDTemplate;
@@ -88,3 +94,67 @@ export type MDTemplateListItem = MDTemplate & {
     templateFirstChildNested?: string;
     templateLastChildNested?: string;
 };
+
+/**
+ * Returns a new profile.
+ * @param id
+ * @param name
+ * @returns profile object
+ */
+export function createNewProfile(id: string, name: string): Profile {
+    return {
+        meta: {
+            id,
+            name,
+            description: "",
+            cmdSelection: false,
+            cmdPage: false,
+            replaceGemojiShortcodes: false,
+            encodeHTMLEntities: false,
+            encodeHTMLEntitiesHexOnly: false,
+            configVersion: 0,
+            doNotUpdate: false,
+        },
+        templates: {
+            blockquoteLine: "",
+            blockquoteWrapper: "",
+            bold: "",
+            callout: "",
+            calloutContentLine: "",
+            codeBlock: "",
+            codeInline: "",
+            embeddedWikilink: "",
+            heading1: "",
+            heading2: "",
+            heading3: "",
+            heading4: "",
+            heading5: "",
+            heading6: "",
+            highlight: "",
+            horizontalRule: "",
+            image: "",
+            italic: "",
+            lineBreak: "",
+            link: "",
+            listItemOrdered: "",
+            listItemUnordered: "",
+            mathBlock: "",
+            mathInline: "",
+            orderedList: "",
+            paragraph: "",
+            paragraphNested: "",
+            strikethrough: "",
+            table: "",
+            tableRow: "",
+            tableHeaderCell: "",
+            tableCell: "",
+            text: "",
+            unorderedList: "",
+            wikilink: "",
+        },
+        extra: {
+            before: "",
+            after: "",
+        },
+    };
+}

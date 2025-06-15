@@ -9,6 +9,8 @@ import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
 import remarkHighlight from "./remark-plugins/highlight";
 import { applyModifiers } from "./utils/applyModifiers";
+import he from "he";
+import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
 
 /**
  * Global variables that the user can use anywhere in any profile
@@ -59,6 +61,19 @@ export class Processor {
 
         if (this.profile.meta.replaceGemojiShortcodes) {
             processor = processor.use(remarkGemoji);
+        }
+        if (this.profile.meta.encodeHTMLEntities) {
+            processor = processor.use(remarkEncodeHTMLEntities, {
+                useNamedReferences: true,
+            });
+        }
+        if (
+            !this.profile.meta.encodeHTMLEntities &&
+            this.profile.meta.encodeHTMLEntitiesHexOnly
+        ) {
+            processor = processor.use(remarkEncodeHTMLEntities, {
+                useNamedReferences: false,
+            });
         }
 
         const content = await processor

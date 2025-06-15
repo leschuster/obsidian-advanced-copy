@@ -23,13 +23,25 @@ const testCases: {
         name: "Markdown to Markdown - Test Case 1",
         inputFile: "__fixtures__/input1.md",
         outputFile: "__fixtures__/output1.md",
-        profile: DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+        profile: {
+            ...DEFAULT_SETTINGS.profiles.markdown_to_markdown,
+            meta: {
+                ...DEFAULT_SETTINGS.profiles.markdown_to_markdown.meta,
+                encodeHTMLEntitiesHexOnly: true,
+            },
+        },
     },
     {
         name: "Markdown to HTML - Test Case 1",
         inputFile: "__fixtures__/input1.md",
         outputFile: "__fixtures__/output1.html",
-        profile: DEFAULT_SETTINGS.profiles.markdown_to_html,
+        profile: {
+            ...DEFAULT_SETTINGS.profiles.markdown_to_html,
+            meta: {
+                ...DEFAULT_SETTINGS.profiles.markdown_to_html.meta,
+                encodeHTMLEntities: true,
+            },
+        },
     },
     {
         name: "Markdown to Markdown - Test Case 2",

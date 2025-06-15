@@ -16,7 +16,13 @@ When running the plugin's commands, you need to select a profile. Default profil
 - Copy content along with a source reference to the original note
 - Quickly share text snippets by pasting them into platforms like Slack
 
-![Demo video](https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c)
+## 🎬 Demo
+
+![Demo Image 1](docs/assets/demo1.png)
+
+![Demo Image 2](docs/assets/demo2.png)
+
+https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c
 
 ## 🚀 Quickstart
 
@@ -57,6 +63,20 @@ Please create a dedicated Dev vault in Obsidian. Do not use your main vault!
 If you'd like to contribute, please fork the repository and open a pull request to the `main` branch.
 
 **Note:** After you've made code changes, you need to either restart Obsidian or disable & enable the plugin. Alternatively, you can use the [Obsidian Hot-Reload Plugin](https://github.com/pjeby/hot-reload).
+
+## 🚢 How to Release
+
+1. Update the version in the following files:
+    - `manifest.json`
+    - `version-bump.mjs`
+    - `package.json`
+2. Run `npm i` to update the version in `package-lock.json`.
+3. Commit your changes.
+4. Tag the commit with the new release version:
+    ```bash
+    git tag -s 0.x.y -m "Release 0.x.y"
+    ```
+5. Push the changes and open Pull Request.
 
 ## 🙏 Acknowledgements
 

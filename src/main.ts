@@ -225,7 +225,7 @@ export default class AdvancedCopyPlugin extends Plugin {
         );
 
         if (missingSections.length > 0) {
-            const err = `Profile is missing the following sections: ${missingSections.join(", ")}`;
+            const err = `Profile is missing these sections: ${missingSections.join(", ")}. Open the profiles settings and the sections will be created automatically.`;
 
             Logger.error(err);
 
@@ -259,7 +259,7 @@ export default class AdvancedCopyPlugin extends Plugin {
             .flat();
 
         if (missingProperties.length > 0) {
-            const err = `Profile is missing the following properties: ${missingProperties.join(", ")}`;
+            const err = `Profile is missing these properties: ${missingProperties.join(", ")}. Open the profiles settings and the properties will be created automatically.`;
 
             Logger.error(err);
 
