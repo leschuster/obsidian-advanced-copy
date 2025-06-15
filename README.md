@@ -16,6 +16,14 @@ When running the plugin's commands, you need to select a profile. Default profil
 - Copy content along with a source reference to the original note
 - Quickly share text snippets by pasting them into platforms like Slack
 
+## 🎬 Demo
+
+todo: remove metadata
+
+![Demo Image 1](docs/assets/demo1.png)
+
+![Demo Image 2](docs/assets/demo2.png)
+
 ![Demo video](https://github.com/user-attachments/assets/af4e9f83-d324-42f4-95fc-bda558bcee2c)
 
 ## 🚀 Quickstart
