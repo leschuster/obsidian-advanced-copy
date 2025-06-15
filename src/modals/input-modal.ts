@@ -1,5 +1,8 @@
 import { App, Modal, Setting } from "obsidian";
 
+/**
+ * InputModal is a modal dialog that prompts the user for input.
+ */
 export class InputModal extends Modal {
     private result: string;
 

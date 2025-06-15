@@ -8,7 +8,7 @@ import {
 } from "obsidian";
 import ConvertAndCopyPlugin from "src/main";
 import { Logger } from "src/utils/Logger";
-import { Profile, MDTemplate } from "./settings";
+import { Profile, MDTemplate, createNewProfile } from "./settings";
 import AdvancedCopyPlugin from "src/main";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
@@ -158,7 +158,13 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
             return;
         }
 
-        addHeading(this.containerEl, "Profiles");
+        addHeading(this.containerEl, "Profiles").addButton((button) => {
+            button
+                .setButtonText("Create new profile")
+                .setIcon("plus")
+                .setTooltip("Create new profile")
+                .onClick(() => this.openNewProfileModal());
+        });
 
         const restartWarning = new Setting(this.containerEl)
             .setName(
@@ -298,7 +304,7 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
                                     ) as Profile;
                                     newProfile.meta.name = name;
                                     newProfile.meta.id = newId;
-                                    this.plugin.settings!.profiles[name] =
+                                    this.plugin.settings!.profiles[newId] =
                                         newProfile;
 
                                     Logger.log(
@@ -339,6 +345,42 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
 
     private openEditProfileModal(profile: Profile): void {
         new EditProfileModal(this.app, this.plugin, profile).open();
+    }
+
+    private openNewProfileModal(): void {
+        new InputModal(
+            this.app,
+            "Create new profile",
+            "Name",
+            "Create",
+            async (name) => {
+                const id = name.toLowerCase().replace(/\s/g, "_");
+
+                if (this.plugin.settings!.profiles[id]) {
+                    new Notice(`Profile ID '${id}' already exists`);
+                    Logger.log(`Profile '${id}' already exists`);
+                    return;
+                }
+
+                if (
+                    Object.values(this.plugin.settings!.profiles).find(
+                        (p) => p.meta.name === name,
+                    )
+                ) {
+                    new Notice(`Profile name '${name}' already exists`);
+                    Logger.log(`Profile '${name}' already exists`);
+                    return;
+                }
+
+                const newProfile = createNewProfile(id, name);
+
+                this.plugin.settings!.profiles[id] = newProfile;
+                Logger.log(`Created profile '${name}'`);
+                await this.save();
+                this.reload();
+                this.openEditProfileModal(newProfile);
+            },
+        ).open();
     }
 }
 
@@ -493,6 +535,7 @@ class EditProfileModal extends Modal {
                     settingDesc.desc,
                     currValue,
                     update,
+                    settingDesc.readonly,
                 );
                 break;
             case "number":
@@ -642,8 +685,8 @@ class TemplateSetting {
 
 // Helper functions
 
-function addHeading(containerEl: HTMLElement, name: string): void {
-    new Setting(containerEl)
+function addHeading(containerEl: HTMLElement, name: string): Setting {
+    return new Setting(containerEl)
         .setName(name)
         .setHeading()
         .setClass("advanced-copy-plugin__heading");
@@ -655,13 +698,18 @@ function addTextInput(
     desc: string,
     value: string,
     update: (value: string) => void,
+    readonly = false,
 ): void {
-    new Setting(containerEl)
+    const setting = new Setting(containerEl)
         .setName(name)
         .setDesc(desc)
         .addText((text) =>
             text.setPlaceholder(name).setValue(value).onChange(update),
         );
+
+    if (readonly) {
+        setting.setDisabled(true);
+    }
 }
 
 function addTextAreaInput(
