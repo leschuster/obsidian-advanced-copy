@@ -69,6 +69,7 @@ export type Profile = {
     extra: {
         before: string | MDTemplate;
         after: string | MDTemplate;
+        hidden: string;
     };
 };
 
@@ -155,6 +156,7 @@ export function createNewProfile(id: string, name: string): Profile {
         extra: {
             before: "",
             after: "",
+            hidden: "",
         },
     };
 }
