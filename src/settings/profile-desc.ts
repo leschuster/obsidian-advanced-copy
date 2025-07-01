@@ -544,7 +544,7 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         },
         hidden: {
             name: "Hidden",
-            desc: "Specify your own HTML tag for Obsidian. Everything enclosed will not be copied. Usage: ##REPLACE##",
+            desc: "Specify your own HTML tag for Obsidian. Everything enclosed will not be copied.<br />Usage: <code>##REPLACE##</code>",
             type: "string",
         },
     },
