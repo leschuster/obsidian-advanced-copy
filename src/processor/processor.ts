@@ -47,7 +47,12 @@ export class Processor {
 
     private preprocess(input: string): string {
         // Standardize line endings
-        return input.replace(/\r\n|\r/g, "\n");
+        let text = input.replace(/\r\n|\r/g, "\n");
+
+        // Ignore Markdown comments
+        text = text.replaceAll(/%%.*%%/gm, "");
+
+        return text;
     }
 
     private async process(input: string): Promise<string> {
