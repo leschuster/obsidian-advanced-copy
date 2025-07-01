@@ -47,7 +47,21 @@ export class Processor {
 
     private preprocess(input: string): string {
         // Standardize line endings
-        return input.replace(/\r\n|\r/g, "\n");
+        let text = input.replace(/\r\n|\r/g, "\n");
+
+        // Ignore Markdown comments
+        text = text.replaceAll(/%%.*%%/gm, "");
+
+        // Ignore "hidden" parts
+        if (this.profile.extra.hidden !== "") {
+            const re = new RegExp(
+                String.raw`<${this.profile.extra.hidden}>(.*?)<\/${this.profile.extra.hidden}>`,
+                "gm",
+            );
+            text = text.replaceAll(re, "");
+        }
+
+        return text;
     }
 
     private async process(input: string): Promise<string> {

@@ -542,5 +542,10 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             desc: "Text to add at the very end of the copied content. Useful for adding closing tags or suffixes.",
             type: "string",
         },
+        hidden: {
+            name: "Hidden",
+            desc: "Specify your own HTML tag for Obsidian. Everything enclosed will not be copied.<br />Usage: <code>##REPLACE##</code>",
+            type: "string",
+        },
     },
 };
