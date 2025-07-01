@@ -1,6 +1,6 @@
 {
     "name": "obsidian-advanced-copy",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "An [Obsidian](https://obsidian.md) to copy Markdown and transform it into HTML, Anki, or any custom format. Create custom profiles with versatile templates tailored to your workflow.",
     "main": "main.js",
     "scripts": {
