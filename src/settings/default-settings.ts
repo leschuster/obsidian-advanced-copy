@@ -276,6 +276,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
             extra: {
                 before: "",
                 after: "\n",
+                hidden: "hidden",
             },
         },
         copy_with_backlink: {
@@ -545,6 +546,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
             extra: {
                 before: "[[$fileName]]\n",
                 after: "\n",
+                hidden: "hidden",
             },
         },
         markdown_to_html: {
@@ -818,6 +820,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
             extra: {
                 before: "",
                 after: "\n",
+                hidden: "hidden",
             },
         },
         markdown_to_anki: {
@@ -1092,6 +1095,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
             extra: {
                 before: "",
                 after: "\n",
+                hidden: "hidden",
             },
         },
     },

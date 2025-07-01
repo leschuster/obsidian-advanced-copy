@@ -21,6 +21,21 @@ import rehypeStringify from "rehype-stringify";
 
 const PLUGIN_ID = "advanced-copy";
 
+type CustomSettingFunc = (
+    containerEl: HTMLElement,
+    settingDesc: ProfileDescSetting,
+    value: string,
+    update: (value: string) => void,
+) => void;
+
+// settings that use custom UI
+// this object provides custom functions for properties the Profile
+const SETTINGS_OVERRIDES: Record<string, Record<string, CustomSettingFunc>> = {
+    extra: {
+        hidden: addExtraHiddenSetting,
+    },
+};
+
 /**
  * Provides the settings tab for the user interface
  */
@@ -527,6 +542,13 @@ class EditProfileModal extends Modal {
             await this.save();
         };
 
+        if (SETTINGS_OVERRIDES[sectionKey]?.[settingKey] !== undefined) {
+            // use override instead of default
+            const func = SETTINGS_OVERRIDES[sectionKey][settingKey];
+            func(sectionEl, settingDesc, currValue, update);
+            return;
+        }
+
         switch (settingDesc.type) {
             case "string":
                 addTextInput(
@@ -738,4 +760,35 @@ function addToggleInput(
         .setName(name)
         .setDesc(desc)
         .addToggle((toggle) => toggle.setValue(value).onChange(update));
+}
+
+/**
+ * Add a setting to configure the profile.extra.hidden setting.
+ */
+function addExtraHiddenSetting(
+    containerEl: HTMLElement,
+    settingDesc: ProfileDescSetting,
+    value: string,
+    update: (value: string) => void,
+): void {
+    const getDesc = (value: string) =>
+        settingDesc.desc.replace(
+            "##REPLACE##",
+            `&lt;${value}&gt;Your secrets.&lt;/${value}&gt;`,
+        );
+
+    const el = new Setting(containerEl)
+        .setName(settingDesc.name)
+        .addText((text) =>
+            text
+                .setPlaceholder(settingDesc.name)
+                .setValue(value)
+                .onChange((v) => {
+                    el.descEl.innerHTML = getDesc(v);
+                    update(v);
+                }),
+        );
+
+    // using .setDesc doesn't work because of the encoded HTML entities
+    el.descEl.innerHTML = getDesc(value);
 }
