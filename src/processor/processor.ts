@@ -52,6 +52,15 @@ export class Processor {
         // Ignore Markdown comments
         text = text.replaceAll(/%%.*%%/gm, "");
 
+        // Ignore "hidden" parts
+        if (this.profile.extra.hidden !== "") {
+            const re = new RegExp(
+                String.raw`<${this.profile.extra.hidden}>(.*?)<\/${this.profile.extra.hidden}>`,
+                "gm",
+            );
+            text = text.replaceAll(re, "");
+        }
+
         return text;
     }
 
