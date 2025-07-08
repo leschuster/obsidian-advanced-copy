@@ -1,4 +1,7 @@
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "../utils/handlerUtils";
 import { Callout } from "../remark-plugins/remark-callout";
 import toCustom, { CustomOptions } from "../toCustom";
 
@@ -13,11 +16,14 @@ export function callout(node: Callout, opts: CustomOptions): string {
 
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const lineTemplate = getTemplate(
+    const lineTemplate = getTemplateWithGlobalAndFrontmatterVariables(
         opts.profile.templates.calloutContentLine,
         opts,
     );
-    const calloutTemplate = getTemplate(opts.profile.templates.callout, opts);
+    const calloutTemplate = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.callout,
+        opts,
+    );
 
     const content = convertChildren(node.children, childOpts)
         .map((line) =>

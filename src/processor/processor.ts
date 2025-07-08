@@ -9,34 +9,23 @@ import remarkWikilink from "./remark-plugins/wikilink";
 import remarkGemoji from "remark-gemoji";
 import remarkHighlight from "./remark-plugins/highlight";
 import { applyModifiers } from "./utils/applyModifiers";
-import he from "he";
 import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
-
-/**
- * Global variables that the user can use anywhere in any profile
- */
-export type GlobalVariables = {
-    vaultName: string;
-    fileBasename: string;
-    fileExtension: string;
-    fileName: string;
-    filePath: string;
-    date: string;
-    time: string;
-};
+import { FrontmatterVariables, GlobalVariables } from "./types";
 
 export class Processor {
     private constructor(
         private profile: Profile,
         private globalVars: GlobalVariables,
+        private frontmatterVars: FrontmatterVariables,
     ) {}
 
     public static async process(
         input: string,
         profile: Profile,
         globalVars: GlobalVariables,
+        frontmatterVars: FrontmatterVariables,
     ): Promise<string> {
-        const instance = new Processor(profile, globalVars);
+        const instance = new Processor(profile, globalVars, frontmatterVars);
 
         const preprocessed = instance.preprocess(input);
         const processed = await instance.process(preprocessed);
@@ -91,7 +80,11 @@ export class Processor {
         }
 
         const content = await processor
-            .use(customStringify, { profile: this.profile })
+            .use(customStringify, {
+                profile: this.profile,
+                globalVars: this.globalVars,
+                frontmatterVars: this.frontmatterVars,
+            })
             .process(input);
 
         const rendered =
@@ -103,15 +96,7 @@ export class Processor {
     }
 
     private postprocess(input: string): string {
-        input = this.replaceGlobalVariables(input);
         input = applyModifiers(input);
         return input;
-    }
-
-    private replaceGlobalVariables(text: string): string {
-        for (const [key, value] of Object.entries(this.globalVars)) {
-            text = text.replaceAll(`\$${key}`, value);
-        }
-        return text;
     }
 }

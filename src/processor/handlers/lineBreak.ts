@@ -1,6 +1,6 @@
 import { Break } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../utils/handlerUtils";
+import { getTemplateWithGlobalAndFrontmatterVariables } from "../utils/handlerUtils";
 
 /**
  * Convert a break node to string
@@ -9,5 +9,8 @@ import { getTemplate } from "../utils/handlerUtils";
  * @returns
  */
 export function lineBreak(node: Break, opts: CustomOptions): string {
-    return getTemplate(opts.profile.templates.lineBreak, opts);
+    return getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.lineBreak,
+        opts,
+    );
 }

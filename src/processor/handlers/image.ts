@@ -1,6 +1,6 @@
 import { Image } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../utils/handlerUtils";
+import { getTemplateWithGlobalAndFrontmatterVariables } from "../utils/handlerUtils";
 
 /**
  * Convert an image node to string
@@ -9,7 +9,10 @@ import { getTemplate } from "../utils/handlerUtils";
  * @returns
  */
 export function image(node: Image, opts: CustomOptions): string {
-    const template = getTemplate(opts.profile.templates.image, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.image,
+        opts,
+    );
 
     return template
         .replaceAll("$src", node.url)

@@ -127,6 +127,8 @@ In addition, the following global variables can be used:
 - **$date**: The current date (e.g. '23/09/2024')
 - **$time**: The current time (e.g. '10:10:00')
 
+**Frontmatter variables**: Access any frontmatter field using double dollar signs. For example, if you have \`permalink: https://obsidian.md\` in your frontmatter, use \`$$permalink\` in your templates to insert that value. If the field doesn't exist, the variable is replaced by an empty string.
+
 You may also use modifiers to transform text in a custom way. The following modifiers are available:
 - **$upper{text}**: Convert text to uppercase
 - **$lower{text}**: Convert text to lowercase

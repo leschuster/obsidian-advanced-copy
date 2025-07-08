@@ -1,6 +1,6 @@
 import { InlineCode } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../utils/handlerUtils";
+import { getTemplateWithGlobalAndFrontmatterVariables } from "../utils/handlerUtils";
 
 /**
  * Convert a code inline node to string
@@ -9,7 +9,10 @@ import { getTemplate } from "../utils/handlerUtils";
  * @returns
  */
 export function codeInline(node: InlineCode, opts: CustomOptions): string {
-    const template = getTemplate(opts.profile.templates.codeInline, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.codeInline,
+        opts,
+    );
 
     return template.replaceAll("$value", node.value);
 }

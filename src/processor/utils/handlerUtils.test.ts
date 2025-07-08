@@ -1,16 +1,22 @@
-import { countNodeTypes, getTemplate } from "./handlerUtils";
+import {
+    countNodeTypes,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "./handlerUtils";
 import { Nodes } from "mdast";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { CustomOptions } from "../toCustom";
 
-describe("getTemplate", () => {
+describe("getTemplateWithGlobalAndFrontmatterVariables", () => {
     it("should return the template string when profileTemplate is a string", () => {
         const profileTemplate = "template string";
         const opts: CustomOptions = {
             profile: DEFAULT_SETTINGS.profiles["markdown_to_html"],
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate);
     });
@@ -27,7 +33,10 @@ describe("getTemplate", () => {
             profile: DEFAULT_SETTINGS.profiles["markdown_to_html"],
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.template);
     });
@@ -48,7 +57,10 @@ describe("getTemplate", () => {
             isLastOfType: true,
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.templateFirstChild);
     });
@@ -68,7 +80,10 @@ describe("getTemplate", () => {
             isFirstOfType: true,
             isLastOfType: true,
         };
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
         expect(result).toBe(profileTemplate.templateLastChild);
     });
 
@@ -88,7 +103,10 @@ describe("getTemplate", () => {
             isLastOfType: true,
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.templateFirstOfType);
     });
@@ -109,7 +127,10 @@ describe("getTemplate", () => {
             isLastOfType: true,
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.templateLastOfType);
     });
@@ -130,7 +151,10 @@ describe("getTemplate", () => {
             isLastOfType: false,
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.template);
     });
@@ -147,7 +171,10 @@ describe("getTemplate", () => {
             isLastOfType: true,
         };
 
-        const result = getTemplate(profileTemplate, opts);
+        const result = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            opts,
+        );
 
         expect(result).toBe(profileTemplate.template);
     });

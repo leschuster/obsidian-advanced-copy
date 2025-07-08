@@ -1,6 +1,9 @@
 import { AlignType, Table, TableCell, TableRow } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "../utils/handlerUtils";
 import { MDTemplate } from "src/settings/settings";
 import { modifyOptsBasedOnListIdx } from "../utils/modifyOptsBasedOnListIdx";
 
@@ -11,7 +14,10 @@ import { modifyOptsBasedOnListIdx } from "../utils/modifyOptsBasedOnListIdx";
  * @returns
  */
 export function table(node: Table, opts: CustomOptions): string {
-    const template = getTemplate(opts.profile.templates.table, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.table,
+        opts,
+    );
 
     if (node.children.length === 0) {
         return "";
@@ -47,14 +53,17 @@ function convertHeaderRow(
     opts: CustomOptions,
     colAlignments: AlignType[] | null,
 ): string {
-    const template = getTemplate(opts.profile.templates.tableRow, {
-        ...opts,
-        isFirstChild: true,
-        isLastChild: true,
-        isFirstOfType: true,
-        isLastOfType: true,
-        topLevel: false,
-    });
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.tableRow,
+        {
+            ...opts,
+            isFirstChild: true,
+            isLastChild: true,
+            isFirstOfType: true,
+            isLastOfType: true,
+            topLevel: false,
+        },
+    );
 
     const content = convertCells(
         node.children,
@@ -80,7 +89,10 @@ function convertContentRows(
 ): string {
     return nodes.reduce((acc, row, idx) => {
         const rowOpts = modifyOptsBasedOnListIdx(opts, idx, nodes.length);
-        const template = getTemplate(opts.profile.templates.tableRow, rowOpts);
+        const template = getTemplateWithGlobalAndFrontmatterVariables(
+            opts.profile.templates.tableRow,
+            rowOpts,
+        );
         const cells = convertCells(
             row.children,
             opts,
@@ -108,7 +120,10 @@ function convertCells(
 ): string {
     return nodes.reduce((acc, cell, idx) => {
         const cellOpts = modifyOptsBasedOnListIdx(opts, idx, nodes.length);
-        const template = getTemplate(profileTemplate, cellOpts);
+        const template = getTemplateWithGlobalAndFrontmatterVariables(
+            profileTemplate,
+            cellOpts,
+        );
 
         const alignment: AlignType = colAlignments?.[idx] ?? null;
         const children = convertChildren(cell.children, cellOpts)
