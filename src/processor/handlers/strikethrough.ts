@@ -1,4 +1,7 @@
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "../utils/handlerUtils";
 import { CustomOptions } from "../toCustom";
 import { Delete } from "mdast";
 
@@ -11,7 +14,10 @@ import { Delete } from "mdast";
 export function strikethrough(node: Delete, opts: CustomOptions): string {
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 
-    const template = getTemplate(opts.profile.templates.strikethrough, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.strikethrough,
+        opts,
+    );
 
     const content = convertChildren(node.children, childOpts).join("");
 

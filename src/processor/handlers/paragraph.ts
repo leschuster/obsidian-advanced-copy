@@ -1,6 +1,9 @@
 import { Paragraph } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "../utils/handlerUtils";
 
 /**
  * Convert a paragraph to string
@@ -10,8 +13,14 @@ import { convertChildren, getTemplate } from "../utils/handlerUtils";
  */
 export function paragraph(node: Paragraph, opts: CustomOptions): string {
     const template = opts.topLevel
-        ? getTemplate(opts.profile.templates.paragraph, opts)
-        : getTemplate(opts.profile.templates.paragraphNested, opts);
+        ? getTemplateWithGlobalAndFrontmatterVariables(
+              opts.profile.templates.paragraph,
+              opts,
+          )
+        : getTemplateWithGlobalAndFrontmatterVariables(
+              opts.profile.templates.paragraphNested,
+              opts,
+          );
 
     const childOpts = opts.topLevel ? { ...opts, topLevel: false } : opts;
 

@@ -1,6 +1,6 @@
 import { ThematicBreak } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../utils/handlerUtils";
+import { getTemplateWithGlobalAndFrontmatterVariables } from "../utils/handlerUtils";
 
 /**
  * Convert a horizontal rule node to string
@@ -12,5 +12,8 @@ export function horizontalRule(
     node: ThematicBreak,
     opts: CustomOptions,
 ): string {
-    return getTemplate(opts.profile.templates.horizontalRule, opts);
+    return getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.horizontalRule,
+        opts,
+    );
 }

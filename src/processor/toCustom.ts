@@ -3,9 +3,12 @@ import { Profile } from "src/settings/settings";
 import { zwitch } from "zwitch";
 import { handlers } from "./handlers";
 import { Logger } from "src/utils/Logger";
+import { FrontmatterVariables, GlobalVariables } from "./types";
 
 export interface CustomOptions {
     profile: Profile;
+    globalVars?: GlobalVariables;
+    frontmatterVars?: FrontmatterVariables;
     topLevel?: boolean;
     isFirstOfType?: boolean;
     isLastOfType?: boolean;

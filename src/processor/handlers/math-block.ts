@@ -1,6 +1,6 @@
 import { Math as MathNode } from "mdast-util-math";
 import { CustomOptions } from "../toCustom";
-import { getTemplate } from "../utils/handlerUtils";
+import { getTemplateWithGlobalAndFrontmatterVariables } from "../utils/handlerUtils";
 
 /**
  * Convert a math block node to string
@@ -9,7 +9,10 @@ import { getTemplate } from "../utils/handlerUtils";
  * @returns
  */
 export function mathBlock(node: MathNode, opts: CustomOptions): string {
-    const template = getTemplate(opts.profile.templates.mathBlock, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.mathBlock,
+        opts,
+    );
 
     return template
         .replaceAll("$value", node.value)
