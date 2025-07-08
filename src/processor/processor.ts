@@ -45,7 +45,7 @@ export class Processor {
         if (this.profile.extra.hidden !== "") {
             const re = new RegExp(
                 String.raw`<${this.profile.extra.hidden}>(.*?)<\/${this.profile.extra.hidden}>`,
-                "gm",
+                "gms",
             );
             text = text.replaceAll(re, "");
         }
