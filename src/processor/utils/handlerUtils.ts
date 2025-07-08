@@ -65,11 +65,11 @@ export function replaceFrontmatterVariables(
 ): string {
     for (const [key, value] of Object.entries(frontmatterVars)) {
         // replace $$frontmatterVar with value
-        text = text.replaceAll(`\$\$${key}`, value);
+        text = text.replaceAll(`\$fm-${key}`, value);
     }
 
-    // remove frontmatter variables that did not match, e.g. $$permalink
-    text = text.replaceAll(/\$\$\w+/gm, "");
+    // remove frontmatter variables that did not match, e.g. $fm-permalink
+    text = text.replaceAll(/\$fm-\w+/gm, "");
 
     return text;
 }
