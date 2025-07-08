@@ -4,16 +4,13 @@ import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
 import { ClipboardHelper } from "./utils/ClipboardHelper";
-import {
-    FrontmatterVariables,
-    GlobalVariables,
-    Processor,
-} from "./processor/processor";
+import { Processor } from "./processor/processor";
 import { ProfileSelectionModal } from "./modals/profile-selection-modal";
 import { ErrorModal } from "./modals/error-modal";
 import { profileDesc } from "./settings/profile-desc";
 import { isEquivalent } from "./utils/isEquivalent";
 import { getFrontmatter } from "./utils/getFrontmatter";
+import { FrontmatterVariables, GlobalVariables } from "./processor/types";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 

@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
-import { GlobalVariables, Processor } from "src/processor/processor";
+import { Processor } from "src/processor/processor";
+import { GlobalVariables } from "src/processor/types";
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
 import { Profile } from "src/settings/settings";
 
@@ -77,6 +78,7 @@ describe("Processor", () => {
             input,
             profile,
             MOCK_GLOAL_VARIABLES,
+            {},
         );
         expect(output).toEqual(expected);
     });

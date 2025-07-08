@@ -1,6 +1,7 @@
 import { DEFAULT_SETTINGS } from "src/settings/default-settings";
-import { GlobalVariables, Processor } from "./processor";
+import { Processor } from "./processor";
 import { Profile } from "src/settings/settings";
+import { GlobalVariables } from "./types";
 
 const mockGlobalVars: GlobalVariables = {
     vaultName: "Test Vault",
@@ -29,7 +30,12 @@ describe("Processor integration tests", () => {
 
     it("should process markdown to HTML correctly", async () => {
         const input = "# Hello World\n\nThis is a test.";
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             "<before /><heading1>Hello World</heading1><paragraph>This is a test.</paragraph><after />",
         );
@@ -37,7 +43,12 @@ describe("Processor integration tests", () => {
 
     it("should handle empty input", async () => {
         const input = "";
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe("<before /><after />");
     });
 
@@ -45,7 +56,12 @@ describe("Processor integration tests", () => {
         profile.templates.text =
             "Vaultname: $vaultName,\nFileBasename: $fileBasename,\nFileExtension: $fileExtension,\nFileName: $fileName,\nFilePath: $filePath,\nDate: $date,\nTime: $time\n\n$value";
         const input = "Test";
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             "<before /><paragraph>Vaultname: Test Vault,\nFileBasename: test.md,\nFileExtension: .md,\nFileName: test,\nFilePath: /path/to/test.md,\nDate: 2023-10-01,\nTime: 12:00\n\nTest</paragraph><after />",
         );
@@ -56,7 +72,12 @@ describe("Processor integration tests", () => {
         profile.templates.bold = "<bold>$value</bold>";
         profile.templates.paragraph = "<paragraph>$value</paragraph>";
         const input = "Hello, **world**!";
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             "<before /><paragraph>Hello, <bold>world</bold>!</paragraph><after />",
         );
@@ -67,7 +88,12 @@ describe("Processor integration tests", () => {
         profile.templates.bold = { template: "<bold>$value</bold>" };
         profile.templates.paragraph = "<paragraph>$value</paragraph>";
         const input = "Hello, **world**!";
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             "<before /><paragraph>Hello, <bold>world</bold>!</paragraph><after />",
         );
@@ -96,7 +122,12 @@ Hello, **last-child**
 
 **first-child** hello **default** **default** hello **last-of-type** hello.
 `;
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             `# <first-child /> hello <default /> hello <last-child />
 
@@ -123,7 +154,12 @@ Hello, **last-child**
         const input = `**greetings**, **lorem** **iPsUm**
 
 And **Hello, world** to **you**!`;
-        const output = await Processor.process(input, profile, mockGlobalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            mockGlobalVars,
+            {},
+        );
         expect(output).toBe(
             `Greetings-GREETINGS, lorem ipsum-mUsPi
 
