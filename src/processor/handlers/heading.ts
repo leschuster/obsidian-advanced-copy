@@ -1,7 +1,9 @@
 import { Heading } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { Logger } from "src/utils/Logger";
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplateWithGlobalAndFrontmatterVariables,
+} from "../utils/handlerUtils";
 
 /**
  * Convert a heading node to string
@@ -14,7 +16,7 @@ export function heading(node: Heading, opts: CustomOptions): string {
 
     const content = convertChildren(node.children, childOpts).join("");
 
-    const template = getTemplate(
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
         opts.profile.templates[`heading${node.depth}`],
         opts,
     );

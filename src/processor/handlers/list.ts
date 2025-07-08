@@ -1,6 +1,12 @@
 import { List, ListItem } from "mdast";
 import { CustomOptions } from "../toCustom";
-import { convertChildren, getTemplate } from "../utils/handlerUtils";
+import {
+    convertChildren,
+    getTemplate,
+    getTemplateWithGlobalAndFrontmatterVariables,
+    replaceFrontmatterVariables,
+    replaceGlobalVariables,
+} from "../utils/handlerUtils";
 import { MDTemplateListItem } from "src/settings/settings";
 import { modifyOptsBasedOnListIdx } from "../utils/modifyOptsBasedOnListIdx";
 
@@ -29,7 +35,10 @@ export function list(node: List, opts: CustomOptions): string {
 function orderedList(node: List, opts: CustomOptions): string {
     const start = node.start ?? 1;
 
-    const template = getTemplate(opts.profile.templates.orderedList, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.orderedList,
+        opts,
+    );
 
     const content = convertListItems(node.children, opts, true, start);
 
@@ -45,7 +54,10 @@ function orderedList(node: List, opts: CustomOptions): string {
  * @returns
  */
 function unorderedList(node: List, opts: CustomOptions): string {
-    const template = getTemplate(opts.profile.templates.unorderedList, opts);
+    const template = getTemplateWithGlobalAndFrontmatterVariables(
+        opts.profile.templates.unorderedList,
+        opts,
+    );
 
     const content = convertListItems(node.children, opts, false);
 
@@ -111,16 +123,28 @@ function getListItemTemplate(
         return tmp;
     }
 
+    let temp = "";
     switch (true) {
         case tmp.templateFirstChildNested &&
             (opts.indentation ?? 0) > 0 &&
             opts.isFirstChild:
-            return tmp.templateFirstChildNested;
+            temp = tmp.templateFirstChildNested;
+            break;
         case tmp.templateLastChildNested &&
             (opts.indentation ?? 0) > 0 &&
             opts.isLastChild:
-            return tmp.templateLastChildNested;
+            temp = tmp.templateLastChildNested;
+            break;
         default:
-            return getTemplate(tmp, opts);
+            temp = getTemplate(tmp, opts);
     }
+
+    if (opts.globalVars) {
+        temp = replaceGlobalVariables(temp, opts.globalVars);
+    }
+    if (opts.frontmatterVars) {
+        temp = replaceFrontmatterVariables(temp, opts.frontmatterVars);
+    }
+
+    return temp;
 }

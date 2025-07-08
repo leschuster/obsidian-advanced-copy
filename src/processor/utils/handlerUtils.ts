@@ -1,6 +1,7 @@
 import { MDTemplate } from "src/settings/settings";
 import toCustom, { CustomOptions } from "../toCustom";
 import { Nodes } from "mdast";
+import { FrontmatterVariables, GlobalVariables } from "../types";
 
 /**
  * Get the template for a node depending on its options
@@ -28,6 +29,49 @@ export function getTemplate(
         default:
             return profileTemplate.template;
     }
+}
+
+export function getTemplateWithGlobalAndFrontmatterVariables(
+    profileTemplate: string | MDTemplate,
+    opts: CustomOptions,
+): string {
+    let temp = getTemplate(profileTemplate, opts);
+
+    if (opts.globalVars) {
+        temp = replaceGlobalVariables(temp, opts.globalVars);
+    }
+
+    if (opts.frontmatterVars) {
+        temp = replaceFrontmatterVariables(temp, opts.frontmatterVars);
+    }
+
+    return temp;
+}
+
+export function replaceGlobalVariables(
+    text: string,
+    globalVars: GlobalVariables,
+): string {
+    for (const [key, value] of Object.entries(globalVars)) {
+        // replace $globalVar with value
+        text = text.replaceAll(`\$${key}`, value);
+    }
+    return text;
+}
+
+export function replaceFrontmatterVariables(
+    text: string,
+    frontmatterVars: FrontmatterVariables,
+): string {
+    for (const [key, value] of Object.entries(frontmatterVars)) {
+        // replace $$frontmatterVar with value
+        text = text.replaceAll(`\$fm-${key}`, value);
+    }
+
+    // remove frontmatter variables that did not match, e.g. $fm-permalink
+    text = text.replaceAll(/\$fm-\w+/gm, "");
+
+    return text;
 }
 
 /**
@@ -62,7 +106,7 @@ export function convertChildren(
         const isLastOfType =
             typeCount[child.type] === totalTypeCount[child.type];
 
-        const childOpts = {
+        const childOpts: CustomOptions = {
             ...opts,
             isFirstOfType,
             isLastOfType,

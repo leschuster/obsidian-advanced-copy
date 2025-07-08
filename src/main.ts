@@ -4,11 +4,13 @@ import { DEFAULT_SETTINGS } from "./settings/default-settings";
 import { AdvancedCopyPluginSettingsTab } from "./settings/settings-ui";
 import { Logger } from "./utils/Logger";
 import { ClipboardHelper } from "./utils/ClipboardHelper";
-import { GlobalVariables, Processor } from "./processor/processor";
+import { Processor } from "./processor/processor";
 import { ProfileSelectionModal } from "./modals/profile-selection-modal";
 import { ErrorModal } from "./modals/error-modal";
 import { profileDesc } from "./settings/profile-desc";
 import { isEquivalent } from "./utils/isEquivalent";
+import { getFrontmatter } from "./utils/getFrontmatter";
+import { FrontmatterVariables, GlobalVariables } from "./processor/types";
 
 export const PLUGIN_NAME = "Advanced-Copy";
 
@@ -145,8 +147,14 @@ export default class AdvancedCopyPlugin extends Plugin {
         this.checkProfileUpdate(profile);
 
         const globalVars = this.getGlobalVariables();
+        const frontmatterVars = this.getFrontmatterVariables();
 
-        const output = await Processor.process(input, profile, globalVars);
+        const output = await Processor.process(
+            input,
+            profile,
+            globalVars,
+            frontmatterVars,
+        );
 
         ClipboardHelper.copy(output);
     }
@@ -209,6 +217,16 @@ export default class AdvancedCopyPlugin extends Plugin {
             date: date.toLocaleDateString(),
             time: date.toLocaleTimeString(),
         };
+    }
+
+    private getFrontmatterVariables(): FrontmatterVariables {
+        const activeFile = this.app.workspace.getActiveFile();
+
+        if (!activeFile) {
+            return {};
+        }
+
+        return getFrontmatter(this.app, activeFile);
     }
 
     /**
