@@ -67,8 +67,8 @@ export type Profile = {
         wikilink: string | MDTemplate;
     };
     extra: {
-        before: string | MDTemplate;
-        after: string | MDTemplate;
+        before: string;
+        after: string;
         hidden: string;
     };
 };

@@ -11,6 +11,10 @@ import remarkHighlight from "./remark-plugins/highlight";
 import { applyModifiers } from "./utils/applyModifiers";
 import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
 import { FrontmatterVariables, GlobalVariables } from "./types";
+import {
+    replaceFrontmatterVariables,
+    replaceGlobalVariables,
+} from "./utils/handlerUtils";
 
 export class Processor {
     private constructor(
@@ -87,16 +91,20 @@ export class Processor {
             })
             .process(input);
 
-        const rendered =
-            this.profile.extra.before +
-            String(content) +
-            this.profile.extra.after;
+        const before = this.replaceVars(this.profile.extra.before);
+        const after = this.replaceVars(this.profile.extra.after);
 
-        return rendered;
+        return before + String(content) + after;
     }
 
     private postprocess(input: string): string {
         input = applyModifiers(input);
         return input;
+    }
+
+    private replaceVars(text: string): string {
+        text = replaceGlobalVariables(text, this.globalVars);
+        text = replaceFrontmatterVariables(text, this.frontmatterVars);
+        return text;
     }
 }
