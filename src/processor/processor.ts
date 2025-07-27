@@ -43,7 +43,7 @@ export class Processor {
         let text = input.replace(/\r\n|\r/g, "\n");
 
         // Ignore Markdown comments
-        text = text.replaceAll(/%%.*%%/gm, "");
+        text = text.replaceAll(/%%[^%]*%%/gms, "");
 
         // Ignore "hidden" parts
         if (this.profile.extra.hidden !== "") {
