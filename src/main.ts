@@ -143,7 +143,7 @@ export default class AdvancedCopyPlugin extends Plugin {
      * @param profile profile to use
      */
     private async copy(input: string, profile: Profile): Promise<void> {
-        if (this.profileIsIncomplete(profile)) return;
+        if (!this.profileIsComplete(profile)) return;
         this.checkProfileUpdate(profile);
 
         const globalVars = this.getGlobalVariables();
@@ -156,7 +156,7 @@ export default class AdvancedCopyPlugin extends Plugin {
             frontmatterVars,
         );
 
-        ClipboardHelper.copy(output);
+        ClipboardHelper.copy(output, profile.meta.htmlCopy);
     }
 
     private checkProfileUpdate(profile: Profile): void {
@@ -230,11 +230,11 @@ export default class AdvancedCopyPlugin extends Plugin {
     }
 
     /**
-     * Check if the profile is incomplete and show an error modal if it is
+     * Check if the profile is complete and show an error modal if it is not
      * @param profile profile to check
      * @returns boolean indicating if the profile is incomplete
      */
-    private profileIsIncomplete(profile: any): profile is Profile {
+    private profileIsComplete(profile: any): profile is Profile {
         // Use profileDesc as reference for required sections and properties
         const schema = profileDesc;
 
@@ -263,7 +263,7 @@ export default class AdvancedCopyPlugin extends Plugin {
                 },
             ).open();
 
-            return true;
+            return false;
         }
 
         const missingProperties = Object.keys(schema)
@@ -297,9 +297,9 @@ export default class AdvancedCopyPlugin extends Plugin {
                 },
             ).open();
 
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

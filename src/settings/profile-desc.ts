@@ -99,6 +99,12 @@ export const profileDesc: {
             desc: "Converts special characters to their hexadecimal HTML entity representations. For example, `©` becomes `&#x00A9;`. Provides better compatibility with older browsers.",
             type: "boolean",
         },
+        htmlCopy: {
+            name: "Copy as Formatted HTML",
+            desc: "This allows directly pasting formatted html into Gmail/Outlook/Docs/etc. rather than text with html markup. Paste the formatted version with ctrl+v or the html with markup using ctrl+shift+v. Allows you to keep formatted email templates inside of Obsidian.",
+            type: "boolean",
+            optional: true,
+        },
         configVersion: {
             name: "Configuration version",
             desc: "Internal version number of the profile configuration.",
