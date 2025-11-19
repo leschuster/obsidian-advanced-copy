@@ -136,12 +136,12 @@ export const profileDesc: {
     frontmatter: {
         enabled: {
             name: "Insert frontmatter",
-            desc: "Adds the frontmatter values of the current file to the beginning. Will be placed between extra.before and the actual content.",
+            desc: "Include frontmatter properties in the copied content. It will be placed between the `before` template from the Meta section and the actual content.",
             type: "boolean",
         },
         order: {
             name: "Order",
-            desc: "Define the order of the frontmatter properties.",
+            desc: "Sort order for frontmatter properties.",
             type: "dropdown",
             dropdownOptions: {
                 original: "Original",
@@ -152,13 +152,13 @@ export const profileDesc: {
         },
         before: {
             name: "Before Template",
-            desc: "Before ", // todo
+            desc: "Template inserted before all frontmatter properties.",
             type: "textarea",
             dependsOn: "frontmatter.enabled",
         },
         property: {
             name: "Property Template",
-            desc: "Template", // todo
+            desc: "Template for each frontmatter property.",
             vars: [
                 { name: "$name", desc: "Name of the property" },
                 { name: "$value", desc: "Content of the property" },
@@ -168,7 +168,7 @@ export const profileDesc: {
         },
         after: {
             name: "After Template",
-            desc: "After", // todo
+            desc: "Template inserted after all frontmatter properties.",
             type: "textarea",
             dependsOn: "frontmatter.enabled",
         },
@@ -182,7 +182,10 @@ export const profileDesc: {
                     title: "My file",
                     created: "2025-11-19",
                 });
-                return "<pre><code>" + encode(rendered) + "</pre></code>";
+                if (rendered) {
+                    return "<pre><code>" + encode(rendered) + "</pre></code>";
+                }
+                return '<br /><em>"Insert Frontmatter" not enabled.</em>';
             },
         },
     },
