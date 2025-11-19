@@ -398,29 +398,40 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
     }
 }
 
+type Subscriber = (profile: Profile) => void;
+
 /**
  * Modal to edit a single profile
  */
 class EditProfileModal extends Modal {
+    // subscribers are notified when the profile gets changed to update their view
+    private subscribers: Subscriber[];
+
     constructor(
         public app: App,
         private plugin: AdvancedCopyPlugin,
         private profile: Profile,
     ) {
         super(app);
+
+        this.subscribers = [];
     }
 
     public onOpen(): void {
+        this.subscribers = [];
         this.fixMissingProperties();
         this.display();
     }
 
     public onClose(): void {
         this.contentEl.empty();
+        this.subscribers = [];
     }
 
     private async save(): Promise<void> {
         await this.plugin.saveSettings();
+
+        this.subscribers.forEach((fn) => fn(this.profile));
     }
 
     /**
@@ -490,6 +501,10 @@ class EditProfileModal extends Modal {
         for (const sectionKey of Object.keys(profileDesc)) {
             await this.addSection(this.contentEl, sectionKey);
         }
+    }
+
+    private addSubscriber(fn: Subscriber): void {
+        this.subscribers.push(fn);
     }
 
     private async addSection(
@@ -573,6 +588,16 @@ class EditProfileModal extends Modal {
                 );
                 break;
 
+            case "textarea":
+                addTextAreaInput(
+                    sectionEl,
+                    settingDesc.name,
+                    settingDesc.desc,
+                    currValue,
+                    update,
+                );
+                break;
+
             case "template":
                 new TemplateSetting(sectionEl, settingDesc, update, currValue);
                 break;
@@ -597,6 +622,7 @@ class EditProfileModal extends Modal {
                     settingDesc.name,
                     this.profile,
                     settingDesc.render,
+                    (fn) => this.addSubscriber(fn),
                 );
                 break;
 
@@ -809,12 +835,15 @@ function addCustomRender(
     name: string,
     profile: Profile,
     render: (profile: Profile) => string,
+    addSubscriber: (fn: Subscriber) => void,
 ): void {
     const el = new Setting(containerEl).setName(name);
 
     const refresh = (profile: Profile) => {
+        console.log("Refresh");
         el.descEl.innerHTML = render(profile);
     };
+    addSubscriber(refresh);
 
     refresh(profile);
 }

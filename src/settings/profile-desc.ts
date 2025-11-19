@@ -21,7 +21,14 @@ export type ProfileDescSection = {
 export type ProfileDescSetting = {
     name: string;
     desc: string;
-    type: "string" | "boolean" | "number" | "template" | "dropdown" | "render";
+    type:
+        | "string"
+        | "boolean"
+        | "number"
+        | "textarea"
+        | "template"
+        | "dropdown"
+        | "render";
     dropdownOptions?: Record<string, string>;
     vars?: { name: string; desc: string }[];
     visible?: boolean;
@@ -146,7 +153,7 @@ export const profileDesc: {
         before: {
             name: "Before Template",
             desc: "Before ", // todo
-            type: "string",
+            type: "textarea",
             dependsOn: "frontmatter.enabled",
         },
         property: {
@@ -156,13 +163,13 @@ export const profileDesc: {
                 { name: "$name", desc: "Name of the property" },
                 { name: "$value", desc: "Content of the property" },
             ],
-            type: "string",
+            type: "textarea",
             dependsOn: "frontmatter.enabled",
         },
         after: {
             name: "After Template",
             desc: "After", // todo
-            type: "string",
+            type: "textarea",
             dependsOn: "frontmatter.enabled",
         },
         _preview: {
@@ -604,12 +611,12 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         before: {
             name: "Before",
             desc: "Text to add at the very beginning of the copied content. Useful for adding opening tags or prefixes.",
-            type: "string",
+            type: "textarea",
         },
         after: {
             name: "After",
             desc: "Text to add at the very end of the copied content. Useful for adding closing tags or suffixes.",
-            type: "string",
+            type: "textarea",
         },
         hidden: {
             name: "Hidden",
