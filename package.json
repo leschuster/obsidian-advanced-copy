@@ -48,6 +48,7 @@
     },
     "dependencies": {
         "he": "^1.2.0",
+        "html-entities": "^2.6.0",
         "mdast-util-find-and-replace": "^3.0.2",
         "rehype-stringify": "^10.0.1",
         "remark-gemoji": "^8.0.0",
