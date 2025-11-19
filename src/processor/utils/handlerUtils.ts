@@ -1,6 +1,6 @@
-import { MDTemplate } from "src/settings/settings";
-import toCustom, { CustomOptions } from "../toCustom";
 import { Nodes } from "mdast";
+import { MDTemplate, Profile } from "src/settings/settings";
+import toCustom, { CustomOptions } from "../toCustom";
 import { FrontmatterVariables, GlobalVariables } from "../types";
 
 /**
@@ -72,6 +72,30 @@ export function replaceFrontmatterVariables(
     text = text.replaceAll(/\$fm-\w+/gm, "");
 
     return text;
+}
+
+export function renderFrontmatter(
+    settings: Pick<Profile, "frontmatter">,
+    frontmatterVars: FrontmatterVariables,
+    globalVars?: GlobalVariables,
+): string {
+    const hasFrontmatterVars = Object.entries(frontmatterVars).length > 0;
+
+    if (!settings.frontmatter?.enabled || !hasFrontmatterVars) {
+        return "";
+    }
+
+    const { order, before, property, after } = settings.frontmatter; // todo
+
+    const content = Object.entries(frontmatterVars)
+        .map(([name, value]) =>
+            property.replaceAll("$name", name).replaceAll("$value", value),
+        )
+        .join("");
+
+    const text = before + content + after;
+
+    return globalVars ? replaceGlobalVariables(text, globalVars) : text;
 }
 
 /**

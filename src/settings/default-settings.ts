@@ -565,6 +565,14 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 configVersion: 1,
                 doNotUpdate: false,
             },
+            frontmatter: {
+                enabled: true,
+                order: "original",
+                before: "<table>\n",
+                property:
+                    "  <tr>\n    <th>$name</th>\n    <td>$value</td>\n  </tr>\n",
+                after: "</table><br /><br />\n\n",
+            },
             templates: {
                 blockquoteLine: {
                     template: "$value",

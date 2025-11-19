@@ -3,6 +3,10 @@
  * It is used in the settings UI to display a description for each property.
  */
 
+import { encode } from "html-entities";
+import { renderFrontmatter } from "src/processor/utils/handlerUtils";
+import { Profile } from "src/settings/settings";
+
 export type ProfileDesc = {
     [key: string]: ProfileDescSection;
 };
@@ -11,17 +15,21 @@ export type ProfileDescSection = {
     [key: string]: ProfileDescSetting;
 } & {
     _desc?: ProfileDescSetting; // metadata to add a description to the section
+    _preview?: ProfileDescSetting; // render a preview of something
 };
 
 export type ProfileDescSetting = {
     name: string;
     desc: string;
-    type: "string" | "boolean" | "number" | "template";
+    type: "string" | "boolean" | "number" | "template" | "dropdown" | "render";
+    dropdownOptions?: Record<string, string>;
     vars?: { name: string; desc: string }[];
     visible?: boolean;
     readonly?: boolean;
     additionalTemplates?: Record<string, ProfileDescSetting>;
+    dependsOn?: string; // only display option if specified setting is truthy (in format `frontmatter.enabled`)
     optional?: boolean;
+    render?: (profile: Profile) => string;
 };
 
 const defaultAdditionalTemplates: Record<string, ProfileDescSetting> = {
@@ -116,6 +124,59 @@ export const profileDesc: {
             desc: "**Only applies to default profiles.** When checked, prevents this profile from being automatically updated when the plugin is updated. If unchecked, you'll be asked whether to update or keep your customizations.",
             type: "boolean",
             optional: true,
+        },
+    },
+    frontmatter: {
+        enabled: {
+            name: "Insert frontmatter",
+            desc: "Adds the frontmatter values of the current file to the beginning. Will be placed between extra.before and the actual content.",
+            type: "boolean",
+        },
+        order: {
+            name: "Order",
+            desc: "Define the order of the frontmatter properties.",
+            type: "dropdown",
+            dropdownOptions: {
+                original: "Original",
+                alphabetical: "Alphabetical",
+                reverseAlphabetical: "Reverse-Alphabetical",
+            },
+            dependsOn: "frontmatter.enabled",
+        },
+        before: {
+            name: "Before Template",
+            desc: "Before ", // todo
+            type: "string",
+            dependsOn: "frontmatter.enabled",
+        },
+        property: {
+            name: "Property Template",
+            desc: "Template", // todo
+            vars: [
+                { name: "$name", desc: "Name of the property" },
+                { name: "$value", desc: "Content of the property" },
+            ],
+            type: "string",
+            dependsOn: "frontmatter.enabled",
+        },
+        after: {
+            name: "After Template",
+            desc: "After", // todo
+            type: "string",
+            dependsOn: "frontmatter.enabled",
+        },
+        _preview: {
+            name: "Preview",
+            desc: "",
+            type: "render",
+            dependsOn: "frontmatter.enabled",
+            render: (profile: Profile) => {
+                const rendered = renderFrontmatter(profile, {
+                    title: "My file",
+                    created: "2025-11-19",
+                });
+                return "<pre><code>" + encode(rendered) + "</pre></code>";
+            },
         },
     },
     templates: {

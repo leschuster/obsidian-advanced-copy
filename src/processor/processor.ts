@@ -1,17 +1,18 @@
+import remarkGemoji from "remark-gemoji";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkParse from "remark-parse";
 import { Profile } from "src/settings/settings";
 import { unified } from "unified";
 import customStringify from "./customStringify";
-import remarkGfm from "remark-gfm";
+import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
+import remarkHighlight from "./remark-plugins/highlight";
 import remarkCallout from "./remark-plugins/remark-callout";
 import remarkWikilink from "./remark-plugins/wikilink";
-import remarkGemoji from "remark-gemoji";
-import remarkHighlight from "./remark-plugins/highlight";
-import { applyModifiers } from "./utils/applyModifiers";
-import remarkEncodeHTMLEntities from "./remark-plugins/encode-html-entities";
 import { FrontmatterVariables, GlobalVariables } from "./types";
+import { applyModifiers } from "./utils/applyModifiers";
 import {
+    renderFrontmatter,
     replaceFrontmatterVariables,
     replaceGlobalVariables,
 } from "./utils/handlerUtils";
@@ -91,10 +92,16 @@ export class Processor {
             })
             .process(input);
 
+        const frontmatter = renderFrontmatter(
+            this.profile,
+            this.frontmatterVars,
+            this.globalVars,
+        );
+
         const before = this.replaceVars(this.profile.extra.before);
         const after = this.replaceVars(this.profile.extra.after);
 
-        return before + String(content) + after;
+        return before + frontmatter + String(content) + after;
     }
 
     private postprocess(input: string): string {
