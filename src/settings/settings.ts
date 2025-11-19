@@ -12,6 +12,7 @@ export type AdvancedCopyPluginSettings = {
  *
  * The profile is divided into three sections:
  * - meta: Metadata about the profile
+ * - frontmatter: Settings about frontmatter insertion
  * - templates: Templates for each markdown element
  * - extra: Additional options
  */
@@ -29,6 +30,13 @@ export type Profile = {
         htmlCopy: boolean;
         configVersion: number;
         doNotUpdate?: boolean; // do not update this profile when updating the plugin
+    };
+    frontmatter?: {
+        enabled: boolean;
+        order: "" | "original" | "alphabetical" | "reverseAlphabetical";
+        before: string;
+        property: string;
+        after: string;
     };
     templates: {
         blockquoteLine: string | MDTemplate;
@@ -117,6 +125,13 @@ export function createNewProfile(id: string, name: string): Profile {
             htmlCopy: false,
             configVersion: 0,
             doNotUpdate: false,
+        },
+        frontmatter: {
+            enabled: false,
+            order: "original",
+            before: "",
+            property: "",
+            after: "",
         },
         templates: {
             blockquoteLine: "",

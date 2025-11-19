@@ -23,3 +23,5 @@ data.json
 
 coverage
 ts-jest.log
+
+test.html
