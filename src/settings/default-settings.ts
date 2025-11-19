@@ -23,6 +23,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 configVersion: 1,
                 doNotUpdate: false,
             },
+            frontmatter: {
+                enabled: false,
+                order: "original",
+                before: "---\n",
+                property: "  $name: $value\n",
+                after: "---\n\n",
+            },
             templates: {
                 blockquoteLine: {
                     template: "> $value\n",
@@ -293,6 +300,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 htmlCopy: false,
                 configVersion: 1,
                 doNotUpdate: false,
+            },
+            frontmatter: {
+                enabled: false,
+                order: "original",
+                before: "---\n",
+                property: "  $name: $value\n",
+                after: "---\n\n",
             },
             templates: {
                 blockquoteLine: {
@@ -566,7 +580,7 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 doNotUpdate: false,
             },
             frontmatter: {
-                enabled: true,
+                enabled: false,
                 order: "original",
                 before: "<table>\n",
                 property:
@@ -847,6 +861,14 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 htmlCopy: false,
                 configVersion: 1,
                 doNotUpdate: false,
+            },
+            frontmatter: {
+                enabled: false,
+                order: "original",
+                before: "<table>\n",
+                property:
+                    "  <tr>\n    <th>$name</th>\n    <td>$value</td>\n  </tr>\n",
+                after: "</table><br /><br />\n\n",
             },
             templates: {
                 blockquoteLine: {
