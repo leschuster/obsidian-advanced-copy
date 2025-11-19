@@ -6,18 +6,17 @@ import {
     setIcon,
     Setting,
 } from "obsidian";
-import ConvertAndCopyPlugin from "src/main";
-import { Logger } from "src/utils/Logger";
-import { Profile, MDTemplate, createNewProfile } from "./settings";
+import rehypeStringify from "rehype-stringify";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
 import AdvancedCopyPlugin from "src/main";
+import { Logger } from "src/utils/Logger";
+import { unified } from "unified";
 import { ConfirmationModal } from "../modals/confirmation-modal";
 import { InputModal } from "../modals/input-modal";
 import { DEFAULT_SETTINGS } from "./default-settings";
 import { profileDesc, ProfileDescSetting } from "./profile-desc";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
-import remarkRehype from "remark-rehype";
-import rehypeStringify from "rehype-stringify";
+import { createNewProfile, MDTemplate, Profile } from "./settings";
 
 const PLUGIN_ID = "advanced-copy";
 
@@ -42,7 +41,7 @@ const SETTINGS_OVERRIDES: Record<string, Record<string, CustomSettingFunc>> = {
 export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
     constructor(
         public app: App,
-        private plugin: ConvertAndCopyPlugin,
+        private plugin: AdvancedCopyPlugin,
     ) {
         super(app, plugin);
     }
@@ -399,29 +398,40 @@ export class AdvancedCopyPluginSettingsTab extends PluginSettingTab {
     }
 }
 
+type Subscriber = (profile: Profile) => void;
+
 /**
  * Modal to edit a single profile
  */
 class EditProfileModal extends Modal {
+    // subscribers are notified when the profile gets changed to update their view
+    private subscribers: Subscriber[];
+
     constructor(
         public app: App,
         private plugin: AdvancedCopyPlugin,
         private profile: Profile,
     ) {
         super(app);
+
+        this.subscribers = [];
     }
 
     public onOpen(): void {
+        this.subscribers = [];
         this.fixMissingProperties();
         this.display();
     }
 
     public onClose(): void {
         this.contentEl.empty();
+        this.subscribers = [];
     }
 
     private async save(): Promise<void> {
         await this.plugin.saveSettings();
+
+        this.subscribers.forEach((fn) => fn(this.profile));
     }
 
     /**
@@ -493,6 +503,10 @@ class EditProfileModal extends Modal {
         }
     }
 
+    private addSubscriber(fn: Subscriber): void {
+        this.subscribers.push(fn);
+    }
+
     private async addSection(
         containerEl: HTMLElement,
         sectionKey: string,
@@ -560,8 +574,10 @@ class EditProfileModal extends Modal {
                     settingDesc.readonly,
                 );
                 break;
+
             case "number":
                 throw new Error("Number settings not implemented");
+
             case "boolean":
                 addToggleInput(
                     sectionEl,
@@ -571,9 +587,45 @@ class EditProfileModal extends Modal {
                     update,
                 );
                 break;
+
+            case "textarea":
+                addTextAreaInput(
+                    sectionEl,
+                    settingDesc.name,
+                    settingDesc.desc,
+                    currValue,
+                    update,
+                );
+                break;
+
             case "template":
                 new TemplateSetting(sectionEl, settingDesc, update, currValue);
                 break;
+
+            case "dropdown":
+                addDropdown(
+                    sectionEl,
+                    settingDesc.name,
+                    settingDesc.desc,
+                    currValue,
+                    settingDesc.dropdownOptions ?? {},
+                    update,
+                );
+                break;
+
+            case "render":
+                if (!settingDesc.render) {
+                    break;
+                }
+                addCustomRender(
+                    sectionEl,
+                    settingDesc.name,
+                    this.profile,
+                    settingDesc.render,
+                    (fn) => this.addSubscriber(fn),
+                );
+                break;
+
             default:
                 Logger.error(`Unknown setting type: ${settingDesc.type}`);
         }
@@ -760,6 +812,39 @@ function addToggleInput(
         .setName(name)
         .setDesc(desc)
         .addToggle((toggle) => toggle.setValue(value).onChange(update));
+}
+
+function addDropdown(
+    containerEl: HTMLElement,
+    name: string,
+    desc: string,
+    value: string,
+    options: Record<string, string>,
+    update: (value: string) => void,
+): void {
+    new Setting(containerEl)
+        .setName(name)
+        .setDesc(desc)
+        .addDropdown((dd) =>
+            dd.addOptions(options).setValue(value).onChange(update),
+        );
+}
+
+function addCustomRender(
+    containerEl: HTMLElement,
+    name: string,
+    profile: Profile,
+    render: (profile: Profile) => string,
+    addSubscriber: (fn: Subscriber) => void,
+): void {
+    const el = new Setting(containerEl).setName(name);
+
+    const refresh = (profile: Profile) => {
+        el.descEl.innerHTML = render(profile);
+    };
+    addSubscriber(refresh);
+
+    refresh(profile);
 }
 
 /**

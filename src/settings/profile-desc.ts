@@ -3,6 +3,10 @@
  * It is used in the settings UI to display a description for each property.
  */
 
+import { encode } from "html-entities";
+import { renderFrontmatter } from "src/processor/utils/handlerUtils";
+import { Profile } from "src/settings/settings";
+
 export type ProfileDesc = {
     [key: string]: ProfileDescSection;
 };
@@ -11,17 +15,28 @@ export type ProfileDescSection = {
     [key: string]: ProfileDescSetting;
 } & {
     _desc?: ProfileDescSetting; // metadata to add a description to the section
+    _preview?: ProfileDescSetting; // render a preview of something
 };
 
 export type ProfileDescSetting = {
     name: string;
     desc: string;
-    type: "string" | "boolean" | "number" | "template";
+    type:
+        | "string"
+        | "boolean"
+        | "number"
+        | "textarea"
+        | "template"
+        | "dropdown"
+        | "render";
+    dropdownOptions?: Record<string, string>;
     vars?: { name: string; desc: string }[];
     visible?: boolean;
     readonly?: boolean;
     additionalTemplates?: Record<string, ProfileDescSetting>;
+    dependsOn?: string; // only display option if specified setting is truthy (in format `frontmatter.enabled`)
     optional?: boolean;
+    render?: (profile: Profile) => string;
 };
 
 const defaultAdditionalTemplates: Record<string, ProfileDescSetting> = {
@@ -116,6 +131,62 @@ export const profileDesc: {
             desc: "**Only applies to default profiles.** When checked, prevents this profile from being automatically updated when the plugin is updated. If unchecked, you'll be asked whether to update or keep your customizations.",
             type: "boolean",
             optional: true,
+        },
+    },
+    frontmatter: {
+        enabled: {
+            name: "Insert frontmatter",
+            desc: "Include frontmatter properties in the copied content. It will be placed between the `before` template from the Meta section and the actual content.",
+            type: "boolean",
+        },
+        order: {
+            name: "Order",
+            desc: "Sort order for frontmatter properties.",
+            type: "dropdown",
+            dropdownOptions: {
+                original: "Original",
+                alphabetical: "Alphabetical",
+                reverseAlphabetical: "Reverse-Alphabetical",
+            },
+            dependsOn: "frontmatter.enabled",
+        },
+        before: {
+            name: "Before Template",
+            desc: "Template inserted before all frontmatter properties.",
+            type: "textarea",
+            dependsOn: "frontmatter.enabled",
+        },
+        property: {
+            name: "Property Template",
+            desc: "Template for each frontmatter property.",
+            vars: [
+                { name: "$name", desc: "Name of the property" },
+                { name: "$value", desc: "Content of the property" },
+            ],
+            type: "textarea",
+            dependsOn: "frontmatter.enabled",
+        },
+        after: {
+            name: "After Template",
+            desc: "Template inserted after all frontmatter properties.",
+            type: "textarea",
+            dependsOn: "frontmatter.enabled",
+        },
+        _preview: {
+            name: "Preview",
+            desc: "",
+            type: "render",
+            dependsOn: "frontmatter.enabled",
+            render: (profile: Profile) => {
+                const rendered = renderFrontmatter(profile, {
+                    title: "My file",
+                    created: "2025-11-19",
+                });
+                if (rendered) {
+                    return "<pre><code>" + encode(rendered) + "</pre></code>";
+                }
+                return '<br /><em>"Insert Frontmatter" not enabled.</em>';
+            },
         },
     },
     templates: {
@@ -543,12 +614,12 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
         before: {
             name: "Before",
             desc: "Text to add at the very beginning of the copied content. Useful for adding opening tags or prefixes.",
-            type: "string",
+            type: "textarea",
         },
         after: {
             name: "After",
             desc: "Text to add at the very end of the copied content. Useful for adding closing tags or suffixes.",
-            type: "string",
+            type: "textarea",
         },
         hidden: {
             name: "Hidden",
