@@ -840,7 +840,6 @@ function addCustomRender(
     const el = new Setting(containerEl).setName(name);
 
     const refresh = (profile: Profile) => {
-        console.log("Refresh");
         el.descEl.innerHTML = render(profile);
     };
     addSubscriber(refresh);

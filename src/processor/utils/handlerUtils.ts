@@ -85,9 +85,17 @@ export function renderFrontmatter(
         return "";
     }
 
-    const { order, before, property, after } = settings.frontmatter; // todo
+    const { order, before, property, after } = settings.frontmatter;
 
-    const content = Object.entries(frontmatterVars)
+    const variables = Object.entries(frontmatterVars);
+
+    if (order === "alphabetical") {
+        variables.sort((a, b) => a[0].localeCompare(b[0]));
+    } else if (order === "reverseAlphabetical") {
+        variables.sort((a, b) => b[0].localeCompare(a[0]));
+    }
+
+    const content = variables
         .map(([name, value]) =>
             property.replaceAll("$name", name).replaceAll("$value", value),
         )
