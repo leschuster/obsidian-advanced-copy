@@ -80,6 +80,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
+                comment: {
+                    template: "",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
                 embeddedWikilink: {
                     template: "![[$link|$text]]",
                     templateFirstOfType: "",
@@ -353,6 +360,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 codeInline: {
                     template: "`$value`",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                comment: {
+                    template: "",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",
@@ -638,6 +652,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                     templateFirstChild: "",
                     templateLastChild: "",
                 },
+                comment: {
+                    template: "",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
                 embeddedWikilink: {
                     template:
                         '<a href="obsidian://open?vault=$vaultName&file=$link">$text</a>',
@@ -916,6 +937,13 @@ export const DEFAULT_SETTINGS: AdvancedCopyPluginSettings = {
                 },
                 codeInline: {
                     template: "<code>$value</code>",
+                    templateFirstOfType: "",
+                    templateLastOfType: "",
+                    templateFirstChild: "",
+                    templateLastChild: "",
+                },
+                comment: {
+                    template: "",
                     templateFirstOfType: "",
                     templateLastOfType: "",
                     templateFirstChild: "",

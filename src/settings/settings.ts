@@ -46,6 +46,7 @@ export type Profile = {
         calloutContentLine: string | MDTemplate;
         codeBlock: string | MDTemplate;
         codeInline: string | MDTemplate;
+        comment: string | MDTemplate;
         embeddedWikilink: string | MDTemplate;
         heading1: string | MDTemplate;
         heading2: string | MDTemplate;
@@ -141,6 +142,7 @@ export function createNewProfile(id: string, name: string): Profile {
             calloutContentLine: "",
             codeBlock: "",
             codeInline: "",
+            comment: "",
             embeddedWikilink: "",
             heading1: "",
             heading2: "",
