@@ -16,6 +16,7 @@ import {
     replaceFrontmatterVariables,
     replaceGlobalVariables,
 } from "./utils/handlerUtils";
+import remarkComment from "./remark-plugins/comments";
 
 export class Processor {
     private constructor(
@@ -43,9 +44,6 @@ export class Processor {
         // Standardize line endings
         let text = input.replace(/\r\n|\r/g, "\n");
 
-        // Ignore Markdown comments
-        text = text.replaceAll(/%%[^%]*%%/gms, "");
-
         // Ignore "hidden" parts
         if (this.profile.extra.hidden !== "") {
             const re = new RegExp(
@@ -65,7 +63,8 @@ export class Processor {
             .use(remarkGfm)
             .use(remarkCallout)
             .use(remarkWikilink)
-            .use(remarkHighlight);
+            .use(remarkHighlight)
+            .use(remarkComment);
 
         if (this.profile.meta.replaceGemojiShortcodes) {
             processor = processor.use(remarkGemoji);

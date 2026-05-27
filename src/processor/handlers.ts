@@ -24,6 +24,7 @@ import { wikilink } from "./handlers/wikilink";
 import { CustomOptions } from "./toCustom";
 import { highlight } from "./handlers/highlight";
 import { table } from "./handlers/table";
+import { comment } from "./handlers/comment";
 
 export type HandlerFunc = (node: Nodes, options: CustomOptions) => string;
 
@@ -31,6 +32,7 @@ export type HandlerFunc = (node: Nodes, options: CustomOptions) => string;
  * Mapping of node type to handler function.
  */
 export const handlers: Record<string, HandlerFunc> = {
+    comment,
     strong: bold,
     blockquote,
     callout,

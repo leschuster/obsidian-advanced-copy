@@ -300,6 +300,13 @@ Example: \`$upper{Hello, World!}\` will output 'HELLO, WORLD!'
             type: "template",
             additionalTemplates: defaultAdditionalTemplates,
         },
+        comment: {
+            name: "Comment",
+            desc: "Template for Markdown comments. Leave it empty to ignore comments. Use '$value' as template to include comments in the output.",
+            vars: [{ name: "$value", desc: "The text value of the comment" }],
+            type: "template",
+            additionalTemplates: defaultAdditionalTemplates,
+        },
         embeddedWikilink: {
             name: "Embedded wikilink",
             desc: "Template for embedded wikilinks that display the target note's content (`![[Note]]`).",
