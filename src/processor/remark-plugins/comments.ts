@@ -1,55 +1,60 @@
 import {
     Data,
     Literal,
-    Nodes,
     Parent,
     PhrasingContent,
     Root,
-    RootContent,
     Text,
+    Nodes,
+    RootContent,
 } from "mdast";
+import { findAndReplace } from "mdast-util-find-and-replace";
 import { Transformer } from "unified";
 import { visit, Visitor, VisitorResult } from "unist-util-visit";
 import { findAfter } from "unist-util-find-after";
 import { findAllBetween } from "unist-util-find-between-all";
 
 /**
- * Markdown highlight node.
+ * Markdown Comment node parsed from Obsidian syntax.
  */
-export interface Highlight extends Parent {
+export interface Comment extends Parent {
     /**
-     * Node type of highlight.
+     * Node type of Comment.
      */
-    type: "highlight";
+    type: "comment";
     /**
-     * Children of strong.
+     * Children Comment.
      */
     children: PhrasingContent[];
     /**
-     * Data associated with the highlight.
+     * Data associated with the Comment.
      */
-    data?: HighlightData | undefined;
+    data?: CommentData | undefined;
 }
 
-export interface HighlightData extends Data {}
+export interface CommentData extends Data {}
 
 declare module "mdast" {
     interface RootContentMap {
-        highlight: Highlight;
+        comment: Comment;
     }
 
     interface PhrasingContentMap {
-        highlight: Highlight;
+        comment: Comment;
     }
 }
 
-const REGEX = /==+/m;
+//const REGEX = /%%(?<value>[^%]*)%%/gms;
+const REGEX = /%%+/m;
 
 /**
- * Add support for Highlight
+ * Add support for Comments
  * @returns tree transformer
  */
-export default function remarkHighlight(): Transformer<Root> {
+export default function remarkComment(): Transformer<Root> {
+    /*const transformer: Transformer<Root> = (tree) => {
+        findAndReplace(tree, [REGEX, parseComment]);
+    };*/
     const transformer: Transformer<Root> = (tree) => {
         visit(tree, "text", visitor);
     };
@@ -58,14 +63,14 @@ export default function remarkHighlight(): Transformer<Root> {
 }
 
 /**
- * Replace a text node with a highlight, if applicable
+ * Replace a text node with a comment node, if applicable
  * @param node a text node
  * @param index index of text node in parent's children property
  * @param parent text's parent node
  * @returns
  */
 const visitor: Visitor<Text, Parent> = (node, index, parent): VisitorResult => {
-    // Quick check if the text node contains a highlight
+    // Quick check if the text node contains a comment
     if (!REGEX.test(node.value)) {
         return;
     }
@@ -75,34 +80,34 @@ const visitor: Visitor<Text, Parent> = (node, index, parent): VisitorResult => {
         throw new Error("Parent or index is undefined");
     }
 
-    const nodes = extractHighlights(node, index, parent);
+    const nodes = extractComments(node, index, parent);
 
     // Replace the text node with the new nodes
     parent.children.splice(index, 1, ...(nodes as RootContent[]));
 };
 
-const extractHighlights = (
+const extractComments = (
     node: Text,
     index: number,
     parent: Parent,
 ): (Nodes | Highlight)[] => {
     return [
-        ...extractAllContainedHighlights(node),
-        ...extractHighlightFromMultipleNodes(node, index, parent),
+        ...extractAllContainedComments(node),
+        ...extractCommentFromMultipleNodes(node, index, parent),
     ];
 };
 
 /**
- * Extract all highlights that begin and end in the same text node
- * Modifies the node to leave only the text that is not part of a highlights
+ * Extract all comments that begin and end in the same text node
+ * Modifies the node to leave only the text that is not part of a comment
  * @param node Text node
  * @returns List of nodes
  */
-const extractAllContainedHighlights = (node: Text): (Nodes | Highlight)[] => {
+const extractAllContainedComments = (node: Text): (Nodes | Highlight)[] => {
     const nodes: (Nodes | Highlight)[] = [];
 
     while (REGEX.test(node.value)) {
-        // There is an opening ==
+        // There is an opening %%
 
         const match = REGEX.exec(node.value);
         const matchLen = match![0].length;
@@ -110,28 +115,28 @@ const extractAllContainedHighlights = (node: Text): (Nodes | Highlight)[] => {
         const after = node.value.slice(match!.index + matchLen);
 
         if (!REGEX.test(after)) {
-            // Highlight ends in another text node or there is no closing ==
+            // Comment ends in another text node or there is no closing %%
             break;
         }
 
-        // Highlight ends in this text node
+        // Comment ends in this text node
 
         const match2nd = REGEX.exec(after);
         const match2ndLen = match2nd![0].length;
         const after2nd = after.slice(match2nd!.index + match2ndLen);
 
-        // Add text node before highlight
+        // Add text node before comment
         if (before !== "") {
             nodes.push({ type: "text", value: before } as Text);
         }
 
-        // Add highlight node
+        // Add comment node
         const value = after.slice(0, match2nd!.index);
         if (value !== "") {
             nodes.push({
-                type: "highlight",
+                type: "comment",
                 children: [{ type: "text", value } satisfies Text],
-            } satisfies Highlight);
+            } satisfies Comment);
         }
 
         // Update text node
@@ -142,13 +147,13 @@ const extractAllContainedHighlights = (node: Text): (Nodes | Highlight)[] => {
 };
 
 /**
- * Extract a highlight that begins in one text node and ends in another
+ * Extract a comment that begins in one text node and ends in another
  * @param node current text node
  * @param index index of text node in parent's children property
  * @param parent parent node of text node
  * @returns nodes
  */
-const extractHighlightFromMultipleNodes = (
+const extractCommentFromMultipleNodes = (
     node: Text,
     index: number,
     parent: Parent,
@@ -173,7 +178,7 @@ const extractHighlightFromMultipleNodes = (
     ) as unknown as Text | undefined;
 
     if (closingNode === undefined) {
-        // There is no closing ==, so the highlight is not valid
+        // There is no closing %%, so the comment is not valid
         return [node];
     }
 
@@ -193,28 +198,28 @@ const extractHighlightFromMultipleNodes = (
     const before2nd = closingNode.value.slice(0, match2nd!.index);
     const after2nd = closingNode.value.slice(match2nd!.index + match2ndLen);
 
-    // Add text node before highlight
+    // Add text node before comment
     if (before1st !== "") {
         nodes.push({ type: "text", value: before1st } as Text);
     }
 
-    // Add highlight node
-    const highlight: Highlight = { type: "highlight", children: [] };
+    // Add comment node
+    const comment: Comment = { type: "comment", children: [] };
     if (after1st !== "") {
-        highlight.children.push({ type: "text", value: after1st } as Text);
+        comment.children.push({ type: "text", value: after1st } as Text);
     }
 
-    highlight.children = highlight.children.concat(between);
+    comment.children = comment.children.concat(between);
 
     if (before2nd !== "") {
-        highlight.children.push({ type: "text", value: before2nd } as Text);
+        comment.children.push({ type: "text", value: before2nd } as Text);
     }
 
-    if (highlight.children.length > 0) {
-        nodes.push(highlight);
+    if (comment.children.length > 0) {
+        nodes.push(comment);
     }
 
-    // Remove nodes between opening and closing == from parent
+    // Remove nodes between opening and closing %% from parent
     parent.children.splice(index + 1, between.length);
 
     // Update closing node
